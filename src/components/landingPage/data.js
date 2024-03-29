@@ -21,6 +21,20 @@ export const sliderItems = [
       bg: "fbf0f4",
     },
   ];
+  export const price = [
+    {
+      id: 1,
+      range: '100-500'
+    },
+    {
+      id: 2,
+      range: '500-1000'
+    },
+    {
+      id: 3,
+      range: '1000-5000'
+    },
+  ];
 
   export const categories = [
     {
