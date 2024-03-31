@@ -1,26 +1,66 @@
 import React from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
+import Footer2 from '../common/Footer2'
+import Header from '../common/Header'
+import AddProduct from './dashboardCompo/AddProduct'
+import ManageOrders from './dashboardCompo/ManageOrders'
+import ManageProducts from './dashboardCompo/ManageProducts'
+
+const buttons=[
+    {
+        name:"Add Product",
+        type:"button",
+        id:"add-product"
+    },
+    {
+        name:"Manage Orders",
+        type:"button",
+        id:"manage-orders"
+    },
+    {
+        name:"Manage Products",
+        type:"button",
+        id:"manage-products"
+    }
+]
+
+
+
+
+
 
 const Dashboard = () => {
+
+    const [btID,SetbtID] =useState("add-product");
+    
+    const handleClick = (e) =>{
+        SetbtID(e.target.id);
+        
+    }
     return (
         <Wrapper>
-            <div className="container">
-                <div className="activity">
-                    <h2>Module</h2>
-                    sales</div>
+            <Header/>
+            <div className='container'>
+                <div className='con1'>
+                    <div className='firstSec'>
+                            {buttons.map((button, index) => (
+                                <button key={index} id={button.id} type={button.type} onClick={handleClick}>{button.name}</button>
+                            ))}
+                        
+                    </div>
+                    <VerticalLine />
+                    <div className='secondSec'>
+                        {console.log(btID)}
+                        {btID === "add-product" && <AddProduct />}
+                       
+                        {btID === "manage-orders" && <ManageOrders />}
+                        {btID === "manage-products" && <ManageProducts />}
+                    </div>
 
-                <div className="activity">
-                    <h2>Module</h2>
-                    purchase</div>
-
-                <div className="activity">
-                    <h2>Module</h2>
-                    orders</div>
+                </div>
             </div>
-
-            <div className="function-container">
-                <h1>Items</h1>
-            </div>
+            <Footer2 />
         </Wrapper>
     )
 }
@@ -28,35 +68,69 @@ const Dashboard = () => {
 export default Dashboard
 
 const Wrapper = styled.section`
-    padding: 10px;
-    .container{
-      display: flex;
-      padding: 10px;
-      justify-content: space-between;
-      align-items: center;
-      height: 8rem;
-      gap: 10rem;
-
-      .activity{
-        
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-      align-items: center;
-      flex: 1;
-      height: 80%;
-      background-color: #b5c0ca;
-      border-radius: 1rem;
-    }
-    }
-   .function-container{
-    width: 100%;
-    height: 26
-    rem;
-    background-color: #dfbce8;
-    border-radius: 1rem;
-    padding: 1rem;
-    display: flex;
+    overflow-y: scroll;
+    height: 98vh;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.100), rgba(0,0,0,0.4)),url('.public/images/nature.jpg');
+    background-size: cover;
+    background-position: center;
     justify-content: center;
-   }
+    align-items: center;
+    .container{
+        height:900px
+        background-color: white;
+       display:flex;
+        
+      }
+
+    .foo{
+        mergin-top: 80px;
+    }
+
+    .con1{
+        height:700px;
+        display:flex;
+    }
+
+    .firstSec{
+       
+        width: 200px;
+        padding:20px;
+        margin-top:200px;
+    }
+
+    .secondSec{
+        
+        border: 1px solid black;
+        border-radius:10px;
+        padding:20px;
+        margin:30px;
+        width:1150px
+    }
+
+    button{
+        width: 100%;
+        height: 40px;
+        background-color: #18a021;
+        border: 1px solid #ccc;
+        color: white;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        transition: transform 0.5s;
+        cursor: pointer;
+    
+    }
+
+    button:hover{
+        background-color: black;
+        border-radius:7px;
+    }
+
 `
+
+const VerticalLine = styled.div`
+  border-left: 3px solid #333; 
+  height: 70%; 
+  margin-top:70px;
+  
+
+  `;

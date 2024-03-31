@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import './index.css'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import AdminDashboard from './pages/Seller/AdminDashboard'
+import SellerRegistration from './components/seller/SellerRegistration'
 
 import Registration from './components/Registration'
 import Login from './components/Login'
@@ -52,10 +53,9 @@ const App = () => {
 
 
         {/* <Route path='/categoryitem' element={<CategoryItem/>} /> */}
-
-        <Route path='/' element={<ProductPage />} />
-        <Route path='/product/:id' element={<SingleProduct />} />
-        <Route path='/login' element={<Login />} />
+        
+        <Route path='/' element={<ProductPage/>} />
+        <Route path='/login' element={<Login/>} />
 
 
 
