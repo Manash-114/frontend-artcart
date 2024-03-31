@@ -4,14 +4,16 @@ import axios from "axios"
 const initialState = {
     loading: false,
     products: [],
+    
     error: ''
 }
 
 export const fetchProducts = createAsyncThunk(
     'products/fetchProduct', async () => {
         const res = await axios
-        .get('https://fakestoreapi.com/products')
-        return res.data;
+        .get('https://dummyjson.com/products')
+        console.log(res.data.products)
+        return res.data.products;
     }
 )
 
@@ -21,17 +23,20 @@ const ProductSlice = createSlice({
     reducers: {},
     extraReducers: builder => {
         builder.addCase(fetchProducts.pending, state => {
-            state.loading = true
+            state.loading = true;
+            state.status = 'loading';
         })
         builder.addCase(fetchProducts.fulfilled, (state, action) => {
             state.loading = false,
             state.products = action.payload,
-            state.error = ''
+            state.error = '';
+            state.status = 'succeeded';
         })
         builder.addCase(fetchProducts.rejected, (state,action) => {
             state.loading = false,
             state.products = [],
-            state.error = action.error.message
+            state.error = action.error.message,
+            state.status = 'failed';
         })
     }
 })

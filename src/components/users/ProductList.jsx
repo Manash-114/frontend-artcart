@@ -1,30 +1,28 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { fetchProducts } from '../../reduxToolkit/features/productList/ProductSlice'
-import { Rating } from '@mui/material'
+import { CircularProgress, Pagination, Rating } from '@mui/material'
+import { Link, NavLink } from 'react-router-dom'
 
 
-const ProductList = () => {
+const ProductList = ({currentProducts}) => {
   const [value, setValue] = useState(2);
-  const dispatch = useDispatch()
+ 
   const product = useSelector(state => state.product)
   console.log(product)
 
-  useEffect(() => {
-    dispatch(fetchProducts())
-  }, [])
-
   return (
+  
     <Container>
-      {product.loading && <div>Loading...</div>}
+      {product.loading && <div><CircularProgress /></div>}
       {!product.loading && product.products.length ? (
 
-        product.products.map((p) => {
+        currentProducts.map((p) => {
           return (
-            <GridItem key={p.id} className={`grid-items`}>
+            <NavLink key={p.id} to={`/product/${p.id}`} className="grid-item-link">
+            <GridItem className={`grid-items`}>
               <div className="image">
-                <img src={p.image} alt='image'></img>
+                <img src={p.thumbnail} alt='image'></img>
               </div>
               <div className="content">
                 <div className="rate">
@@ -37,7 +35,7 @@ const ProductList = () => {
                       setValue(newValue);
                     }}
                   />
-                  ({p.rating.rate})
+                  ({p.rating})
                 </div>
                 <div className="miniContainer">
                   <div className="dp">
@@ -53,16 +51,20 @@ const ProductList = () => {
                 <span id='author'>{p.category}</span>
               </div>
             </GridItem>
-
+            </NavLink>            
           )
         })
 
       ) : null}
+     
     </Container>
+   
+  
   )
 }
 
 export default ProductList
+
 
 const Container = styled.section`
    
@@ -73,11 +75,11 @@ const Container = styled.section`
 `
 const GridItem = styled.div`
   border: 1px solid black;
+  border-radius: 15px;
   height: 330px;
   width: 85%;
   
   .image{
-    border: 1px solid black;
     height: 70%;
     padding-top: 10px;
   }
@@ -124,4 +126,6 @@ const GridItem = styled.div`
     font-size: 13px;
     padding-left: 20%;
   }
+
 `
+

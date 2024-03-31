@@ -1,18 +1,41 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import SearchIcon from '@mui/icons-material/Search';
-import { Accordion, AccordionDetails, AccordionSummary, Button, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Button, Pagination, Typography } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { categories, price } from '../landingPage/data';
 import ProductList from './ProductList';
+import { useDispatch, useSelector } from 'react-redux';
+
 
 
 const Products = () => {
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(9);
   const [selectedValue, setSelectedValue] = useState("");
+
+
 
   const handleSelectChange = (e) => {
     setSelectedValue(e.target.value);
   }
+
+  const product = useSelector(state => state.product);
+  console.log(product)
+  const { products } = product;
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentProducts = products.slice(indexOfFirstItem, indexOfLastItem);
+
+  const scrollToElementById = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
 
     <Container>
@@ -20,7 +43,7 @@ const Products = () => {
         <h1>Shop for art from creators you love</h1>
       </ImageSection>
       <FilterTop>
-        <div className="filter-content">
+        <div className="filter-content" id='ref'>
           <div className="title">Product List (0)</div>
           <div className="search">
             <SearchIcon />
@@ -43,39 +66,39 @@ const Products = () => {
         <LeftFilter>
           <h2>Filter</h2>
           <Accordion
-             
+
           >
             <AccordionSummary >
               <Typography variant='h5' id='category'>Categories <ArrowDropDownIcon /></Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
-              {
-                categories.map((item, index) => (
-                  <List>
-                  <Button key={index} variant='outlined'>{item.title}</Button>
-                  </List>
-                ))
-               }
+                {
+                  categories.map((item, index) => (
+                    <List>
+                      <Button key={index} variant='outlined'>{item.title}</Button>
+                    </List>
+                  ))
+                }
               </Typography>
             </AccordionDetails>
 
           </Accordion>
           <Accordion
-             
+
           >
             <AccordionSummary >
-            <Typography variant='h5' id='price'>Price <ArrowDropDownIcon /></Typography>
+              <Typography variant='h5' id='price'>Price <ArrowDropDownIcon /></Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
-               {
-                price.map((item, index) => (
-                  <List>
-                  <Button key={item.index} variant='outlined' color='success'>{item.range}</Button>
-                  </List>
-                ))
-               }
+                {
+                  price.map((item, index) => (
+                    <List key={item.id}>
+                      <Button key={index} variant='outlined' color='success'>{item.range}</Button>
+                    </List>
+                  ))
+                }
               </Typography>
             </AccordionDetails>
 
@@ -85,7 +108,14 @@ const Products = () => {
 
         {/* product-container */}
         <ProductContainer>
-               <ProductList />
+          <ProductList currentProducts = {currentProducts}/>
+          <StyledPagination>
+            <Pagination
+              count={Math.ceil(products.length / itemsPerPage)}
+              color="primary"
+              onChange={(event, page) => {setCurrentPage(page); scrollToElementById('ref');}}
+            />
+          </StyledPagination>
         </ProductContainer>
       </SubContainer>
 
@@ -96,16 +126,24 @@ const Products = () => {
 
 export default Products
 
+const StyledPagination = styled.div`
+border-top: 0.4px solid black;
+padding: 12px;
+ margin-top: 50px;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ font-weight: 500;
+`
 const List = styled.div`
   width: auto;
   height: auto;
 `
 const Container = styled.div`
-   
-
+  height: 220vh;
   `
 const ImageSection = styled.div`
-    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.023), rgba(0, 0, 0, 0.393)), url('public/images/theme1.jpg');
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.023), rgba(0, 0, 0, 0.393)), url('/images/theme1.jpg');
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -221,7 +259,5 @@ const LeftFilter = styled.div`
 `
 const ProductContainer = styled.div`
   flex: 1.1;
-  height: 150vh;
-  border: 1px solid black;
  
 `

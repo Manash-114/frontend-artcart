@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './index.css'
-import {Route, BrowserRouter as Router, Routes} from 'react-router-dom'
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import AdminDashboard from './pages/Seller/AdminDashboard'
 
 import Registration from './components/Registration'
@@ -20,37 +20,49 @@ import Categories from './components/landingPage/Categories'
 import Services from './components/landingPage/Services.jsx'
 import Footer2 from './components/common/Footer2.jsx'
 import FeaturedProducts from './components/landingPage/FeaturedProducts.jsx'
-import ProductPage from './components/users/ProductPage.jsx'
-
+import ProductPage from './pages/users/ProductPage.jsx'
+import SingleProduct from './pages/users/SingleProduct.jsx'
+import Product from './components/users/Product.jsx'
+import Test from './components/users/Test.jsx'
+import { useDispatch } from 'react-redux'
+import { fetchProducts } from './reduxToolkit/features/productList/ProductSlice.jsx'
 
 
 
 const App = () => {
-  
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(fetchProducts())
+  }, [dispatch])
+
+
+
   return (
     <Router>
       <Routes>
-        
-       
-        
-        
+
+
+
+
         <Route path='/register' element={<Registration />} />
         {/* <Route path='/' element={<Slide />} > */}
-        <Route path='/hero' element={<HeroSection/>} />
+        <Route path='/hero' element={<HeroSection />} />
         {/* <Route path='/' element={<LandingPage />} />  */}
-       
-        
-        {/* <Route path='/categoryitem' element={<CategoryItem/>} /> */}
-        
-        <Route path='/' element={<ProductPage/>} />
-        <Route path='/login' element={<Login/>} />
 
-        
-       
+
+        {/* <Route path='/categoryitem' element={<CategoryItem/>} /> */}
+
+        <Route path='/' element={<ProductPage />} />
+        <Route path='/product/:id' element={<SingleProduct />} />
+        <Route path='/login' element={<Login />} />
+
+
+
       </Routes>
     </Router>
   )
-   
+
 }
 
 export default App

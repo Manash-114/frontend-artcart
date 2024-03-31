@@ -21,6 +21,29 @@ export const sliderItems = [
       bg: "fbf0f4",
     },
   ];
+  export const images = [
+    {
+      id:1,
+      image: "https://img.freepik.com/free-vector/artistic-beautiful-sunset-scene-decorative-background_1055-17709.jpg?t=st=1711790975~exp=1711794575~hmac=7e2c7f1481edd72e8dd1bb742c0d85f50f9b6075f48bafbee2fc8ec9642c4fb8&w=996",
+    },
+    {
+      id:2,
+      image: "https://img.freepik.com/free-photo/beautiful-shot-small-lake-with-wooden-rowboat-focus-breathtaking-clouds-sky_181624-2490.jpg?t=st=1711790916~exp=1711794516~hmac=80cd39bce0e395f6b46432e05a439de2216d5b0429f4fa9886efa5f9df28b0ba&w=996",
+    },
+    {
+      id:3,
+      image: "https://img.freepik.com/free-photo/sunset-sisters-monument-valley-usa_268835-1009.jpg?t=st=1711790994~exp=1711794594~hmac=a11843d74637112b0cf0d2a9b1357fdfebed55d758a1b7987889df69a7d26956&w=996",
+    },
+    {
+      id:4,
+      image: "https://img.freepik.com/free-photo/breathtaking-shot-beautiful-stones-turquoise-water-lake-hills-background_181624-12847.jpg?t=st=1711791008~exp=1711794608~hmac=a621216d3bb1dffcd84f00472b2462a481ade3806a681b6d7d408ae64b771867&w=996",
+    },
+    {
+      id:5,
+      image: "https://img.freepik.com/free-photo/cascade-boat-clean-china-natural-rural_1417-1356.jpg?t=st=1711790940~exp=1711794540~hmac=0e6c07be207b7f97f922e1949997aa2a5a2acc0626c282dabf0b5f418a807ed6&w=996",
+    }, 
+  ]
+
   export const price = [
     {
       id: 1,
