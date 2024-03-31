@@ -2,6 +2,7 @@ import React from 'react'
 import './index.css'
 import {Route, BrowserRouter as Router, Routes} from 'react-router-dom'
 import AdminDashboard from './pages/Seller/AdminDashboard'
+import SellerRegistration from './components/seller/SellerRegistration'
 
 import Registration from './components/Registration'
 import Login from './components/Login'
@@ -44,6 +45,16 @@ const App = () => {
         
         <Route path='/' element={<ProductPage/>} />
         <Route path='/login' element={<Login/>} />
+
+        {/* Seller Section */}
+
+        <Route path='/seller/register' element={<SellerRegistration/>} />
+        <Route path='/seller/dashboard' element={<Dashboard/>} />
+        <Route path='/random' element={<Header/>} />
+        <Route path='/random1' element={<Footer2/>} />
+
+
+
 
         
        

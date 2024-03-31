@@ -23,7 +23,7 @@ const Header = () => {
           <ul>
             <li>About</li> 
             
-            <li><StyledLink to='/login'>Become a Seller</StyledLink></li>          
+            <li><StyledLink to='/seller/register'>Become a Seller</StyledLink></li>          
             <li><StyledLink to='/login'>Login</StyledLink></li>          
             <li>Cart</li>          
             </ul>
