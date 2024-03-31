@@ -2,8 +2,9 @@ import React from 'react'
 import Header from '../common/Header'
 import Footer2 from '../common/Footer2'
 import Products from './Products'
+import ProductList from './ProductList'
 
-const ProductPage = () => {
+const ProductPage = ({data}) => {
   return (
     <div>
       <Header />

@@ -12,8 +12,10 @@ const Categories = ({ data }) => {
           <GridItem key={index}
             className={`grid-item item${index + 1}`}
             style={{ backgroundImage: `url(${item.img})` }}>
+
             <Link to={`/products/${item.cat}`} />
             <button>{item.cat}</button>
+            
           </GridItem>
         ))}
       </Container>
