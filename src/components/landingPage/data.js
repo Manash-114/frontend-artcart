@@ -64,24 +64,35 @@ export const sliderItems = [
       id: 1,
       img: "https://c4.wallpaperflare.com/wallpaper/618/385/72/fantasy-art-science-fiction-space-suit-artwork-wallpaper-preview.jpg",
       title: "SHIRT STYLE!",
+      category: "smartphones",
       cat: "Digital"
     },
     {
       id: 2,
       img: "https://c4.wallpaperflare.com/wallpaper/428/434/322/art-computer-digital-art-concept-art-wallpaper-preview.jpg",
       title: "LOUNGEWEAR LOVE",
+      category: "laptops",
       cat: "Conceptual"
     },
     {
       id: 3,
       img: "https://r4.wallpaperflare.com/wallpaper/834/299/692/city-lights-girl-moon-wallpaper-e178a9faa68bf35ee7e3f2afc50e43fc.jpg",
       title: "LIGHT JACKETS",
+      category: "fragrances",
       cat: "Classic"
     },
     {
       id: 4,
       img: "https://c4.wallpaperflare.com/wallpaper/240/654/397/nature-landscape-painting-artwork-wallpaper-preview.jpg",
       title: "LIGHT JACKETS",
+      category: "skincare",
+      cat: "Nature"
+    },
+    {
+      id: 5,
+      img: "https://c4.wallpaperflare.com/wallpaper/240/654/397/nature-landscape-painting-artwork-wallpaper-preview.jpg",
+      title: "LIGHT JACKETS",
+      category: "groceries",
       cat: "Nature"
     },
   ];

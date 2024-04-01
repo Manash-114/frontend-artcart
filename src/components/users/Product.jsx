@@ -152,7 +152,7 @@ const Container = styled.section`
     
     
     .content-section{
-      flex: 0.8;
+      flex: 0.6;
       border: 1px solid black;
     }
     .content-container{

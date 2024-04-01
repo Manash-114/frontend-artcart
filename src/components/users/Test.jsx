@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components';
 import { images } from '../landingPage/data';
 import Slider from 'react-slick';
@@ -43,9 +43,15 @@ const Test = () => {
       }
     ]
   };
+  const [term, setTerm] = useState('');
+  const handle = (e) => {
+    setTerm(e.target.value.toLowerCase());
+  }
+  console.log(term)
   return (
     <Container>
       <Wrapper>
+              <input type='text' value={term} onChange={handle} />
               <Slider {...settings}>
               {images.map((item) =>(
                    <div className="card">
@@ -75,11 +81,15 @@ const Wrapper = styled.div`
   }
   .card > img{
     height: 100%;
-    width: 98%;
+    width: 100%;
     object-fit: cover;
   }
 
- 
+  .slick-list{
+    .slick-slide {
+      
+    }
+  }
   .slick-slider{
     .slick-arrow{
       z-index: 100;

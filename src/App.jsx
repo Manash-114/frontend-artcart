@@ -55,6 +55,7 @@ const App = () => {
         {/* <Route path='/categoryitem' element={<CategoryItem/>} /> */}
         
         <Route path='/' element={<ProductPage/>} />
+        <Route path='/product/:id' element={<SingleProduct/>} />
         <Route path='/login' element={<Login/>} />
 
 

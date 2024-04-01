@@ -43,7 +43,7 @@ const Container = styled.div`
 const Wrapper = styled.section`
   display: flex;
   flex: 1;
-  border: 1px solid black;
+ 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -67,6 +67,7 @@ const Wrapper = styled.section`
     object-fit: cover;
   }
   .grid-cols{
+    background-color: #eef2f5;
     flex: 1;
     display: grid;
     grid-template-columns: repeat(4, 1fr);

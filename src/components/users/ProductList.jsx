@@ -42,8 +42,15 @@ const ProductList = ({currentProducts}) => {
                     <img src='public/images/profile.png' alt='profile'></img>
                   </div>
                   <div className="subContent">
-                    <div className="title">{p.title.slice(0, 35)}..</div>
-                    <div className="price"> {p.price}</div>
+                    <div className="title">
+                      {
+                        p.title.length > 30 ? `${p.title.slice(0,25)}..`
+                        : p.title
+                      }
+                    </div>
+                    <div className="price"> 
+                    <img src='/images/ruppee.png'/>
+                    {p.price}</div>
 
                   </div>
 
@@ -72,6 +79,12 @@ const Container = styled.section`
    grid-template-columns: repeat(3, 1fr);
    height: 100%;
    grid-gap: 20px 10px;
+
+   .grid-item-link{
+    text-decoration: none;
+    color: black;
+   }
+  
 `
 const GridItem = styled.div`
   border: 1px solid black;
@@ -117,6 +130,11 @@ const GridItem = styled.div`
     color: green;
     font-weight: bold;
     font-size: 14px;
+  }
+  .price > img{
+    padding-right: 5px;
+    height: 12px;
+    width: 10px;
   }
   .star{
     padding-left: 10px;
