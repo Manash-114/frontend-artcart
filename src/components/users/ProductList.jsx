@@ -44,7 +44,7 @@ const ProductList = ({currentProducts}) => {
                   <div className="subContent">
                     <div className="title">
                       {
-                        p.title.length > 30 ? `${p.title.slice(0,25)}..`
+                        p.title.length > 20 ? `${p.title.slice(0,18)}..`
                         : p.title
                       }
                     </div>
@@ -127,6 +127,8 @@ const GridItem = styled.div`
     font-size: 12px;
   }
   .price{
+    width: 30%;
+    margin-right: 2px;
     color: green;
     font-weight: bold;
     font-size: 14px;

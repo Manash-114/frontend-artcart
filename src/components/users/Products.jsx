@@ -97,6 +97,7 @@ const Products = () => {
     applyFilters(term, filter, selectedValue);
   }, [term, filter, selectedValue, selectedCategory]);
 
+  
   return (
 
     <Container>

@@ -51,7 +51,7 @@ const ProductSlice = createSlice({
                 default:
                     break; // No additional filtering if 'all' is selected
             }
-
+             
             // Apply sorting (if selected)
             if (sort === "ascending") {
                 filteredProducts.sort((a, b) => a.price - b.price);
