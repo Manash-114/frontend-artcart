@@ -1,8 +1,8 @@
 import React from 'react'
-import Header from '../common/Header'
-import Footer2 from '../common/Footer2'
-import Products from './Products'
-import ProductList from './ProductList'
+import Header from '../../components/common/Header'
+import Footer2 from '../../components/common/Footer2'
+import Products from '../../components/users/Products'
+
 
 const ProductPage = ({data}) => {
   return (
