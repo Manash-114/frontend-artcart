@@ -1,0 +1,23 @@
+import React from "react";
+import Header from "../../components/common/Header";
+import Footer from "../../components/common/Footer";
+
+import { Outlet } from "react-router-dom";
+
+const AdminDashboard = () => {
+  return (
+    <div className="border-2 border-red-600 flex flex-col h-screen p-5 w-screen box-border">
+      <div className="border-3 border-green-500">
+        <Header />
+      </div>
+      <div className="flex-1 border-2 border-orange-300">
+        <Outlet />
+      </div>
+      <div className="border-3 border-blue-600">
+        <Footer />
+      </div>
+    </div>
+  );
+};
+
+export default AdminDashboard;
