@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getAllCategories } from "../../apiCalls/admin/getAllCategories";
 import AddCategoryModal from "./AddCategoryModal";
 
-const Categories = () => {
+const ProductCategories = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -110,4 +110,4 @@ const Categories = () => {
   );
 };
 
-export default Categories;
+export default ProductCategories;

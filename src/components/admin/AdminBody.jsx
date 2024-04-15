@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const Body = () => {
+const AdminBody = () => {
   const navigate = useNavigate();
 
   const handleClickCategories = () => {
@@ -49,4 +49,4 @@ const Body = () => {
   );
 };
 
-export default Body;
+export default AdminBody;

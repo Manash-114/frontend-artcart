@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import SearchIcon from "@mui/icons-material/Search";
 import {
@@ -7,67 +6,65 @@ import {
   AccordionDetails,
   AccordionSummary,
   Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormLabel,
+  Pagination,
+  Radio,
+  RadioGroup,
   Typography,
 } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { categories, price } from "../landingPage/data";
 import ProductList from "./ProductList";
-=======
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import SearchIcon from '@mui/icons-material/Search';
-import { Accordion, AccordionDetails, AccordionSummary, Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Pagination, Radio, RadioGroup, Typography } from '@mui/material';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { categories, price } from '../landingPage/data';
-import ProductList from './ProductList';
-import { useDispatch, useSelector } from 'react-redux';
-import { searchAndFilter } from '../../reduxToolkit/features/productList/ProductSlice';
-
-
->>>>>>> aff208fd233ddad9b4ac22da7fa8e06ee4ee9533
+import { useDispatch, useSelector } from "react-redux";
+import { searchAndFilter } from "../../reduxToolkit/features/productList/ProductSlice";
 
 const Products = () => {
-
   const itemsPerPage = 9;
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  const product = useSelector(state => state.product);
-  console.log(product)
+  const product = useSelector((state) => state.product);
+  console.log(product);
 
   const { products, filterProducts } = product;
 
-  const totalProducts = filterProducts.length > 0 ? filterProducts.length : products.length;
+  const totalProducts =
+    filterProducts.length > 0 ? filterProducts.length : products.length;
 
   //For pagination
   useEffect(() => {
-    const totalFilteredProducts = filterProducts.length > 0 ? filterProducts.length : products.length;
+    const totalFilteredProducts =
+      filterProducts.length > 0 ? filterProducts.length : products.length;
     setTotalPages(Math.ceil(totalFilteredProducts / itemsPerPage));
   }, [filterProducts, products]);
 
   const handlePageChange = (event, page) => {
     setCurrentPage(page);
-    scrollToElementById('ref');
+    scrollToElementById("ref");
   };
 
   const scrollToElementById = (id) => {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: "smooth" });
     }
   };
-
-
-
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
-  const currentProducts = filterProducts.length > 0 ? filterProducts.slice(indexOfFirstItem, indexOfLastItem) : products.slice(indexOfFirstItem, indexOfLastItem);
+  const currentProducts =
+    filterProducts.length > 0
+      ? filterProducts.slice(indexOfFirstItem, indexOfLastItem)
+      : products.slice(indexOfFirstItem, indexOfLastItem);
 
-  const [term, setTerm] = useState('');
+  const [term, setTerm] = useState("");
   const [selectedValue, setSelectedValue] = useState("default");
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState("all");
   const [selectedCategory, setSelectedCategory] = useState([]);
 
   const dispatch = useDispatch();
@@ -78,10 +75,6 @@ const Products = () => {
   };
 
   const handleSelectChange = (e) => {
-<<<<<<< HEAD
-    setSelectedValue(e.target.value);
-  };
-=======
     const selected = e.target.value;
     setSelectedValue(selected);
   };
@@ -95,31 +88,37 @@ const Products = () => {
     const newselectedCategory = [...selectedCategory]; // Create copy to avoid mutation
 
     const index = newselectedCategory.indexOf(category);
-    if (index > -1) { // Category already selected, remove it
+    if (index > -1) {
+      // Category already selected, remove it
       newselectedCategory.splice(index, 1);
-    } else { // Category not selected, add it
+    } else {
+      // Category not selected, add it
       newselectedCategory.push(category);
     }
     setSelectedCategory(newselectedCategory);
   };
 
-  console.log(selectedCategory)
+  console.log(selectedCategory);
   // All Filters working simultaneously
   const applyFilters = (searchTerm, priceFilter, sortOption) => {
-    dispatch(searchAndFilter({ term: searchTerm, price: priceFilter, sort: sortOption, category: selectedCategory }));
+    dispatch(
+      searchAndFilter({
+        term: searchTerm,
+        price: priceFilter,
+        sort: sortOption,
+        category: selectedCategory,
+      })
+    );
   };
 
   useEffect(() => {
     applyFilters(term, filter, selectedValue); // Call initial filter without category
   }, [term, filter, selectedValue]);
 
-  useEffect(() => { // Re-apply filters when selectedCategory change
+  useEffect(() => {
+    // Re-apply filters when selectedCategory change
     applyFilters(term, filter, selectedValue);
   }, [term, filter, selectedValue, selectedCategory]);
-
-  
-  return (
->>>>>>> aff208fd233ddad9b4ac22da7fa8e06ee4ee9533
 
   fetch("http://3.108.56.2:7002/api/admin/all-unapproved-seller", {
     method: "GET",
@@ -140,32 +139,28 @@ const Products = () => {
         <h1>Shop for art from creators you love</h1>
       </ImageSection>
       <FilterTop>
-        <div className="filter-content" id='ref'>
+        <div className="filter-content" id="ref">
           <div className="title">Product List ({totalProducts})</div>
           <div className="search">
             <SearchIcon />
-<<<<<<< HEAD
-            <input type="text" placeholder="Search Arts" />
+            <input
+              type="text"
+              placeholder="Search Arts"
+              value={term}
+              onChange={handleSearchChange}
+            />
           </div>
           <div className="sort">
-            <label htmlFor="dropdown">Sort By </label>
+            <label htmlFor="dropdown">Sort By</label>
 
             <select
               id="dropdown"
               value={selectedValue}
               onChange={handleSelectChange}
             >
-              <option value="default">Select Option</option>
-=======
-            <input type='text' placeholder='Search Arts' value={term} onChange={handleSearchChange} />
-          </div>
-          <div className="sort">
-
-            <label htmlFor="dropdown">Sort By</label>
-
-            <select id="dropdown" value={selectedValue} onChange={handleSelectChange}>
-              <option value="default" disabled={selectedValue !== "default"}>Select Option</option>
->>>>>>> aff208fd233ddad9b4ac22da7fa8e06ee4ee9533
+              <option value="default" disabled={selectedValue !== "default"}>
+                Select Option
+              </option>
               <option value="ascending">Low to High</option>
               <option value="descending">High to Low</option>
             </select>
@@ -175,31 +170,15 @@ const Products = () => {
       <SubContainer>
         <LeftFilter>
           <h2>Filter</h2>
-<<<<<<< HEAD
           <Accordion>
             <AccordionSummary>
               <Typography variant="h5" id="category">
                 Categories <ArrowDropDownIcon />
               </Typography>
-=======
-          <Accordion
-
-          >
-            <AccordionSummary >
-              <Typography variant='h5' id='category'>Categories <ArrowDropDownIcon /></Typography>
->>>>>>> aff208fd233ddad9b4ac22da7fa8e06ee4ee9533
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
                 {categories.map((item, index) => (
-<<<<<<< HEAD
-                  <List>
-                    <Button key={index} variant="outlined">
-                      {item.title}
-                    </Button>
-                  </List>
-                ))}
-=======
                   <FormGroup key={index}>
                     <FormControlLabel
                       control={
@@ -212,33 +191,14 @@ const Products = () => {
                     />
                   </FormGroup>
                 ))}
-
->>>>>>> aff208fd233ddad9b4ac22da7fa8e06ee4ee9533
               </Typography>
             </AccordionDetails>
           </Accordion>
-<<<<<<< HEAD
           <Accordion>
             <AccordionSummary>
               <Typography variant="h5" id="price">
                 Price <ArrowDropDownIcon />
               </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography>
-                {price.map((item, index) => (
-                  <List>
-                    <Button key={item.index} variant="outlined" color="success">
-                      {item.range}
-                    </Button>
-                  </List>
-                ))}
-=======
-          <Accordion
-
-          >
-            <AccordionSummary >
-              <Typography variant='h5' id='price'>Price <ArrowDropDownIcon /></Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
@@ -250,10 +210,30 @@ const Products = () => {
                     name="radio-buttons-group"
                     onChange={handlePriceFilter}
                   >
-                    <FormControlLabel id='form-left' value="all" control={<Radio />} label="All" />
-                    <FormControlLabel id='form-left' value="below" control={<Radio />} label="Below 300" />
-                    <FormControlLabel id='form-left' value="between" control={<Radio />} label="300 - 1000" />
-                    <FormControlLabel id='form-left' value="above" control={<Radio />} label="1000 and above" />
+                    <FormControlLabel
+                      id="form-left"
+                      value="all"
+                      control={<Radio />}
+                      label="All"
+                    />
+                    <FormControlLabel
+                      id="form-left"
+                      value="below"
+                      control={<Radio />}
+                      label="Below 300"
+                    />
+                    <FormControlLabel
+                      id="form-left"
+                      value="between"
+                      control={<Radio />}
+                      label="300 - 1000"
+                    />
+                    <FormControlLabel
+                      id="form-left"
+                      value="above"
+                      control={<Radio />}
+                      label="1000 and above"
+                    />
                   </RadioGroup>
                 </FormControl>
 
@@ -264,7 +244,6 @@ const Products = () => {
                     </List>
                   ))
                 } */}
->>>>>>> aff208fd233ddad9b4ac22da7fa8e06ee4ee9533
               </Typography>
             </AccordionDetails>
           </Accordion>
@@ -272,9 +251,6 @@ const Products = () => {
 
         {/* product-container */}
         <ProductContainer>
-<<<<<<< HEAD
-          <ProductList />
-=======
           <ProductList currentProducts={currentProducts} />
           <StyledPagination>
             <Pagination
@@ -284,7 +260,6 @@ const Products = () => {
               page={currentPage}
             />
           </StyledPagination>
->>>>>>> aff208fd233ddad9b4ac22da7fa8e06ee4ee9533
         </ProductContainer>
       </SubContainer>
     </Container>
@@ -294,27 +269,28 @@ const Products = () => {
 export default Products;
 
 const StyledPagination = styled.div`
-border-top: 0.4px solid black;
-padding: 12px;
- margin-top: 50px;
- display: flex;
- justify-content: center;
- align-items: center;
- font-weight: 500;
-`
+  border-top: 0.4px solid black;
+  padding: 12px;
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+`;
 const List = styled.div`
   width: auto;
   height: auto;
-<<<<<<< HEAD
 `;
-const Container = styled.div``;
+const Container = styled.div`
+  height: 220vh;
+`;
 const ImageSection = styled.div`
   background-image: linear-gradient(
       to bottom,
       rgba(0, 0, 0, 0.023),
       rgba(0, 0, 0, 0.393)
     ),
-    url("public/images/theme1.jpg");
+    url("/images/theme1.jpg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -331,30 +307,6 @@ const ImageSection = styled.div`
     text-align: center;
   }
 `;
-=======
-`
-const Container = styled.div`
-  height: 220vh;
-  `
-const ImageSection = styled.div`
-    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.023), rgba(0, 0, 0, 0.393)), url('/images/theme1.jpg');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    height: 200px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    
-    h1{
-      text-transform: uppercase;
-      font-size: 40px;
-      width: 50%;
-      text-align: center;
-    }
-  `
->>>>>>> aff208fd233ddad9b4ac22da7fa8e06ee4ee9533
 const FilterTop = styled.div`
   height: 120px;
   display: flex;
@@ -418,15 +370,10 @@ const LeftFilter = styled.div`
   flex: 0.3;
   border: 1px solid black;
 
-<<<<<<< HEAD
-  h2 {
-=======
-  #form-left{
+  #form-left {
     padding-left: 15px;
   }
-  h2{
-    
->>>>>>> aff208fd233ddad9b4ac22da7fa8e06ee4ee9533
+  h2 {
     text-transform: uppercase;
     text-align: center;
     margin-bottom: 40px;
@@ -456,11 +403,4 @@ const LeftFilter = styled.div`
 `;
 const ProductContainer = styled.div`
   flex: 1.1;
-<<<<<<< HEAD
-  height: 150vh;
-  border: 1px solid black;
 `;
-=======
- 
-`
->>>>>>> aff208fd233ddad9b4ac22da7fa8e06ee4ee9533
