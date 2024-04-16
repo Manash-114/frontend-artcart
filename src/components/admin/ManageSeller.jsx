@@ -1,79 +1,74 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import DataTable from "./DataTable";
+import { useSelector } from "react-redux";
+import { getAllUnapprovedSeller } from "../../apiCalls/admin/getAllUnapprovedSeller";
+import { approvedSeller } from "../../apiCalls/admin/approvedSeller";
 // import { getAllUnapprovedSeller } from "../../api/getAllUnapprovedSeller";
 
 const ManageSeller = () => {
-  const token = localStorage.getItem("token");
-  useEffect(() => {
-    // getAllUnapprovedSeller(token);
-  }, []);
+  const token = useSelector((store) => store.auth.token);
+
+  const [unapprovedSellerList, setUnapprovedSellerList] = useState([]);
+
+  const data = [
+    {
+      id: 1,
+      name: "John Doe",
+      aadhaarNumber: "1234 5678 9012",
+      aadharImage: "path_to_image_1.jpg",
+    },
+    {
+      id: 2,
+      name: "Jane Smith",
+      aadhaarNumber: "9876 5432 1098",
+      aadharImage: "path_to_image_2.jpg",
+    },
+    // Add more data as needed
+  ];
+
+  const onViewAadharImage = (imagePath) => {
+    // Logic to open the image in a modal or new window
+    window.open(imagePath);
+  };
+
+  const onApprove = (id) => {
+    // Logic to handle approval
+    console.log("Approved seller with ID:", id);
+    approvedSeller(token, id, 1);
+  };
+
+  const onReject = (id) => {
+    // Logic to handle rejection
+    console.log("Rejected seller with ID:", id);
+    approvedSeller(token, id, 0);
+  };
+
+  // const token = localStorage.getItem("token");
+  useEffect(() => {}, []);
   return (
     <div className="flex p-4">
       {/* left side */}
       <div className="border-2 border-red-600 h-72 w-[25%]">
-        <div className="bg-gray-300 h-12 m-2 text-center">
-          <h1>View Request</h1>
+        <div
+          className="bg-gray-300 h-12 m-2 text-center p-3 cursor-pointer"
+          onClick={() => {
+            getAllUnapprovedSeller(token, setUnapprovedSellerList);
+          }}
+        >
+          <h1>View All Request</h1>
         </div>
-        <div className="bg-gray-300 h-12 m-2 text-center">
-          <h1>List-of-seller</h1>
+        <div className="bg-gray-300 h-12 m-2 text-center p-3">
+          <h1>List-of-All-seller</h1>
         </div>
       </div>
 
       {/* right side */}
-      <div className="border-2 border-green-400 h-72 w-[70%]">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-              <th scope="col" class="px-6 py-3">
-                Seller name
-              </th>
-              <th scope="col" class="px-6 py-3">
-                Aadhaar No
-              </th>
-              <th scope="col" class="px-6 py-3">
-                AadhaarImage
-              </th>
-              <th scope="col" class="px-6 py-3">
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-              <th
-                scope="row"
-                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                Apple MacBook Pro 17"
-              </th>
-              <td class="px-6 py-4">Silver</td>
-              <td class="px-6 py-4">Laptop</td>
-              <td class="px-6 py-4">$2999</td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-              <th
-                scope="row"
-                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                Microsoft Surface Pro
-              </th>
-              <td class="px-6 py-4">White</td>
-              <td class="px-6 py-4">Laptop PC</td>
-              <td class="px-6 py-4">$1999</td>
-            </tr>
-            <tr class="bg-white dark:bg-gray-800">
-              <th
-                scope="row"
-                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                Magic Mouse 2
-              </th>
-              <td class="px-6 py-4">Black</td>
-              <td class="px-6 py-4">Accessories</td>
-              <td class="px-6 py-4">$99</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <DataTable
+        data={unapprovedSellerList}
+        onViewAadharImage={onViewAadharImage}
+        onApprove={onApprove}
+        onReject={onReject}
+      />
     </div>
   );
 };

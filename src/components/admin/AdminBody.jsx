@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const AdminBody = () => {
   const navigate = useNavigate();
@@ -28,7 +28,10 @@ const AdminBody = () => {
         />
       </div>
       <div className="border-4 bg-gray-500 p-3 w-[30%] h-52 flex flex-col justify-center items-center">
-        <h2 className="font-semibold text-3xl">Manage Seller</h2>
+        {/* <h2 className="font-semibold text-3xl">Manage Seller</h2> */}
+        <Link className="font-semibold text-3xl" to={"/admin/manageseller"}>
+          ManageSeller
+        </Link>
         <img
           onClick={handleClickSeller}
           className="w-32 h-32 rounded-full mt-4"

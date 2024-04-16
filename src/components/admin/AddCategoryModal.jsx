@@ -1,15 +1,26 @@
 import React, { useState } from "react";
 import { saveCategory } from "../../apiCalls/admin/saveCategory";
+import { useSelector } from "react-redux";
 
-const AddCategoryModal = ({ isOpen, onClose, onSubmit }) => {
+const AddCategoryModal = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  categories,
+  setCategories,
+}) => {
   const [categoryName, setCategoryName] = useState("");
-  const token =
-    "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtYW5hc2giLCJpYXQiOjE3MTI3NDgzODAsImV4cCI6MTcxMjgzNDc4MCwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9BRE1JTiJ9.1Yjoq9WPAj9peG4K5NPAReI52I3pZC5kgjcjaRGMK7E";
+  const token = useSelector((store) => store.auth.token);
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(categoryName);
-    setCategoryName(""); // Clear input after submission
-    saveCategory(token, categoryName);
+    if (categoryName.length < 2) {
+      alert("enter valid name");
+      setCategoryName("");
+    } else {
+      saveCategory(token, categoryName, categories);
+      setCategories(categories);
+    }
   };
 
   return (

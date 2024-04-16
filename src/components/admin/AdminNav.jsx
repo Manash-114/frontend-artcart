@@ -16,6 +16,9 @@ const AdminNav = () => {
         <div className="right">
           <ul>
             <li>
+              <StyledLink to="/admin/dashboard">Home</StyledLink>
+            </li>
+            <li>
               <StyledLink to="/login">Logout</StyledLink>
             </li>
           </ul>

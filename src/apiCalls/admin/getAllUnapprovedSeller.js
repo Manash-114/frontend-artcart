@@ -1,8 +1,10 @@
 import { BASE_URL, BASE_URL_LOCAL } from "../common-db";
 
-export const getAllCategories = async (token, setCategories) => {
-  console.log("token" + token);
-  const res = await fetch(`${BASE_URL_LOCAL}/api/admin/category`, {
+export const getAllUnapprovedSeller = async (
+  token,
+  setUnapprovedSellerList
+) => {
+  const res = await fetch(`${BASE_URL_LOCAL}/api/admin/all-unapproved-seller`, {
     headers: {
       "Content-type": "application/json",
       Authorization: `Bearer ${token}`,
@@ -12,7 +14,8 @@ export const getAllCategories = async (token, setCategories) => {
   if (res.status === 200) {
     const resData = await res.json();
     console.log(resData);
-    setCategories(resData);
+    setUnapprovedSellerList(resData);
+    // setCategories(resData);
   } else {
     alert("Internal server error");
   }
