@@ -21,7 +21,7 @@ const authSlice = createSlice({
     signout: (state, action) => {
       state.signin = false;
       state.currentUser = {};
-      localStorage.removeItem("token");
+      localStorage.removeItem("jwttoken");
       state.token = "";
     },
   },

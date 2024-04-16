@@ -1,8 +1,11 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { signout } from "../../reduxToolkit/features/authSlice";
 
 const AdminNav = () => {
+  const dispatch = useDispatch();
   return (
     <Wrapper>
       <div className="container">
@@ -19,7 +22,14 @@ const AdminNav = () => {
               <StyledLink to="/admin/dashboard">Home</StyledLink>
             </li>
             <li>
-              <StyledLink to="/login">Logout</StyledLink>
+              <StyledLink
+                onClick={() => {
+                  dispatch(signout());
+                }}
+                to={"/login"}
+              >
+                Logout
+              </StyledLink>
             </li>
           </ul>
         </div>

@@ -15,8 +15,6 @@ export const approvedSeller = async (token, id, approvedStatus) => {
   if (res.status === 200) {
     const resData = await res.json();
     console.log(resData);
-    // setUnapprovedSellerList(resData);
-    // setCategories(resData);
     alert(resData.message);
   } else {
     alert("Internal server error");
