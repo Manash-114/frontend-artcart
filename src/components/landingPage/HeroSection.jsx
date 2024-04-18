@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 
 const HeroSection = () => {
+   
   return (
     <Wrapper>
-      <div className="container">
-        <div className="hero-section">
-            <div className="hero-content">
+      <div className="container" id='refer'>
+        <div className="hero-section" >
+            <div className="hero-content" >
                 <h1>Discover the endless possibilities of Artcart's unique marketplace</h1>
                 <ul style={{ listStyleType: 'circle' }}>
                     <li>Artcart connects buyers and sellers, providing a platform for art enthusiasts to buy and sell their creations.</li>

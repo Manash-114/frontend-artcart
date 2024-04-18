@@ -5,6 +5,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import TextError from './TextError';
 import axios from "axios"
+import { BASE_URL } from '../apiUrl';
 
 
 
@@ -25,7 +26,7 @@ const Login = () => {
 
   const onSubmit = values => {
   
-    axios.post('https://art-cart-backend-production.up.railway.app/auth/signin', values)
+    axios.post(`${BASE_URL}/auth/signin`, values)
      .then(res => {
        navigate('/')
        console.log(res.data)

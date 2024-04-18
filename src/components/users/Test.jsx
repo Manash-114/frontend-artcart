@@ -1,27 +1,23 @@
-import React, { useState } from 'react'
-import styled from 'styled-components';
-import { images } from '../landingPage/data';
-import Slider from 'react-slick';
+import React from 'react'
+import styled from 'styled-components'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { useSelector } from 'react-redux';
+import Slider from "react-slick";
 
 const Test = () => {
-  
-
   const settings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 2,
-    slidesToScroll: 2,
+    slidesToShow: 3,
+    slidesToScroll: 1,
     initialSlide: 0,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
+          slidesToShow: 3,
+          slidesToScroll: 3,
           infinite: true,
           dots: true
         }
@@ -30,8 +26,8 @@ const Test = () => {
         breakpoint: 600,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2
+          slidesToScroll: 1,
+          initialSlide: 1
         }
       },
       {
@@ -43,60 +39,61 @@ const Test = () => {
       }
     ]
   };
-  const [term, setTerm] = useState('');
-  const handle = (e) => {
-    setTerm(e.target.value.toLowerCase());
-  }
-  console.log(term)
   return (
-    <Container>
-      <Wrapper>
-              <input type='text' value={term} onChange={handle} />
-              <Slider {...settings}>
-              {images.map((item) =>(
-                   <div className="card">
-                    <img src={item.image} alt={item.id} />
-                 </div>
-              ))}
-              </Slider>
- 
-            </Wrapper>
-            </Container>
+    <Carousel>
+      <h2>Carousal tutorial</h2>
+
+      <Slider {...settings}>
+      <div className="box">
+        <h3>1</h3>
+      </div>
+      <div className="box">
+        <h3>2</h3>
+      </div>
+      <div className="box">
+        <h3>3</h3>
+      </div>
+      <div className="box">
+        <h3>4</h3>
+      </div>
+      <div className="box">
+        <h3>5</h3>
+      </div>
+      </Slider>
+    </Carousel>
   )
 }
 
 export default Test
-
-const Container = styled.div`
-  background-color: aqua;
+const Carousel = styled.div`
+  padding: 5rem;
+  background-color: #7b7878;
+  color: #fff;
   height: 100vh;
-`
-const Wrapper = styled.div`
-  width: 70%;
-  margin: 10px auto;
-  padding: 20px 0;
 
-  .card{
-    height: 500px;
+  .box{
+    background-Color: #60b060;
+    height: 300px;
   }
-  .card > img{
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
+  .box h3{
+    text-align: center;
   }
-
-  .slick-list{
-    .slick-slide {
-      
-    }
+  .slick-slide div{
+    margin: 0 1rem;
   }
-  .slick-slider{
-    .slick-arrow{
-      z-index: 100;
-      height: 9%;
-      width: 5%;
-      border-radius: 50%;
-      background-color: #dfeca1b9;
-    }
+  .slick-next{
+    right: 20px !important;
+  }
+  .slick-prev{
+    left: 40px !important;
+    z-index: 99;
+  }
+  .slick-dots li.slick-active button:before{
+    color: #5dcf5d !important;
+  }
+  .slick-dots li button:before{
+    color: #fff;
+    font-size: 1rem;
+    top: 2rem;
   }
 `

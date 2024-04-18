@@ -13,9 +13,9 @@ const initialValues = {
 
 const onSubmit = values => {
 
-    values["role"] = "admin"
+    values["role"] = "customer"
     console.log( values)
-    axios.post('https://art-cart-backend-production.up.railway.app/auth/signup', values)
+    axios.post('http://3.108.56.2:7002/auth/signup', values)
      .then(res => {
        console.log(res.data)
      })

@@ -22,7 +22,7 @@ const ProductList = ({currentProducts}) => {
             <NavLink key={p.id} to={`/product/${p.id}`} className="grid-item-link">
             <GridItem className={`grid-items`}>
               <div className="image">
-                <img src={p.thumbnail} alt='image'></img>
+                <img src={p.images[0]} alt='image'></img>
               </div>
               <div className="content">
                 <div className="rate">
