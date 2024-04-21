@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -35,42 +35,76 @@ const buttons = [
 ];
 
 const Dashboard = () => {
-  const auth = useSelector((store) => store.auth);
   const navigate = useNavigate();
-  const [btID, SetbtID] = useState("add-product");
+  const auth = useSelector((store) => store.auth);
+  const [btID, SetbtID] = useState();
+
   const handleClick = (e) => {
     SetbtID(e.target.id);
   };
-  return (
-    <Wrapper>
-      <Header />
-      <div className="container">
-        <div className="con1">
-          <div className="firstSec">
-            {buttons.map((button, index) => (
-              <button
-                key={index}
-                id={button.id}
-                type={button.type}
-                onClick={handleClick}
-              >
-                {button.name}
-              </button>
-            ))}
-          </div>
-          <VerticalLine />
-          <div className="secondSec">
-            {console.log(btID)}
+  const [showMessage, setShowMessage] = useState(false);
 
-            {btID === "add-product" && <AddProduct />}
-            {btID === "complete-profile" && navigate("/seller/completeprofile")}
-            {btID === "manage-orders" && <ManageOrders />}
-            {btID === "manage-products" && <ManageProducts />}
+  const { currentUser } = useSelector((store) => store.auth);
+
+  useEffect(() => {
+    if (currentUser.name == null) {
+      console.log("use effect");
+      SetbtID("complete-profile");
+    } else if (currentUser.approved == false) {
+      setShowMessage(true);
+    } else {
+      setShowMessage(false);
+    }
+  }, [currentUser]);
+
+  return (
+    // <Wrapper>
+    <>
+      <Header />
+      {showMessage ? (
+        <div
+          className="bg-gray-100 border border-gray-400 text-gray-700 px-4 py-3 rounded relative"
+          role="alert"
+        >
+          <span className="block sm:inline">
+            Please wait until admin approved your request
+          </span>
+        </div>
+      ) : (
+        <div className="p-32 pt-8">
+          <div className="con1">
+            <div className="">
+              {currentUser.approved == false
+                ? ""
+                : buttons.map((button, index) => {
+                    if (index != 0)
+                      return (
+                        <button
+                          className="p-2  bg-indigo-700 text-white m-3 rounded-md hover:bg-indigo-600"
+                          key={index}
+                          id={button.id}
+                          type={button.type}
+                          onClick={handleClick}
+                        >
+                          {button.name}
+                        </button>
+                      );
+                  })}
+            </div>
+            <VerticalLine />
+            <div className="secondSec">
+              {btID === "complete-profile" && <SellerRegistration />}
+              {btID === "add-product" && <AddProduct />}
+              {btID === "manage-orders" && <ManageOrders />}
+              {btID === "manage-products" && <ManageProducts />}
+            </div>
           </div>
         </div>
-      </div>
-      <Footer2 />
-    </Wrapper>
+      )}
+      <Footer2 className="" />
+    </>
+
+    // </Wrapper>
   );
 };
 
