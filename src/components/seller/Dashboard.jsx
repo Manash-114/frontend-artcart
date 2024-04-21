@@ -50,13 +50,14 @@ const Dashboard = () => {
         
     }
     return (
-        <Wrapper>
-            <Header/>
-            <div className='container'>
+        // <Wrapper>
+        <>
+         <Header/>
+            <div className='p-32 pt-8'>
                 <div className='con1'>
-                    <div className='firstSec'>
+                    <div className=''>
                             {buttons.map((button, index) => (
-                                <button key={index} id={button.id} type={button.type} onClick={handleClick}>{button.name}</button>
+                                <button className='p-2  bg-indigo-700 text-white m-3 rounded-md hover:bg-indigo-600' key={index} id={button.id} type={button.type} onClick={handleClick}>{button.name}</button>
                             ))}
                         
                     </div>
@@ -73,7 +74,9 @@ const Dashboard = () => {
                 </div>
             </div>
             <Footer2 />
-        </Wrapper>
+        </>
+           
+        // </Wrapper>
     )
 }
 
