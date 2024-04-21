@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import ListAltIcon from '@mui/icons-material/ListAlt';
 
 const Header = () => {
   let totalQuantity = useSelector(state => state.cart.cartTotalQuantity)
@@ -89,6 +91,10 @@ const Header = () => {
                       textDecoration: 'none',
                       color: 'black'
                     }}><MenuItem onClick={handleClose}><FavoriteBorderOutlinedIcon/>WishList</MenuItem></NavLink>
+                      <NavLink to='/orders' style={{
+                        textDecoration: 'none',
+                        color: 'black'
+                      }}><MenuItem onClick={handleClose}><ListAltIcon/>Orders</MenuItem></NavLink>
                     <MenuItem onClick={handleClose}><LogoutIcon/>Logout</MenuItem>
                   </Menu>
                 </div>

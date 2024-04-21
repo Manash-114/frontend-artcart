@@ -30,6 +30,9 @@ import { fetchProducts } from './reduxToolkit/features/productList/ProductSlice.
 import CartPage from './pages/users/CartPage.jsx'
 import WishListPage from './pages/users/WishListPage.jsx'
 import Test2 from './components/users/Test2.jsx'
+import BillingPage from './components/Billing/BillingPage.jsx'
+import OrderPage from './components/Orders/OrderPage.jsx'
+import OrderDetails from './components/Orders/OrderDetails.jsx'
 
 
 
@@ -62,6 +65,9 @@ const App = () => {
         <Route path='/test' element={<Test/>} />
         <Route path='/wishlist' element={<WishListPage/>} />
         <Route path='/test2' element={<Test2/>} />
+        <Route path='/billing' element={<BillingPage/>} />
+        <Route path='/orders' element={<OrderPage/>} />
+        <Route path='/orders/details' element={<OrderDetails/>} />
 
 
 

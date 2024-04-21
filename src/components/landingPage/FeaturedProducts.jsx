@@ -118,7 +118,7 @@ const FeatureProducts = () => {
           featuredProducts.slice(3, 8).map((p, index) => {
 
             return (
-
+              
               <NavLink key={p.id} to={`/product/${p.id}`} className="Flink" onClick={handleClick}>
 
                 <Wrapper className={`grid-items`}>
@@ -270,6 +270,7 @@ const Carousel = styled.div`
   padding-right: 8rem;
   background-color: #f1ebeb;
   color: #fff;
+  
 .Flink{
   margin-left: 3rem;
   text-decoration: none;

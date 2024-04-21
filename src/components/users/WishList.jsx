@@ -67,7 +67,21 @@ const WishList = () => {
     //     const selectedProduct = useSelector(state => state.product.products.find(item => item.id === product.id))
     //     dispatch(addToCart(selectedProduct));
     // }
+    const addToBag = (product,e) =>{
+        e.preventDefault();
+      e.stopPropagation();
+        // const productId = product.id;
+        dispatch(addToCart(product));
+        toast.success("Item added to cart Successfully")
+    }
+    const handleClick = () => {
 
+        window.scrollTo({ top: 10, behavior: 'smooth' });
+      };
+    const handlePreventClick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+    }
     return (
         <Wrapper>
             <UpperSection>
@@ -105,8 +119,9 @@ const WishList = () => {
                             </>
                         ) : ( 
                         wishlistItems.map(item => (
+                            <NavLink key={item.product.id} to={`/product/${item.product.id}`} className="W-link" onClick={handleClick}>
                             <div key={item.product.id} className="item">
-                                <div className="remove">
+                                <div className="remove" onClick={(e) => handlePreventClick(e)}>
                                     <CancelIcon onClick={() => {
                                         setItemToDelete(item.product.id);
                                         setModalOpen(true);
@@ -154,12 +169,14 @@ const WishList = () => {
                                             marginTop: '1.5rem',
                                             backgroundColor: 'black'
                                         }}
-                                       
+                                       onClick={(e) => addToBag(item.product,e)}
+                                      
                                     >
                                         Move to bag
                                     </Button>
                                 </div>
                             </div>
+                            </NavLink>
                         ))
                     )}
 
@@ -263,6 +280,10 @@ const DownSection = styled.div`
         grid-template-columns: repeat(3, 1fr);
         gap: 2rem;
        
+    }
+    .W-link{
+        text-decoration: none;
+        color: black;
     }
     .item{
         border: 1px solid black;
