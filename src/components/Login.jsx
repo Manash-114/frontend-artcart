@@ -39,12 +39,16 @@ const Login = () => {
           navigate("/");
         } else if (res.data.auth && res.data.role === "ROLE_SELLER") {
           console.log(res.data);
-          navigate("/seller/dashboard");
+          localStorage.setItem("jwttoken", res.data.token);
+          navigate("/seller");
         } else if (res.data.auth && res.data.role === "ROLE_ADMIN") {
           console.log(res.data);
           localStorage.setItem("jwttoken", res.data.token);
           dispatch(signIn(res.data.token));
           navigate("/admin/dashboard");
+        } else {
+          console.log(res.data);
+          alert(res.data.message);
         }
       })
       .then((err) => console.log(err));

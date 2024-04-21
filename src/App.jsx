@@ -30,6 +30,7 @@ import ManageSeller from "./components/admin/ManageSeller.jsx";
 import ProductCategories from "./components/admin/ProductCategories.jsx";
 import AdminBody from "./components/admin/AdminBody.jsx";
 import ProtectedRoute from "./components/common/ProtectedRoute.jsx";
+import ProtectedRouteSeller from "./components/common/ProtectedRouteSeller.jsx";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -49,13 +50,17 @@ const App = () => {
         <Route path="/" element={<ProductPage />} />
         <Route path="/product/:id" element={<SingleProduct />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/seller/dashboard" element={<Dashboard />} />
+
+        {/* <Route path="/seller/dashboard" element={<Dashboard />} /> */}
+        <Route
+          path="/seller"
+          element={<ProtectedRouteSeller Component={Dashboard} />}
+        >
+          <Route path="completeprofile" element={<SellerRegistration />} />
+        </Route>
+
         <Route path="/seller/register" element={<Registration />} />
         <Route path="/seller/login" element={<Login />} />
-        <Route
-          path="/seller/completeprofile"
-          element={<SellerRegistration />}
-        />
 
         {/* admin route */}
         <Route

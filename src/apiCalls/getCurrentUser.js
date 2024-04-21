@@ -17,6 +17,14 @@ const getCurrentUser = async (tokenFromLocal, navigate, dispatch) => {
           Authorization: `Bearer ${tokenFromLocal}`,
         },
       });
+    } else if (s === "seller") {
+      res = await fetch(`${BASE_URL_LOCAL}/api/seller`, {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${tokenFromLocal}`,
+        },
+      });
     }
 
     const resData = await res.json();

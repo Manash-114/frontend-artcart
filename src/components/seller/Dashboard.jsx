@@ -1,83 +1,80 @@
-import React from 'react'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import styled from 'styled-components'
-import Footer2 from '../common/Footer2'
-import Header from '../common/Header'
-import AddProduct from './dashboardCompo/AddProduct'
-import ManageOrders from './dashboardCompo/ManageOrders'
-import ManageProducts from './dashboardCompo/ManageProducts'
-import SellerRegistration from './SellerRegistration'
+import React from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import Footer2 from "../common/Footer2";
+import Header from "../common/Header";
+import AddProduct from "./dashboardCompo/AddProduct";
+import ManageOrders from "./dashboardCompo/ManageOrders";
+import ManageProducts from "./dashboardCompo/ManageProducts";
+import SellerRegistration from "./SellerRegistration";
+import { useSelector } from "react-redux";
 
-const buttons=[
-    {
-        name:"Complete your profile", 
-        type:"button",
-        id:"complete-profile",
-    },
-    ,
-    {
-        name:"Add Product",
-        type:"button",
-        id:"add-product"
-    },
-    {
-        name:"Manage Orders",
-        type:"button",
-        id:"manage-orders"
-    },
-    {
-        name:"Manage Products",
-        type:"button",
-        id:"manage-products"
-    }
-]
-
-
-
-
-
+const buttons = [
+  {
+    name: "Complete your profile",
+    type: "button",
+    id: "complete-profile",
+  },
+  ,
+  {
+    name: "Add Product",
+    type: "button",
+    id: "add-product",
+  },
+  {
+    name: "Manage Orders",
+    type: "button",
+    id: "manage-orders",
+  },
+  {
+    name: "Manage Products",
+    type: "button",
+    id: "manage-products",
+  },
+];
 
 const Dashboard = () => {
+  const auth = useSelector((store) => store.auth);
+  const navigate = useNavigate();
+  const [btID, SetbtID] = useState("add-product");
+  const handleClick = (e) => {
+    SetbtID(e.target.id);
+  };
+  return (
+    <Wrapper>
+      <Header />
+      <div className="container">
+        <div className="con1">
+          <div className="firstSec">
+            {buttons.map((button, index) => (
+              <button
+                key={index}
+                id={button.id}
+                type={button.type}
+                onClick={handleClick}
+              >
+                {button.name}
+              </button>
+            ))}
+          </div>
+          <VerticalLine />
+          <div className="secondSec">
+            {console.log(btID)}
 
-   const navigate =  useNavigate();
-    
+            {btID === "add-product" && <AddProduct />}
+            {btID === "complete-profile" && navigate("/seller/completeprofile")}
+            {btID === "manage-orders" && <ManageOrders />}
+            {btID === "manage-products" && <ManageProducts />}
+          </div>
+        </div>
+      </div>
+      <Footer2 />
+    </Wrapper>
+  );
+};
 
-    const [btID,SetbtID] =useState("add-product");
-    
-    const handleClick = (e) =>{
-        SetbtID(e.target.id);
-        
-    }
-    return (
-        <Wrapper>
-            <Header/>
-            <div className='container'>
-                <div className='con1'>
-                    <div className='firstSec'>
-                            {buttons.map((button, index) => (
-                                <button key={index} id={button.id} type={button.type} onClick={handleClick}>{button.name}</button>
-                            ))}
-                        
-                    </div>
-                    <VerticalLine />
-                    <div className='secondSec'>
-                        {console.log(btID)}
-                        {btID === "add-product" && <AddProduct />}
-                        {btID === "complete-profile" && navigate("/seller/completeprofile")}
-                       
-                        {btID === "manage-orders" && <ManageOrders />}
-                        {btID === "manage-products" && <ManageProducts />}
-                    </div>
-
-                </div>
-            </div>
-            <Footer2 />
-        </Wrapper>
-    )
-}
-
-export default Dashboard
+export default Dashboard;
 
 const Wrapper = styled.section`
     overflow-y: scroll;
@@ -137,12 +134,10 @@ const Wrapper = styled.section`
         border-radius:7px;
     }
 
-`
+`;
 
 const VerticalLine = styled.div`
-  border-left: 3px solid #333; 
-  height: 70%; 
-  margin-top:70px;
-  
-
-  `;
+  border-left: 3px solid #333;
+  height: 70%;
+  margin-top: 70px;
+`;
