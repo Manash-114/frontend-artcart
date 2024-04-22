@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import LockIcon from '@mui/icons-material/Lock';
 import LocalMallIcon from '@mui/icons-material/LocalMall';
 import SingleCart from './SingleCart';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 
@@ -16,13 +16,13 @@ const Cart = () => {
         <Wrapper>
             <Container>
                 <div className="my-cart">
-                    <LocalMallIcon /><span id='title'>My Cart</span>  
+                    <LocalMallIcon /><span id='title'>My Cart</span>
                 </div>
-                
+
                 <div className="continue-shop">
-                        <StyledNavLink to='/products'>Continue Shopping </StyledNavLink>
-                        <span id='items'><span className='quantity'>{totalQuantity}</span> items</span><br/>
-                    </div>
+                    <StyledNavLink to='/products'>Continue Shopping </StyledNavLink>
+                    <span id='items'><span className='quantity'>{totalQuantity}</span> items</span><br />
+                </div>
                 <div className="cart-content">
                     <div className="cart-details">
                         {cartItems.map(item => (
@@ -55,52 +55,57 @@ const Cart = () => {
                         <div className="cart discount">
                             <p>Subtotal</p>
                             <p id='purchase'><CurrencyRupeeIcon
-                            style={{
-                                height: '1.2rem',
-                                
-                            }}
+                                style={{
+                                    height: '1.2rem',
+
+                                }}
                             />{totalAmount}</p>
                         </div>
                         <div className="cart shipping-cost">
                             <p>Shipping cost</p>
                             <p id='purchase'><CurrencyRupeeIcon
-                            style={{
-                                height: '1.2rem'
-                            }}
+                                style={{
+                                    height: '1.2rem'
+                                }}
                             />10</p>
                         </div>
                         <div className="cart red">
                             <p>Shipping Discount</p>
                             <p id='purchase'>-<CurrencyRupeeIcon
-                            style={{
-                                height: '1.2rem'
-                            }}
+                                style={{
+                                    height: '1.2rem'
+                                }}
                             />10</p>
                         </div>
-                        
+
                         <div className="cart tax border-bot">
                             <p>Tax</p>
                             <p>TBO</p>
                         </div>
-                        
+
                         <div className="cart total-cost">
                             <p id='total'>Estimated Total</p>
                             <p id='totalEstimated'><CurrencyRupeeIcon
                                 style={{
-                                    height: '1.2rem'  
+                                    height: '1.2rem'
                                 }}
                             /> {totalAmount} </p>
                         </div>
-                        <Button variant="contained" color='secondary' startIcon={<LockIcon />}
-                            style={{
-                                width: '100%',
-                                height: '2.8rem',
-                                color: 'white',
-                                backgroundColor: 'green'
-                            }}
-                        >
-                            Checkout
-                        </Button>
+                        <Link to="/billing" style={{ textDecoration: 'none' }}>
+                            <Button
+                                variant="contained"
+                                color='secondary'
+                                startIcon={<LockIcon />}
+                                style={{
+                                    width: '100%',
+                                    height: '2.8rem',
+                                    color: 'white',
+                                    backgroundColor: 'green'
+                                }}
+                            >
+                                Checkout
+                            </Button>
+                        </Link>
                     </div>
                 </div>
             </Container>

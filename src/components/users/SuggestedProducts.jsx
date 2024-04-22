@@ -51,10 +51,17 @@ const SuggestedProducts = () => {
 
   const { id } = useParams();
   const featuredProducts = useSelector(state => state.product.products);
-  const selectedProducts = featuredProducts.find(product => product.id === parseInt(id));
+  const selectedProducts = featuredProducts.find(product => product.id === id);
+  
+
   const similarProducts = featuredProducts.filter(individualProduct => individualProduct.category === selectedProducts.category && individualProduct.id !== selectedProducts.id);
-  const filterItems = similarProducts.slice(0, 7);
+ 
+
+  const filterItems = similarProducts.slice(0, 2);
+  console.log(filterItems)
+
   const selectedProduct = useSelector(state => state.product.products);
+
   const dispatch = useDispatch();
   const toastMessage = useSelector(state => state.wishlist.toastMessage);
 
@@ -83,7 +90,7 @@ const SuggestedProducts = () => {
     event.preventDefault();
     event.stopPropagation();
     //finding individual item
-    const product = selectedProduct.find(product => product.id === parseInt(id))
+    const product = selectedProduct.find(product => product.id === id)
     dispatch(addToWishList({ product, quantity: 1 })); 
   };
 
@@ -106,6 +113,7 @@ const handleColorClick = (productId) => {
   setClickedProducts(newClickedProducts);
 };
 const wishlistColor = useSelector(state => state.wishlist.items);
+
   return (
 
     <Carousel>

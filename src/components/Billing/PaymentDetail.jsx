@@ -127,4 +127,7 @@ const Container = styled.div`
     .cv{
         margin-left: 2rem;
     }
+    .EditError{
+        color: red
+    }
 `

@@ -4,82 +4,87 @@ import ShoppingCartCheckoutOutlinedIcon from '@mui/icons-material/ShoppingCartCh
 import CurrencyRupeeOutlinedIcon from '@mui/icons-material/CurrencyRupeeOutlined';
 import { CurrencyRupee } from '@mui/icons-material';
 import { Button } from '@mui/material';
+import { useSelector } from 'react-redux';
 
 const OrderDetail = () => {
-  return (
-    <Wrapper>
-        <Container>
-            <div className="product-detail">
-                    <div className="item-image">
-                        <img src='/images/scenery1.jpg' alt='title' />
-                    </div>
-                    <div className="description">
-                        <p className='title'>LG FN5U, Noise Isolation, UV Nano, IPX4, </p>
-                        <span id='category'>Category:  <span id='catDetail'>Painting</span></span><br />
-                        <span id='seller'>Seller:  <span id='sellername'>james Bond</span></span><br />
-                        <p className='itemPrice'>
-                        <CurrencyRupee
-                             style={{
-                                height: "1.2rem",
-                            }}
-                        /><span id="product-price">400</span>
-                        </p>
-                    </div>
-            </div>
 
-            <div className="price-detail">
+    const cartItems = useSelector(state => state.cart.cartItems);
+    const cartQuantity = useSelector(state => state.cart.cartTotalQuantity);
+    const cartAmount = useSelector(state => state.cart.cartTotalAmount);
+
+    return (
+        <Wrapper>
+            <Container>
+                <div className="items">
+
+                    {cartItems.map(item => (
+                        <div className="product-detail" key={item.id}>
+                            <div className="item-image">
+                                <img src={item.images[0]} alt={item.id} />
+                            </div>
+                            <div className="description">
+                                <p className='title'>{item.title} </p>
+                                <span id='category'>Category:  <span id='catDetail'>{item.category}</span></span><br />
+                                <span id='seller'>Seller:  <span id='sellername'>{item.brand}</span></span><br />
+                                <p className='itemPrice'>
+                                    <CurrencyRupee
+                                        style={{
+                                            height: "1.2rem",
+                                        }}
+                                    /><span id="product-price">{item.price}</span>
+                                </p>
+                            </div>
+                        </div>))}
+                </div>
+
+                <div className="price-detail">
                     <h2>Order Summary</h2>
                     <div className="mini-container">
-                        
                         <div className="desc1">
-                            <ShoppingCartCheckoutOutlinedIcon/>
-                            <span id='cartid'><span className='count'>( 1 ) </span> items in cart</span>   
+                            <ShoppingCartCheckoutOutlinedIcon />
+                            <span id='cartid'><span className='count'>( {cartQuantity} ) </span> items in cart</span>
                         </div>
                         <div className="item first">
-                        <div className="desc order">Order Subtotal</div>
-                        <div className="no">
-                        <CurrencyRupeeOutlinedIcon
-                            style={{
-                                height: "1.2rem"
-                            }}
-                        />200
-                        </div>
-                        </div>
-                        <div className="item">
-                        <div className="desc charge">Delivery Charges</div>
-                        <div className="no" style={{textDecoration: 'line-through', color: "red"}}>
-                        <CurrencyRupee
-                             style={{
-                                height: "1.2rem",
-                                color: "red"
-                            }}
-                        /><span id="number">10</span>
-                        </div>
+                            <div className="desc order">Order Subtotal</div>
+                            <div className="no">
+                                <CurrencyRupeeOutlinedIcon
+                                    style={{
+                                        height: "1.2rem"
+                                    }}
+                                />{cartAmount}
+                            </div>
                         </div>
                         <div className="item">
-                        <div className="desc total">Pre-Tax Total</div>
-                        <div className="no">
-                        <CurrencyRupeeOutlinedIcon
-                             style={{
-                                height: "1.2rem"
-                            }}
-                        />200
+                            <div className="desc charge">Delivery Charges</div>
+                            <div className="no" style={{ textDecoration: 'line-through', color: "red" }}>
+                                <CurrencyRupee
+                                    style={{
+                                        height: "1.2rem",
+                                        color: "red"
+                                    }}
+                                /><span id="number">10</span>
+                            </div>
                         </div>
+                        <div className="item total">
+                        <strong style={{
+                            display: 'flex',
+                            justifyContent: 'space-around'
+                        }}><div>Total Payable</div>
+                            <div className="no">
+                                <CurrencyRupeeOutlinedIcon
+                                    style={{
+                                        height: "1.2rem"
+                                    }}
+                                />{cartAmount}
+                            </div></strong>
                         </div>
-                       
+
                     </div>
                 </div>
-        </Container>
-        <Button variant="contained"
-            style={{
-                width: '14rem',
-                height: '2.6rem',
-                marginTop: "1rem",
-                backgroundColor: 'orange'
-            }}
-            >Confirm</Button>
-    </Wrapper>
-  )
+            </Container>
+
+        </Wrapper>
+    )
 }
 
 export default OrderDetail
@@ -89,18 +94,23 @@ const Wrapper = styled.div`
 const Container = styled.div`
     display: flex;
     gap: 4rem;
-
+    justify-content: center;
+    align-items: center;
+    .items{
+      
+    }
     .product-detail{
+        margin-top: 1rem;
         border: 1px solid black;
         flex: 1;
         display: flex;
-        height: 40%;
+        
         /* justify-content: space-evenly;
         align-items: flex-start; */
 
         .item-image{
             /* border: 1px solid black; */
-            height: 190px;
+            height: 160px;
             width: 190px;
             padding: 10px;
 
@@ -126,6 +136,7 @@ const Container = styled.div`
                 align-items: center;
             }
         }
+        
 
     }
 
@@ -174,8 +185,12 @@ const Container = styled.div`
         align-items: center;
     }
     .no{
+        margin-left: 1rem;
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+    .total{
+        border-top: 1px dotted black;
     }
 `
