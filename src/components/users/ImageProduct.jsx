@@ -7,7 +7,7 @@ const ImageProduct = ({data}) => {
     setImage(index);
   };
 
-  console.log(data)
+  // console.log(data)
   return (
     <Wrapper>
       {data ? (

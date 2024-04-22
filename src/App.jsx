@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import "./index.css";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-
 import SellerRegistration from "./components/seller/SellerRegistration";
 import Registration from "./components/Registration";
 import Login from "./components/Login";
@@ -43,13 +42,21 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/register" element={<Registration />} />
+
         {/* <Route path='/' element={<Slide />} > */}
         <Route path="/hero" element={<HeroSection />} />
         {/* <Route path='/' element={<LandingPage />} />  */}
         {/* <Route path='/categoryitem' element={<CategoryItem/>} /> */}
+
         <Route path="/" element={<ProductPage />} />
         <Route path="/product/:id" element={<SingleProduct />} />
         <Route path="/login" element={<Login />} />
+
+        <Route path="/wishlist" element={<WishListPage />} />
+        <Route path="/test2" element={<Test2 />} />
+        <Route path="/billing" element={<BillingPage />} />
+        <Route path="/orders" element={<OrderPage />} />
+        <Route path="/orders/details" element={<OrderDetails />} />
 
         {/* <Route path="/seller/dashboard" element={<Dashboard />} /> */}
         <Route

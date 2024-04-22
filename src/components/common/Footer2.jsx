@@ -51,6 +51,7 @@ const Wrapper = styled.section`
     height: 38vh;
     background-image: linear-gradient(45deg, #107286, #3dfadb);
     display: flex;
+   
     flex-direction: column;
     
 `

@@ -7,27 +7,40 @@ import BoltIcon from '@mui/icons-material/Bolt';
 import ImageProduct from './ImageProduct';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../../reduxToolkit/features/productList/CartSlice';
+import toast, { Toaster } from 'react-hot-toast';
 
 
 const Product = () => {
 
-  const {id} = useParams();
+  const { id } = useParams();
   const items = useSelector(state => state.product.products.find(product => product.id === parseInt(id)))
-  console.log(items)
+  // console.log(items)
 
   // const {title, rating, brand, description, price,images} = singleproduct;
-  const {title} = items || {};
+  const { title } = items || {};
 
   const [value, setValue] = React.useState(2);
+
+  const selectedProduct = useSelector(state => state.product.products.find(product => product.id === parseInt(id)))
+  console.log(selectedProduct)
+  const dispatch = useDispatch();
+
+  const handleAddToCart = () => {
+    toast.success('successfully added to cart')
+    dispatch(addToCart(selectedProduct));
+  }
+
+
   return (
-    
+
     <Wrapper>
       <Routing>
         <span id='home'>Home </span> / product / {title}
       </Routing>
       {items ? (
-       
+
         <Container>
           <div className="product-container">
             {/* image-section */}
@@ -54,9 +67,16 @@ const Product = () => {
               </div>
               <div className="action-container">
                 <div className="add-to-cart">
-                  <Button variant="outlined" color='warning' startIcon={<ShoppingCartIcon />}>
+                  <Button variant="outlined" color='warning' startIcon={<ShoppingCartIcon />}
+                    onClick={handleAddToCart}
+                  >
                     Add to cart
+                    <Toaster 
+                      position="top-center"
+                      reverseOrder={true}
+                    />
                   </Button>
+                  
                 </div>
                 <div className="buy">
                   <Button variant="outlined" color='success' startIcon={<BoltIcon />}>
@@ -153,6 +173,7 @@ const Container = styled.section`
     
     .content-section{
       flex: 0.6;
+      height: 90%;
       border: 1px solid black;
     }
     .content-container{
@@ -203,5 +224,3 @@ const Container = styled.section`
       font-weight: 500;
     }
 `
-
-
