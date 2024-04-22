@@ -5,7 +5,11 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import TextError from './TextError';
 import axios from "axios"
+<<<<<<< HEAD
 import { BASE_URL } from './common/config';
+=======
+import { BASE_URL } from '../apiUrl';
+>>>>>>> 40e2fe013b21584232ee0a57091538d82e8039e3
 
 
 

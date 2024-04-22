@@ -27,6 +27,12 @@ import Product from './components/users/Product.jsx'
 import Test from './components/users/Test.jsx'
 import { useDispatch } from 'react-redux'
 import { fetchProducts } from './reduxToolkit/features/productList/ProductSlice.jsx'
+import CartPage from './pages/users/CartPage.jsx'
+import WishListPage from './pages/users/WishListPage.jsx'
+import Test2 from './components/users/Test2.jsx'
+import BillingPage from './components/Billing/BillingPage.jsx'
+import OrderPage from './components/Orders/OrderPage.jsx'
+import OrderDetails from './components/Orders/OrderDetails.jsx'
 
 
 
@@ -43,9 +49,6 @@ const App = () => {
     <Router>
       <Routes>
 
-
-
-
         <Route path='/register' element={<Registration />} />
         {/* <Route path='/' element={<Slide />} > */}
         <Route path='/hero' element={<HeroSection />} />
@@ -54,14 +57,25 @@ const App = () => {
 
         {/* <Route path='/categoryitem' element={<CategoryItem/>} /> */}
         
-        <Route path='/' element={<ProductPage/>} />
+        <Route path='/' element={<LandingPage/>} />
+        <Route path='/products' element={<ProductPage/>} />
         <Route path='/product/:id' element={<SingleProduct/>} />
+        <Route path='/cartPage' element={<CartPage />} />
         <Route path='/login' element={<Login/>} />
+<<<<<<< HEAD
         <Route path='/seller/dashboard' element={<Dashboard/>} />
         <Route path='/seller/register' element={<Registration/>} />
         <Route path='/seller/login' element={<Login/>} />
         <Route path='/seller/completeprofile' element={<SellerRegistration/>} />
 
+=======
+        <Route path='/test' element={<Test/>} />
+        <Route path='/wishlist' element={<WishListPage/>} />
+        <Route path='/test2' element={<Test2/>} />
+        <Route path='/billing' element={<BillingPage/>} />
+        <Route path='/orders' element={<OrderPage/>} />
+        <Route path='/orders/details' element={<OrderDetails/>} />
+>>>>>>> 40e2fe013b21584232ee0a57091538d82e8039e3
 
 
 

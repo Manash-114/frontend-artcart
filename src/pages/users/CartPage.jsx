@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react'
+import Cart from '../../components/users/Cart'
 import Header from '../../components/common/Header'
 import Footer2 from '../../components/common/Footer2'
-import Products from '../../components/users/Products'
 
-
-const ProductPage = ({data}) => {
+const CartPage = () => {
   useEffect(() => {
     // Scroll to the top when the component mounts
     window.scrollTo({
@@ -15,10 +14,10 @@ const ProductPage = ({data}) => {
   return (
     <div>
       <Header />
-      <Products />
-      <Footer2 />
+      <Cart/>
+      <Footer2/>
     </div>
   )
 }
 
-export default ProductPage
+export default CartPage

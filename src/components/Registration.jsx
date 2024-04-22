@@ -18,6 +18,7 @@ const onSubmit = values => {
     const d = url.split("/")
     const r = d[3];
 
+<<<<<<< HEAD
     if(r==='seller')
       values["role"] = "seller"
     else
@@ -25,6 +26,11 @@ const onSubmit = values => {
     console.log(values)
     // console.log( values)
     axios.post(`${BASE_URL}/auth/signup`, values)
+=======
+    values["role"] = "customer"
+    console.log( values)
+    axios.post('http://3.108.56.2:7002/auth/signup', values)
+>>>>>>> 40e2fe013b21584232ee0a57091538d82e8039e3
      .then(res => {
        console.log("res",res.data)
      })
