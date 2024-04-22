@@ -54,18 +54,14 @@ const SuggestedProducts = () => {
   const { id } = useParams();
   const featuredProducts = useSelector((state) => state.product.products);
   const selectedProducts = featuredProducts.find(
-    (product) => product.id === id
+    (product) => product.id === parseInt(id)
   );
-
   const similarProducts = featuredProducts.filter(
     (individualProduct) =>
-      individualProduct.category.name === selectedProducts.category.name &&
+      individualProduct.category === selectedProducts.category &&
       individualProduct.id !== selectedProducts.id
   );
-
-  console.log("similar", similarProducts);
-  const filterItems = similarProducts.slice(0, 5);
-  console.log("filter", filterItems);
+  const filterItems = similarProducts.slice(0, 7);
   const selectedProduct = useSelector((state) => state.product.products);
   const dispatch = useDispatch();
   const toastMessage = useSelector((state) => state.wishlist.toastMessage);
@@ -94,7 +90,9 @@ const SuggestedProducts = () => {
     event.preventDefault();
     event.stopPropagation();
     //finding individual item
-    const product = selectedProduct.find((product) => product.id === id);
+    const product = selectedProduct.find(
+      (product) => product.id === parseInt(id)
+    );
     dispatch(addToWishList({ product, quantity: 1 }));
   };
 
