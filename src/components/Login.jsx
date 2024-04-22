@@ -9,6 +9,7 @@ import { BASE_URL } from "./common/config";
 import { BASE_URL_LOCAL } from "../apiCalls/common-db";
 import { useDispatch } from "react-redux";
 import { signIn } from "../reduxToolkit/features/authSlice";
+import getCurrentUser from "../apiCalls/getCurrentUser";
 
 const initialValues = {
   email: "",
@@ -36,6 +37,9 @@ const Login = () => {
         //  console.log(res.data.auth)
         if (res.data.auth && res.data.role === "ROLE_CUSTOMER") {
           console.log(res.data);
+          localStorage.setItem("jwttoken", res.data.token);
+          const token = localStorage.getItem("jwttoken");
+          getCurrentUser(res.data.token, navigate, dispatch);
           navigate("/");
         } else if (res.data.auth && res.data.role === "ROLE_SELLER") {
           console.log(res.data);

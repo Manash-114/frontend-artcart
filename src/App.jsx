@@ -30,6 +30,11 @@ import ProductCategories from "./components/admin/ProductCategories.jsx";
 import AdminBody from "./components/admin/AdminBody.jsx";
 import ProtectedRoute from "./components/common/ProtectedRoute.jsx";
 import ProtectedRouteSeller from "./components/common/ProtectedRouteSeller.jsx";
+import WishListPage from "./pages/users/WishListPage.jsx";
+import BillingPage from "./components/Billing/BillingPage.jsx";
+import OrderPage from "./components/Orders/OrderPage.jsx";
+import OrderDetails from "./components/Orders/OrderDetails.jsx";
+import Cart from "./components/users/Cart.jsx";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -43,17 +48,15 @@ const App = () => {
       <Routes>
         <Route path="/register" element={<Registration />} />
 
-        {/* <Route path='/' element={<Slide />} > */}
         <Route path="/hero" element={<HeroSection />} />
-        {/* <Route path='/' element={<LandingPage />} />  */}
-        {/* <Route path='/categoryitem' element={<CategoryItem/>} /> */}
-
         <Route path="/" element={<ProductPage />} />
+        <Route path="/ff" element={<LandingPage />} />
+        <Route path="/test" element={<Test />} />
+        <Route path="/products" element={<ProductPage />} />
         <Route path="/product/:id" element={<SingleProduct />} />
         <Route path="/login" element={<Login />} />
-
         <Route path="/wishlist" element={<WishListPage />} />
-        <Route path="/test2" element={<Test2 />} />
+        <Route path="/cartPage" element={<Cart />} />
         <Route path="/billing" element={<BillingPage />} />
         <Route path="/orders" element={<OrderPage />} />
         <Route path="/orders/details" element={<OrderDetails />} />

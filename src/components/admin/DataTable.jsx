@@ -15,7 +15,7 @@ const DataTable = ({ data, onViewAadharImage, onApprove, onReject }) => {
   };
 
   return (
-    <div className="border-2 border-green-400 h-72 w-[70%]">
+    <div className="border-2 border-green-400 h-72 w-[70%] overflow-auto">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>

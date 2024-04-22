@@ -120,19 +120,6 @@ const Products = () => {
     applyFilters(term, filter, selectedValue);
   }, [term, filter, selectedValue, selectedCategory]);
 
-  fetch("http://3.108.56.2:7002/api/admin/all-unapproved-seller", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtYW5hc2giLCJpYXQiOjE3MTI0NzQ0NjgsImV4cCI6MTcxMjU2MDg2OCwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9BRE1JTiJ9.wNpkCoMNTeqmkkas9r4_wRAIWwzbBfXmbjSJnUvpOgw",
-    },
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      console.log(res);
-    });
-
   return (
     <Container>
       <ImageSection>

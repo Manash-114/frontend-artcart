@@ -9,6 +9,7 @@ import { BASE_URL } from "../common/config";
 import { useDispatch, useSelector } from "react-redux";
 import { BASE_URL_LOCAL } from "../../apiCalls/common-db";
 import { currentUser } from "../../reduxToolkit/features/authSlice";
+import Spinner from "../common/Spinner";
 
 // import {BASE_URI} from '../common/config'
 
@@ -37,6 +38,7 @@ const SellerRegistration = () => {
   const dispatch = useDispatch();
 
   const { token } = useSelector((store) => store.auth);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleAadhaarImageChange = (e) => {
     console.log("aadhaar image");
@@ -45,13 +47,8 @@ const SellerRegistration = () => {
   };
 
   const onSubmitHandle = async (values) => {
+    setIsLoading(true);
     console.log("submit");
-    // let ob = {
-    //   "name":values.sellerName,
-    //   "aadhaarNo":values.aadhaarNo,
-    //   "phoneNumber":values.sellerPhone
-    // }
-
     const ob = `{
         "name" : "${values.sellerName}",
         "aadhaarNo" : "${values.aadhaarNo}",
@@ -59,7 +56,6 @@ const SellerRegistration = () => {
       }`;
 
     console.log(ob);
-
     const data1 = new FormData();
     data1.append("aadhaarImage", aadhaarImage);
     data1.append("profileImage", profileImage);
@@ -72,9 +68,9 @@ const SellerRegistration = () => {
         Authorization: `Bearer ${token}`,
       },
     });
-
     const resData = await res.json();
     console.log(resData);
+    setIsLoading(false);
     dispatch(currentUser(resData));
   };
 
@@ -174,6 +170,11 @@ const SellerRegistration = () => {
               <button type="submit">Submit</button>
             </Form>
           </Formik>
+          {isLoading && (
+            <div className="mt-4">
+              <Spinner />
+            </div>
+          )}
         </div>
       </div>
     </Wrapper>

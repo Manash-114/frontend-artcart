@@ -4,13 +4,14 @@ import { useState } from "react";
 import { uploadImageToCloudinary } from "../../../apiCalls/uploadImageToCloudinary";
 import { useSelector } from "react-redux";
 import { BASE_URL_LOCAL } from "../../../apiCalls/common-db";
+import Spinner from "../../common/Spinner";
 
 const AddProduct = () => {
   const [showProductName, setShowProductName] = useState(false);
   const [productImages, setProductImages] = useState([]);
   const token = useSelector((store) => store.auth.token);
   const [productCategory, setProductCategory] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [productData, setProductData] = useState({
     name: "",
     price: "",
@@ -21,9 +22,10 @@ const AddProduct = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     console.log("form submit " + JSON.stringify(productData));
     console.log(productImages);
-    uploadImageToCloudinary(productImages, productData, token);
+    uploadImageToCloudinary(productImages, productData, token, setIsLoading);
   };
 
   useEffect(() => {
@@ -35,7 +37,6 @@ const AddProduct = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         setProductCategory(res);
       });
   }, []);
@@ -152,7 +153,7 @@ const AddProduct = () => {
                 type="file"
                 id="pImage"
                 name="pImage"
-                accept=" .jpg, .jpeg, .png"
+                accept=" .jpg, .jpeg, .png ,.webp"
                 multiple
                 className="mt-4"
                 onChange={(e) => {
@@ -169,6 +170,11 @@ const AddProduct = () => {
                 Add Product
               </button>
             </div>
+            {isLoading && (
+              <div className="mt-4">
+                <Spinner />
+              </div>
+            )}
           </form>
         </div>
       </div>

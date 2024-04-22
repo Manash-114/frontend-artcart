@@ -47,7 +47,7 @@ const Dashboard = () => {
   const { currentUser } = useSelector((store) => store.auth);
 
   useEffect(() => {
-    if (currentUser.name == null) {
+    if (currentUser.name === null) {
       console.log("use effect");
       SetbtID("complete-profile");
     } else if (currentUser.approved == false) {

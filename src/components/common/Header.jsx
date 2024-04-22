@@ -3,17 +3,20 @@ import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import ListAltIcon from "@mui/icons-material/ListAlt";
+import { signout } from "../../reduxToolkit/features/authSlice";
 
 const Header = () => {
   let totalQuantity = useSelector((state) => state.cart.cartTotalQuantity);
-  let login = true;
 
+  const { currentUser } = useSelector((store) => store.auth);
+
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -21,6 +24,11 @@ const Header = () => {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    console.log("logout");
+    dispatch(signout());
   };
 
   const scrollToHero = () => {
@@ -63,11 +71,13 @@ const Header = () => {
             <li>
               <StyledLink to="/products">Products</StyledLink>
             </li>
-            <li>
-              <StyledLink to="/seller/register">Become a Seller</StyledLink>
-            </li>
+            {Object.keys(currentUser).length === 0 && (
+              <li>
+                <StyledLink to="/seller/register">Become a Seller</StyledLink>
+              </li>
+            )}
 
-            {login ? (
+            {Object.keys(currentUser).length !== 0 ? (
               <div className="avatar">
                 <div
                   className="action"
@@ -122,8 +132,10 @@ const Header = () => {
                     </MenuItem>
                   </NavLink>
                   <MenuItem onClick={handleClose}>
-                    <LogoutIcon />
-                    Logout
+                    <div onClick={handleLogout}>
+                      <LogoutIcon />
+                      Logout
+                    </div>
                   </MenuItem>
                 </Menu>
               </div>
