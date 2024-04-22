@@ -9,25 +9,23 @@ import { CurrencyRupee } from '@mui/icons-material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { addressData } from './addressData';
 import { useDispatch, useSelector } from 'react-redux';
-import { addBillingAddress, updateBillingAddress } from '../../reduxToolkit/features/productList/BillingAddressSlice';
+import { addBillingAddress, updateAddressId, updateBillingAddress, updateCustomerDetails } from '../../reduxToolkit/features/productList/BillingAddressSlice';
 
-const BillAddress = ({ setNextButtonDisabled }) => {
-
-
-    //Radio-buttons
-    const [selectedAddressId, setSelectedAddressId] = useState(null);
-    // const latestAddress = useSelector(state => state.billingAddress.billingAddresses[state.billingAddress.billingAddresses.length - 1]);
-
-    // console.log('Latest Address:', latestAddress);
-    
-
-    const handleAddressSelection = (id) => {
-        setSelectedAddressId(id);
-        setNextButtonDisabled(false)
-        // console.log(id)
-    };
+const BillAddress = ({ setNextButtonDisabled, nextButtonDisabled, handleDeliverClick }) => {
 
     const dispatch = useDispatch();
+    //Radio-buttons
+    const selectedAddressIdFromRedux = useSelector(state => state.billingAddress.addressId);
+    const [selectedAddressId, setSelectedAddressId] = useState(null);
+
+    const handleAddressSelection = (id) => {
+        console.log(id)
+        dispatch(updateAddressId(id))
+        setSelectedAddressId(id);
+     
+    };
+
+
 
     const initialValues = {
         pincode: '',
@@ -39,8 +37,7 @@ const BillAddress = ({ setNextButtonDisabled }) => {
     };
 
     const validationSchema = yup.object({
-        // name: yup.string().required('Name is required'),
-        // contact: yup.string().required('Contact number is required').matches(/^[0-9]+$/, 'Contact number must only contain digits').min(10, 'Contact number must be at least 10 digits'),
+
         address: yup.string().required('Address is required'),
         city: yup.string().required('City/District/Town is required'),
         state: yup.string().required('State is required'),
@@ -53,16 +50,16 @@ const BillAddress = ({ setNextButtonDisabled }) => {
     });
 
     const onSubmit = (values) => {
-        
+
         dispatch(addBillingAddress(values))
     };
     const onSubmit2 = (values) => {
-        
+
         dispatch(updateBillingAddress({ orderId: selectedAddress.orderId, updatedData: values }));
-        handleCancelClick(); 
+        handleCancelClick();
     };
-    
-    const [expandedAddresses, setExpandedAddresses] = useState({}); 
+
+    const [expandedAddresses, setExpandedAddresses] = useState({});
     const [selectedAddress, setSelectedAddress] = useState(null);
 
     const handleEditButtonClick = (ad) => {
@@ -95,13 +92,31 @@ const BillAddress = ({ setNextButtonDisabled }) => {
         locality: selectedAddress.locality || ''
     } : {};
 
+    const { name, contact, alternateContact } = useSelector(state => state.billingAddress);
+
+    const initialValues3 = {
+        name: name || '',
+        contact: contact || '',
+        alternateContact: alternateContact || ''
+    }
+    const validationSchema3 = yup.object({
+        name: yup.string().required('Name is required'),
+        contact: yup.string()
+            .required('Contact number is required')
+            .matches(/^[0-9]+$/, 'Contact number must only contain digits')
+            .min(10, 'Contact number must be at least 10 digits'),
+        // alternateContact: yup.string()
+        //     .required('Contact number is required')
+
+    });
+
     return (
         <Wrapper>
             <Container>
                 <div className="person-address">
 
                     {/* first-part */}
-                    {userAddress.length > 0 && (
+                    {addressData.length > 0 && (
                         <Accordion>
                             <AccordionSummary
                                 expandIcon={<ExpandMoreIcon />}
@@ -117,16 +132,16 @@ const BillAddress = ({ setNextButtonDisabled }) => {
                                         value={selectedAddressId}
                                         onChange={(event) => handleAddressSelection(event.target.value)}
                                     >
-                                        {userAddress.map((ad, index) => (
-                                            <div key={ad.orderId} style={{ marginBottom: '1rem' }}>
+                                        {addressData.map((ad, index) => (
+                                            <div key={ad.id} style={{ marginBottom: '1rem' }}>
                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                                     <FormControlLabel
-                                                        value={ad.orderId}
-                                                        control={<Radio />}
-                                                        label={`${ad.address}, ${ad.city}, ${ad.state} - ${ad.pincode}`}
+                                                        value={ad.id}
+                                                        control={<Radio checked={ad.id === selectedAddressId} />}
+                                                        label={`${ad.landmark}, ${ad.city}, ${ad.state} - ${ad.zipCode}`}
                                                         style={{ width: 'calc(100% - 100px)' }}
                                                     />
-                                                    {!expandedAddresses[ad.orderId] && ( // Show Edit button only if accordion is not expanded
+                                                    {!expandedAddresses[ad.id] && ( // Show Edit button only if accordion is not expanded
                                                         <Button
                                                             variant="contained"
                                                             onClick={() => handleEditButtonClick(ad)}
@@ -136,162 +151,10 @@ const BillAddress = ({ setNextButtonDisabled }) => {
                                                         </Button>
                                                     )}
                                                 </div>
-                                                {expandedAddresses[ad.orderId] && (
-                                                    <Accordion>
 
-                                                        <AccordionDetails>
-                                                            <div className="billing-address">
-                                                                <Formik
-                                                                    initialValues={initialValues2}
-                                                                    validationSchema={validationSchema}
-                                                                    onSubmit={onSubmit2}
-                                                                >
-                                                                    {({ errors, touched, isSubmitting }) => (
-                                                                        <Form>
-                                                                            <div className="form-control">
-                                                                                {/* address-detail */}
-                                                                                <div className="address-bar">
-                                                                                    <div className="thirdrow">
-                                                                                        <Field
-                                                                                            name="address"
-                                                                                            as={TextField}
-                                                                                            id="outlined-multiline-static"
-                                                                                            label="Address (Area and Streets)"
-                                                                                            multiline
-                                                                                            rows={3}
-                                                                                            fullWidth
-                                                                                            error={touched.address && !!errors.address}
-                                                                                            helperText={touched.address && errors.address}
-                                                                                        />
-                                                                                    </div>
-                                                                                    <div className="fourthrow">
-                                                                                        <div className="pcity">
-                                                                                            <Field
-                                                                                                name="city"
-                                                                                                as={TextField}
-                                                                                                id="outlined-basic"
-                                                                                                label="City/District/Town"
-                                                                                                variant="outlined"
-                                                                                                style={{
-                                                                                                    width: '18rem',
-                                                                                                    marginTop: ".5rem"
-                                                                                                }}
-                                                                                                error={touched.city && !!errors.city}
-                                                                                                helperText={touched.city && errors.city}
-                                                                                            />
-                                                                                        </div>
-
-                                                                                        <div className="pstate" style={{ position: 'relative' }}>
-                                                                                            <FormControl sx={{ m: 1, minWidth: 120 }}>
-                                                                                                <InputLabel id="demo-simple-select-helper-label">State</InputLabel>
-                                                                                                <Field
-                                                                                                    name="state"
-                                                                                                    as={Select}
-                                                                                                    labelId="demo-simple-select-helper-label"
-                                                                                                    id="demo-simple-select-helper"
-                                                                                                    style={{
-                                                                                                        width: '17.5rem',
-
-                                                                                                    }}
-                                                                                                    error={touched.state && !!errors.state}
-                                                                                                >
-                                                                                                    <MenuItem value={"madhya Pradesh"}>Madhya Pradesh</MenuItem>
-                                                                                                    <MenuItem value={"assam"}>Assam</MenuItem>
-                                                                                                    <MenuItem value={'mizoram'}>Mizoram</MenuItem>
-                                                                                                    <MenuItem value={"meghalaya"}>Meghalaya</MenuItem>
-                                                                                                </Field>
-                                                                                            </FormControl>
-                                                                                            <FormHelperText error={!!(touched.state && errors.state)} style={{ margin: '-7px 15px' }}>
-                                                                                                <ErrorMessage name="state" />
-                                                                                            </FormHelperText>
-                                                                                        </div>
-                                                                                    </div>
-
-                                                                                    <div className="fifthrow">
-                                                                                        <div className="plandmark">
-                                                                                            <Field
-                                                                                                name="landmark"
-                                                                                                as={TextField}
-                                                                                                id="outlined-basic"
-                                                                                                label="Landmark (Optional)"
-                                                                                                variant="outlined"
-                                                                                                style={{
-                                                                                                    width: '18rem',
-                                                                                                }}
-                                                                                            />
-                                                                                        </div>
-                                                                                        <div className="ppincode">
-                                                                                            <Field
-                                                                                                name="pincode"
-                                                                                                as={TextField}
-                                                                                                id="outlined-number"
-                                                                                                label="Pincode"
-                                                                                                type="number"
-                                                                                                InputLabelProps={{
-                                                                                                    shrink: true,
-                                                                                                }}
-                                                                                                style={{
-                                                                                                    width: '18rem',
-                                                                                                }}
-                                                                                                error={touched.pincode && !!errors.pincode}
-                                                                                                helperText={touched.pincode && errors.pincode}
-                                                                                            />
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div className="sixthhrow">
-                                                                                        <div className="plocality">
-                                                                                            <Field
-                                                                                                name="locality"
-                                                                                                as={TextField}
-                                                                                                id="outlined-basic"
-                                                                                                label="Locality"
-                                                                                                variant="outlined"
-                                                                                                style={{
-                                                                                                    width: '18rem',
-                                                                                                }}
-                                                                                                error={touched.locality && !!errors.locality}
-                                                                                                helperText={touched.locality && errors.locality}
-                                                                                            />
-                                                                                        </div>
-                                                                                        <Button
-                                                                                            type="submit"
-                                                                                            variant="contained"
-                                                                                            disabled={isSubmitting}
-                                                                                            style={{
-                                                                                                width: '14rem',
-                                                                                                height: '2.6rem',
-                                                                                                marginTop: "1rem",
-                                                                                                backgroundColor: 'green',
-                                                                                                color: 'white'
-                                                                                            }}
-                                                                                        >
-                                                                                            Save and deliver here
-                                                                                        </Button>
-                                                                                        <Button
-                                                                                            variant="outlined"
-                                                                                            style={{
-                                                                                                width: '14rem',
-                                                                                                height: '2.6rem',
-                                                                                                marginTop: "1rem",
-                                                                                                marginLeft: "1rem",
-                                                                                                color: 'black'
-                                                                                            }}
-                                                                                            onClick={handleCancelClick}
-                                                                                        >
-                                                                                            Cancel
-                                                                                        </Button>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </Form>
-                                                                    )}
-                                                                </Formik>
-                                                            </div>
-                                                        </AccordionDetails>
-                                                    </Accordion>
-                                                )}
                                             </div>
-                                        ))}
+                                        ))
+                                        }
 
 
                                     </RadioGroup>
@@ -451,47 +314,94 @@ const BillAddress = ({ setNextButtonDisabled }) => {
 
                     {/* Different-section */}
                     {/* personal-detail */}
-                    <div className="person-detail">
-                        <div className="firstrow">
-                            <div className="pname">
-                                <TextField id="outlined-basic" label="Name" variant="outlined"
-                                    style={{
-                                        width: '18rem',
+                    <Formik
+                        initialValues={initialValues3}
+                        validationSchema={validationSchema3}
+                        onSubmit={(values) => {
+                            // Handle form submission
+                            console.log(values);
+                            dispatch(updateCustomerDetails(values))
+                            handleDeliverClick(); // Call the handleDeliverClick function
+                        }}
+                    >
 
-                                    }}
-                                />
-                            </div>
-                            <div className="pcontact">
-                                <TextField
-                                    id="outlined-number"
-                                    label="10-digit mobile number"
-                                    type="number"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    style={{
-                                        width: '18rem',
-                                    }}
-                                />
-                            </div>
-                        </div>
-                        <div className="secondrow">
-                            <div className="palternate-contact">
-                                <TextField
-                                    id="outlined-number"
-                                    label="Alternate Phone (Optional)"
-                                    type="number"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    style={{
-                                        width: '18rem',
-                                    }}
-                                />
-                            </div>
-                        </div>
+                        {({ handleSubmit, touched, errors }) => (
+                            <form onSubmit={handleSubmit}>
+                                <div className="person-detail">
+                                    <div className="firstrow">
+                                        <div className="pname">
 
-                    </div>
+                                            <Field
+                                                name="name"
+                                                as={TextField}
+                                                id="name"
+                                                label="Name"
+                                                variant="outlined"
+                                                style={{
+                                                    width: '18rem',
+                                                    marginTop: '.5rem'
+                                                }}
+                                                error={touched.name && !!errors.name}
+                                                helperText={touched.name && errors.name}
+                                            />
+                                        </div>
+                                        <div className="pcontact">
+                                            <Field
+                                                name="contact"
+                                                as={TextField}
+                                                id="contact"
+                                                label="10-digit mobile number"
+                                                type="number"
+                                                InputLabelProps={{ shrink: true }}
+                                                variant="outlined"
+                                                style={{
+                                                    width: '18rem',
+                                                    marginTop: '.5rem'
+                                                }}
+                                                error={touched.contact && !!errors.contact}
+                                                helperText={touched.contact && errors.contact}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="secondrow">
+                                        <div className="palternate-contact">
+                                            <Field
+                                                name="alternateContact"
+                                                as={TextField}
+                                                id="alternateContact"
+                                                label="Alternate mobile number"
+                                                type="number"
+                                                InputLabelProps={{ shrink: true }}
+                                                variant="outlined"
+                                                style={{
+                                                    width: '18rem',
+                                                    marginTop: '1rem'
+                                                }}
+                                                error={touched.alternateContact && !!errors.alternateContact}
+                                                helperText={touched.alternateContact && errors.alternateContact}
+                                            />
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <Button
+                                    variant="contained"
+                                    type="submit3"
+                                    disabled={nextButtonDisabled}
+                                    style={{
+                                        width: '14rem',
+                                        height: '2.6rem',
+                                        marginTop: '1.5rem',
+                                        marginLeft: '0rem',
+                                        backgroundColor: 'orange'
+                                    }}
+                                >
+                                    deliver here
+                                </Button>
+                            </form>
+                        )}
+                    </Formik>
                 </div>
 
                 {/* <div className="price-detail">
@@ -538,7 +448,7 @@ const BillAddress = ({ setNextButtonDisabled }) => {
                 </div> */}
             </Container>
 
-           
+
         </Wrapper>
     )
 }

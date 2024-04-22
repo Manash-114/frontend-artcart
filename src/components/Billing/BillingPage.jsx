@@ -8,14 +8,17 @@ import PaymentIcon from '@mui/icons-material/Payment';
 import BillAddress from './BillAddress';
 import OrderDetail from './OrderDetail';
 import PaymentDetail from './PaymentDetail';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateProductInCart } from '../../reduxToolkit/features/productList/BillingAddressSlice';
+import PaymentDetails from './PaymentDetails';
 
 const BillingPage = () => {
   const [value, setValue] = useState('1');
-  const [deliverClicked, setDeliverClicked] = useState(false);
   const [visited1, setVisited1] = useState(true); // Tab 1 is visited by default
   const [visited2, setVisited2] = useState(false);
   const [visited3, setVisited3] = useState(false);
   const [nextButtonDisabled, setNextButtonDisabled] = useState(true);
+  const dispatch = useDispatch();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -24,17 +27,31 @@ const BillingPage = () => {
   const handleDeliverClick = () => {
     setValue('2');
     setVisited2(true); // Mark Tab 2 as visited when it's selected
-    setDeliverClicked(true);
+
+
   };
+  const individualCartItem = useSelector(state => state.cart.cartItems);
+
+  const productsInCart = individualCartItem.map(item => ({
+    productId: item.id,
+    cartQuantity: item.cartQuantity
+  }));
+  // console.log(productsInCart)
 
   const handleDeliverClick2 = () => {
+    productsInCart.map(p=>(
+      dispatch(updateProductInCart({ productId: p.productId, quantity: p.cartQuantity }))
+    ))
     setValue('3');
     setVisited3(true); // Mark Tab 3 as visited when it's selected
-    setDeliverClicked(true);
+
   };
 
   return (
     <Wrapper>
+      <div className="header">
+        <img src='/images/Logo.jpg' alt='Logo'></img> <span className='art'> ArtCart</span>
+      </div>
       <TabContext value={value}>
         <Container>
           <TabList onChange={handleChange} aria-label="head">
@@ -63,18 +80,8 @@ const BillingPage = () => {
           </TabList>
         </Container>
         <SubContainer>
-          <TabPanel value="1"><BillAddress setNextButtonDisabled={setNextButtonDisabled}/>
-            <Button variant="contained"
-              onClick={handleDeliverClick}
-              disabled={nextButtonDisabled}
-              style={{
-                width: '14rem',
-                height: '2.6rem',
-                marginTop: "1.5rem",
-                marginLeft: "12.5rem",
-                backgroundColor: 'orange'
-              }}
-            >Deliver here</Button>
+          <TabPanel value="1">
+            <BillAddress handleDeliverClick={handleDeliverClick} />
           </TabPanel>
 
           <TabPanel value="2"><OrderDetail />
@@ -84,12 +91,12 @@ const BillingPage = () => {
                 width: '14rem',
                 height: '2.6rem',
                 marginTop: "1rem",
-                marginLeft: '9rem',
+                marginLeft: '10rem',
                 backgroundColor: 'orange'
               }}
             >Confirm order</Button>
           </TabPanel>
-          <TabPanel value="3"><PaymentDetail /></TabPanel>
+          <TabPanel value="3"><PaymentDetails /></TabPanel>
         </SubContainer>
       </TabContext>
     </Wrapper>
@@ -98,14 +105,36 @@ const BillingPage = () => {
 
 export default BillingPage
 
-const Wrapper = styled.section``
+const Wrapper = styled.section`
+  .header{
+    background: linear-gradient(to right, #007bff, #00bfff); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+    height: 50px;
+  }
+  .header > img{
+    height: 40px;
+    width: 40px;
+    border-radius: 2rem;
+  }
+  .art{
+    margin-left: .5rem;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 550;
+  }
+`
 const Container = styled.div`
   border-bottom: 1px solid dimgray  ;
-  /* border: 1px solid black; */
+  border: 1px solid black;
   margin: auto 12%;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 52%;
+  margin-left: 24%;
 
   .item-head{
     text-transform: capitalize;
