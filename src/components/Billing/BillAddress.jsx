@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
+import { Accordion, AccordionDetails, AccordionSummary, Button, FormControl, FormControlLabel, FormHelperText, InputLabel, MenuItem, Radio, RadioGroup, Select, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Formik, Field, ErrorMessage, Form } from 'formik';
@@ -6,178 +6,495 @@ import * as yup from 'yup'
 import ShoppingCartCheckoutOutlinedIcon from '@mui/icons-material/ShoppingCartCheckoutOutlined';
 import CurrencyRupeeOutlinedIcon from '@mui/icons-material/CurrencyRupeeOutlined';
 import { CurrencyRupee } from '@mui/icons-material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { addressData } from './addressData';
+import { useDispatch, useSelector } from 'react-redux';
+import { addBillingAddress, updateBillingAddress } from '../../reduxToolkit/features/productList/BillingAddressSlice';
 
-const BillAddress = () => {
+const BillAddress = ({ setNextButtonDisabled }) => {
 
+
+    //Radio-buttons
+    const [selectedAddressId, setSelectedAddressId] = useState(null);
+    // const latestAddress = useSelector(state => state.billingAddress.billingAddresses[state.billingAddress.billingAddresses.length - 1]);
+
+    // console.log('Latest Address:', latestAddress);
+    
+
+    const handleAddressSelection = (id) => {
+        setSelectedAddressId(id);
+        setNextButtonDisabled(false)
+        // console.log(id)
+    };
+
+    const dispatch = useDispatch();
 
     const initialValues = {
-        name: '',
-        contact: '',
         pincode: '',
         locality: '',
         address: '',
         city: '',
         state: '',
         landmark: '',
-        alternativePhone: '',
     };
+
+    const validationSchema = yup.object({
+        // name: yup.string().required('Name is required'),
+        // contact: yup.string().required('Contact number is required').matches(/^[0-9]+$/, 'Contact number must only contain digits').min(10, 'Contact number must be at least 10 digits'),
+        address: yup.string().required('Address is required'),
+        city: yup.string().required('City/District/Town is required'),
+        state: yup.string().required('State is required'),
+        locality: yup.string().required('locality is required'),
+        pincode: yup
+            .string()
+            .required('Pincode is required')
+            .length(6, 'Pincode must be 6 digits'),
+
+    });
 
     const onSubmit = (values) => {
-        // Submit the form data here
-        console.log('Form data', values);
-
+        
+        dispatch(addBillingAddress(values))
     };
-    const validationSchema = yup.object({
-        name: yup.string().required('Name is required'),
-        contact: yup.string().required('Contact number is required').matches(/^[0-9]+$/, 'Contact number must only contain digits').min(10, 'Contact number must be at least 10 digits'),
-        // Landmark and alternativePhone are optional, so no validation required
-    });
-    const [state, setState] = useState('');
+    const onSubmit2 = (values) => {
+        
+        dispatch(updateBillingAddress({ orderId: selectedAddress.orderId, updatedData: values }));
+        handleCancelClick(); 
+    };
+    
+    const [expandedAddresses, setExpandedAddresses] = useState({}); 
+    const [selectedAddress, setSelectedAddress] = useState(null);
 
-    const handleChange = (event) => {
-        setState(event.target.value);
+    const handleEditButtonClick = (ad) => {
+        const newExpandedAddresses = { ...expandedAddresses };
+        if (expandedAddresses[ad.orderId]) {
+            // If the accordion is already expanded, close it
+            delete newExpandedAddresses[ad.orderId];
+            setSelectedAddress(null); // Reset selected address
+        } else {
+            // If the accordion is not expanded, expand it
+            newExpandedAddresses[ad.orderId] = true;
+            setSelectedAddress(ad);
+        }
+        setExpandedAddresses(newExpandedAddresses);
     };
 
+    const handleCancelClick = () => {
+        // Close the accordion when cancel is clicked
+        setExpandedAddresses({});
+        setSelectedAddress(null); // Reset selected address
+    };
+    const userAddress = useSelector(state => state.billingAddress.billingAddresses)
+
+    const initialValues2 = selectedAddress ? {
+        address: selectedAddress.address,
+        city: selectedAddress.city,
+        state: selectedAddress.state,
+        landmark: selectedAddress.landmark || '',
+        pincode: selectedAddress.pincode || '',
+        locality: selectedAddress.locality || ''
+    } : {};
 
     return (
         <Wrapper>
             <Container>
-                <div className="billing-address">
-                    <Formik
-                        initialValues={initialValues}
-                        validationSchema={validationSchema}
-                        onSubmit={onSubmit}
-                    >
-                        <Form>
-                            <div className="form-control">
-                                {/* address-detail */}
-                                
-                                <div className="address-bar">
-                                    <div className="thirdrow">
-                                        <TextField
-                                            id="outlined-multiline-static"
-                                            label="Address (Area and Streets)"
-                                            multiline
-                                            rows={3}
+                <div className="person-address">
 
-                                            fullWidth
-                                        />
-                                    </div>
-                                    <div className="fourthrow">
-                                        <div className="pcity">
-                                            <TextField id="outlined-basic" label="City/District/Town" variant="outlined"
-                                                style={{
-                                                    width: '18rem',
-                                                    marginTop: ".5rem"
-                                                }}
-                                            />
-                                        </div>
-                                        <div className="pstate">
-                                            <FormControl sx={{ m: 1, minWidth: 120 }}>
-                                                <InputLabel id="demo-simple-select-helper-label">State</InputLabel>
-                                                <Select
-                                                    labelId="demo-simple-select-helper-label"
-                                                    id="demo-simple-select-helper"
-                                                    value={state}
-                                                    label="State"
-                                                    onChange={handleChange}
-                                                    style={{
-                                                        width: '17.5rem',
-                                                    }}
-                                                >
-                                                    <MenuItem value={"mp"}>Madhya Pradesh</MenuItem>
-                                                    <MenuItem value={"as"}>Assam</MenuItem>
-                                                    <MenuItem value={'mz'}>Mizoram</MenuItem>
-                                                    <MenuItem value={"mg"}>Meghalaya</MenuItem>
-                                                </Select>
+                    {/* first-part */}
+                    {userAddress.length > 0 && (
+                        <Accordion>
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1-content"
+                                id="panel1-header"
+                            >
+                                Delivery Address
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <FormControl component="fieldset" style={{ width: '100%' }}>
+                                    <RadioGroup
+                                        aria-labelledby="demo-radio-buttons-group-label"
+                                        value={selectedAddressId}
+                                        onChange={(event) => handleAddressSelection(event.target.value)}
+                                    >
+                                        {userAddress.map((ad, index) => (
+                                            <div key={ad.orderId} style={{ marginBottom: '1rem' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                    <FormControlLabel
+                                                        value={ad.orderId}
+                                                        control={<Radio />}
+                                                        label={`${ad.address}, ${ad.city}, ${ad.state} - ${ad.pincode}`}
+                                                        style={{ width: 'calc(100% - 100px)' }}
+                                                    />
+                                                    {!expandedAddresses[ad.orderId] && ( // Show Edit button only if accordion is not expanded
+                                                        <Button
+                                                            variant="contained"
+                                                            onClick={() => handleEditButtonClick(ad)}
+                                                            style={{ marginRight: "1rem" }}
+                                                        >
+                                                            Edit
+                                                        </Button>
+                                                    )}
+                                                </div>
+                                                {expandedAddresses[ad.orderId] && (
+                                                    <Accordion>
 
-                                            </FormControl>
-                                        </div>
-                                    </div>
-                                    <div className="fifthrow">
+                                                        <AccordionDetails>
+                                                            <div className="billing-address">
+                                                                <Formik
+                                                                    initialValues={initialValues2}
+                                                                    validationSchema={validationSchema}
+                                                                    onSubmit={onSubmit2}
+                                                                >
+                                                                    {({ errors, touched, isSubmitting }) => (
+                                                                        <Form>
+                                                                            <div className="form-control">
+                                                                                {/* address-detail */}
+                                                                                <div className="address-bar">
+                                                                                    <div className="thirdrow">
+                                                                                        <Field
+                                                                                            name="address"
+                                                                                            as={TextField}
+                                                                                            id="outlined-multiline-static"
+                                                                                            label="Address (Area and Streets)"
+                                                                                            multiline
+                                                                                            rows={3}
+                                                                                            fullWidth
+                                                                                            error={touched.address && !!errors.address}
+                                                                                            helperText={touched.address && errors.address}
+                                                                                        />
+                                                                                    </div>
+                                                                                    <div className="fourthrow">
+                                                                                        <div className="pcity">
+                                                                                            <Field
+                                                                                                name="city"
+                                                                                                as={TextField}
+                                                                                                id="outlined-basic"
+                                                                                                label="City/District/Town"
+                                                                                                variant="outlined"
+                                                                                                style={{
+                                                                                                    width: '18rem',
+                                                                                                    marginTop: ".5rem"
+                                                                                                }}
+                                                                                                error={touched.city && !!errors.city}
+                                                                                                helperText={touched.city && errors.city}
+                                                                                            />
+                                                                                        </div>
 
-                                        <div className="plandmark">
-                                            <TextField id="outlined-basic" label="Landmark (Optional)" variant="outlined"
-                                                style={{
-                                                    width: '18rem',
-                                                }}
-                                            />
-                                        </div>
-                                        <div className="ppincode">
-                                            <TextField
-                                                id="outlined-number"
-                                                label="Pincode"
-                                                type="number"
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                style={{
-                                                    width: '18rem',
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="sixthhrow">
-                                        <div className="plocality">
-                                            <TextField id="outlined-basic" label="Locality" variant="outlined"
-                                                style={{
-                                                    width: '18rem',
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
+                                                                                        <div className="pstate" style={{ position: 'relative' }}>
+                                                                                            <FormControl sx={{ m: 1, minWidth: 120 }}>
+                                                                                                <InputLabel id="demo-simple-select-helper-label">State</InputLabel>
+                                                                                                <Field
+                                                                                                    name="state"
+                                                                                                    as={Select}
+                                                                                                    labelId="demo-simple-select-helper-label"
+                                                                                                    id="demo-simple-select-helper"
+                                                                                                    style={{
+                                                                                                        width: '17.5rem',
 
-                                {/* personal-detail */}
-                                <div className="person-detail">
-                                    <div className="firstrow">
-                                        <div className="pname">
-                                            <TextField id="outlined-basic" label="Name" variant="outlined"
-                                                style={{
-                                                    width: '18rem',
+                                                                                                    }}
+                                                                                                    error={touched.state && !!errors.state}
+                                                                                                >
+                                                                                                    <MenuItem value={"madhya Pradesh"}>Madhya Pradesh</MenuItem>
+                                                                                                    <MenuItem value={"assam"}>Assam</MenuItem>
+                                                                                                    <MenuItem value={'mizoram'}>Mizoram</MenuItem>
+                                                                                                    <MenuItem value={"meghalaya"}>Meghalaya</MenuItem>
+                                                                                                </Field>
+                                                                                            </FormControl>
+                                                                                            <FormHelperText error={!!(touched.state && errors.state)} style={{ margin: '-7px 15px' }}>
+                                                                                                <ErrorMessage name="state" />
+                                                                                            </FormHelperText>
+                                                                                        </div>
+                                                                                    </div>
 
-                                                }}
-                                            />
-                                        </div>
-                                        <div className="pcontact">
-                                            <TextField
-                                                id="outlined-number"
-                                                label="10-digit mobile number"
-                                                type="number"
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                style={{
-                                                    width: '18rem',
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="secondrow">
-                                        <div className="palternate-contact">
-                                            <TextField
-                                                id="outlined-number"
-                                                label="Alternate Phone (Optional)"
-                                                type="number"
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                style={{
-                                                    width: '18rem',
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
+                                                                                    <div className="fifthrow">
+                                                                                        <div className="plandmark">
+                                                                                            <Field
+                                                                                                name="landmark"
+                                                                                                as={TextField}
+                                                                                                id="outlined-basic"
+                                                                                                label="Landmark (Optional)"
+                                                                                                variant="outlined"
+                                                                                                style={{
+                                                                                                    width: '18rem',
+                                                                                                }}
+                                                                                            />
+                                                                                        </div>
+                                                                                        <div className="ppincode">
+                                                                                            <Field
+                                                                                                name="pincode"
+                                                                                                as={TextField}
+                                                                                                id="outlined-number"
+                                                                                                label="Pincode"
+                                                                                                type="number"
+                                                                                                InputLabelProps={{
+                                                                                                    shrink: true,
+                                                                                                }}
+                                                                                                style={{
+                                                                                                    width: '18rem',
+                                                                                                }}
+                                                                                                error={touched.pincode && !!errors.pincode}
+                                                                                                helperText={touched.pincode && errors.pincode}
+                                                                                            />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div className="sixthhrow">
+                                                                                        <div className="plocality">
+                                                                                            <Field
+                                                                                                name="locality"
+                                                                                                as={TextField}
+                                                                                                id="outlined-basic"
+                                                                                                label="Locality"
+                                                                                                variant="outlined"
+                                                                                                style={{
+                                                                                                    width: '18rem',
+                                                                                                }}
+                                                                                                error={touched.locality && !!errors.locality}
+                                                                                                helperText={touched.locality && errors.locality}
+                                                                                            />
+                                                                                        </div>
+                                                                                        <Button
+                                                                                            type="submit"
+                                                                                            variant="contained"
+                                                                                            disabled={isSubmitting}
+                                                                                            style={{
+                                                                                                width: '14rem',
+                                                                                                height: '2.6rem',
+                                                                                                marginTop: "1rem",
+                                                                                                backgroundColor: 'green',
+                                                                                                color: 'white'
+                                                                                            }}
+                                                                                        >
+                                                                                            Save and deliver here
+                                                                                        </Button>
+                                                                                        <Button
+                                                                                            variant="outlined"
+                                                                                            style={{
+                                                                                                width: '14rem',
+                                                                                                height: '2.6rem',
+                                                                                                marginTop: "1rem",
+                                                                                                marginLeft: "1rem",
+                                                                                                color: 'black'
+                                                                                            }}
+                                                                                            onClick={handleCancelClick}
+                                                                                        >
+                                                                                            Cancel
+                                                                                        </Button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </Form>
+                                                                    )}
+                                                                </Formik>
+                                                            </div>
+                                                        </AccordionDetails>
+                                                    </Accordion>
+                                                )}
+                                            </div>
+                                        ))}
 
-                                </div>
 
+                                    </RadioGroup>
+                                </FormControl>
+
+                            </AccordionDetails>
+
+                        </Accordion>
+                    )}
+
+                    {/* Second-part */}
+                    <Accordion>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1-content"
+                            id="panel1-header"
+                        >
+                            Create New Address
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <div className="billing-address">
+                                <Formik
+                                    initialValues={initialValues}
+                                    validationSchema={validationSchema}
+                                    onSubmit={onSubmit}
+                                >
+                                    {({ errors, touched, isSubmitting }) => (
+                                        <Form>
+                                            <div className="form-control">
+                                                {/* address-detail */}
+                                                <div className="address-bar">
+                                                    <div className="thirdrow">
+                                                        <Field
+                                                            name="address"
+                                                            as={TextField}
+                                                            id="outlined-multiline-static"
+                                                            label="Address (Area and Streets)"
+                                                            multiline
+                                                            rows={3}
+                                                            fullWidth
+                                                            error={touched.address && !!errors.address}
+                                                            helperText={touched.address && errors.address}
+                                                        />
+                                                    </div>
+                                                    <div className="fourthrow">
+                                                        <div className="pcity">
+                                                            <Field
+                                                                name="city"
+                                                                as={TextField}
+                                                                id="outlined-basic"
+                                                                label="City/District/Town"
+                                                                variant="outlined"
+                                                                style={{
+                                                                    width: '18rem',
+                                                                    marginTop: ".5rem"
+                                                                }}
+                                                                error={touched.city && !!errors.city}
+                                                                helperText={touched.city && errors.city}
+                                                            />
+                                                        </div>
+
+                                                        <div className="pstate" style={{ position: 'relative' }}>
+                                                            <FormControl sx={{ m: 1, minWidth: 120 }}>
+                                                                <InputLabel id="demo-simple-select-helper-label">State</InputLabel>
+                                                                <Field
+                                                                    name="state"
+                                                                    as={Select}
+                                                                    labelId="demo-simple-select-helper-label"
+                                                                    id="demo-simple-select-helper"
+                                                                    style={{
+                                                                        width: '17.5rem',
+
+                                                                    }}
+                                                                    error={touched.state && !!errors.state}
+                                                                >
+                                                                    <MenuItem value={"madhya Pradesh"}>Madhya Pradesh</MenuItem>
+                                                                    <MenuItem value={"assam"}>Assam</MenuItem>
+                                                                    <MenuItem value={'mizoram'}>Mizoram</MenuItem>
+                                                                    <MenuItem value={"meghalaya"}>Meghalaya</MenuItem>
+                                                                </Field>
+                                                            </FormControl>
+                                                            <FormHelperText error={!!(touched.state && errors.state)} style={{ margin: '-7px 15px' }}>
+                                                                <ErrorMessage name="state" />
+                                                            </FormHelperText>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="fifthrow">
+                                                        <div className="plandmark">
+                                                            <Field
+                                                                name="landmark"
+                                                                as={TextField}
+                                                                id="outlined-basic"
+                                                                label="Landmark (Optional)"
+                                                                variant="outlined"
+                                                                style={{
+                                                                    width: '18rem',
+                                                                }}
+                                                            />
+                                                        </div>
+                                                        <div className="ppincode">
+                                                            <Field
+                                                                name="pincode"
+                                                                as={TextField}
+                                                                id="outlined-number"
+                                                                label="Pincode"
+                                                                type="number"
+                                                                InputLabelProps={{
+                                                                    shrink: true,
+                                                                }}
+                                                                style={{
+                                                                    width: '18rem',
+                                                                }}
+                                                                error={touched.pincode && !!errors.pincode}
+                                                                helperText={touched.pincode && errors.pincode}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div className="sixthhrow">
+                                                        <div className="plocality">
+                                                            <Field
+                                                                name="locality"
+                                                                as={TextField}
+                                                                id="outlined-basic"
+                                                                label="Locality"
+                                                                variant="outlined"
+                                                                style={{
+                                                                    width: '18rem',
+                                                                }}
+                                                                error={touched.locality && !!errors.locality}
+                                                                helperText={touched.locality && errors.locality}
+                                                            />
+                                                        </div>
+                                                        <Button
+                                                            type="submit"
+                                                            variant="contained"
+                                                            disabled={isSubmitting}
+                                                            style={{
+                                                                width: '14rem',
+                                                                height: '2.6rem',
+                                                                marginTop: "1rem",
+                                                                backgroundColor: 'green',
+                                                                color: 'white'
+                                                            }}
+                                                        >
+                                                            Save and deliver here
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </Form>
+                                    )}
+                                </Formik>
                             </div>
-                        </Form>
-                    </Formik>
+                        </AccordionDetails>
+                    </Accordion>
 
                     {/* Different-section */}
+                    {/* personal-detail */}
+                    <div className="person-detail">
+                        <div className="firstrow">
+                            <div className="pname">
+                                <TextField id="outlined-basic" label="Name" variant="outlined"
+                                    style={{
+                                        width: '18rem',
+
+                                    }}
+                                />
+                            </div>
+                            <div className="pcontact">
+                                <TextField
+                                    id="outlined-number"
+                                    label="10-digit mobile number"
+                                    type="number"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    style={{
+                                        width: '18rem',
+                                    }}
+                                />
+                            </div>
+                        </div>
+                        <div className="secondrow">
+                            <div className="palternate-contact">
+                                <TextField
+                                    id="outlined-number"
+                                    label="Alternate Phone (Optional)"
+                                    type="number"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    style={{
+                                        width: '18rem',
+                                    }}
+                                />
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
-                <div className="price-detail">
+
+                {/* <div className="price-detail">
                     <h2>Order Summary</h2>
                     <div className="mini-container">
 
@@ -218,17 +535,10 @@ const BillAddress = () => {
                         </div>
 
                     </div>
-                </div>
+                </div> */}
             </Container>
 
-            <Button variant="contained"
-                style={{
-                    width: '14rem',
-                    height: '2.6rem',
-                    marginTop: "1rem",
-                    backgroundColor: 'orange'
-                }}
-            >Deliver here</Button>
+           
         </Wrapper>
     )
 }
@@ -236,18 +546,23 @@ const BillAddress = () => {
 export default BillAddress
 const Wrapper = styled.div`
     padding: .2rem 1rem;
+    
 `
 const Container = styled.div`
     display: flex;
+    justify-content: center;
+    align-items: center;
     gap: 4rem;
 
     .person-detail{
-        border: 1px solid black;
-        padding: 1rem 2rem;
+        border-radius: 15px;
+        border: 1px solid lightgrey;
+        padding: 2rem;
         margin-top: 1rem;
+
     }
     .address-bar{
-        border: 1px solid black;
+        /* border: 1px solid black; */
        
         padding: 1rem 2rem;
     }
@@ -304,6 +619,7 @@ const Container = styled.div`
         align-items: flex-start;
     }
     .fifthrow{
+        margin-top: 10px;
         height: 5.4rem;
         display: flex;
         justify-content: space-between;

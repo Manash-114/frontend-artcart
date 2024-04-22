@@ -11,7 +11,7 @@ const SingleProduct = () => {
     <div>
       <Header />
       <Product />
-      <SuggestedProducts />
+      {/* <SuggestedProducts /> */}
       <Footer2 />
     </div>
   )
