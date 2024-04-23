@@ -8,10 +8,9 @@ import PaymentIcon from "@mui/icons-material/Payment";
 import BillAddress from "./BillAddress";
 import OrderDetail from "./OrderDetail";
 import PaymentDetail from "./PaymentDetail";
-import PaymentButton from "../users/PaymentButton";
-import { generatePaymentWithRazopay } from "../../apiCalls/users/generatePaymentWithRazopay";
 import { useDispatch, useSelector } from "react-redux";
-
+import { updateProductInCart } from "../../reduxToolkit/features/productList/BillingAddressSlice";
+import PaymentDetails from "./PaymentDetails";
 const BillingPage = () => {
   const [value, setValue] = useState("1");
   const [deliverClicked, setDeliverClicked] = useState(false);
@@ -21,6 +20,7 @@ const BillingPage = () => {
   const [nextButtonDisabled, setNextButtonDisabled] = useState(true);
   const { token } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -28,14 +28,30 @@ const BillingPage = () => {
   const handleDeliverClick = () => {
     setValue("2");
     setVisited2(true); // Mark Tab 2 as visited when it's selected
-    setDeliverClicked(true);
   };
+  const individualCartItem = useSelector((state) => state.cart.cartItems);
+
+  const productsInCart = individualCartItem.map((item) => ({
+    productId: item.id,
+    cartQuantity: item.cartQuantity,
+  }));
+  // console.log(productsInCart)
 
   const handleDeliverClick2 = () => {
+    // setValue("3");
+    // setVisited3(true); // Mark Tab 3 as visited when it's selected
+    // setDeliverClicked(true);
+    console.log("delivery");
+    productsInCart.map((p) =>
+      dispatch(
+        updateProductInCart({
+          productId: p.productId,
+          quantity: p.cartQuantity,
+        })
+      )
+    );
     setValue("3");
     setVisited3(true); // Mark Tab 3 as visited when it's selected
-    setDeliverClicked(true);
-    console.log("delivery");
 
     //if payment mode is cod direct hit order api
     //if payment mode online then first hit backend to create a payement with razorpay
@@ -48,6 +64,10 @@ const BillingPage = () => {
 
   return (
     <Wrapper>
+      <div className="header">
+        <img src="/images/Logo.jpg" alt="Logo"></img>{" "}
+        <span className="art"> ArtCart</span>
+      </div>
       <TabContext value={value}>
         <Container>
           <TabList onChange={handleChange} aria-label="head">
@@ -76,21 +96,7 @@ const BillingPage = () => {
         </Container>
         <SubContainer>
           <TabPanel value="1">
-            <BillAddress setNextButtonDisabled={setNextButtonDisabled} />
-            <Button
-              variant="contained"
-              onClick={handleDeliverClick}
-              disabled={nextButtonDisabled}
-              style={{
-                width: "14rem",
-                height: "2.6rem",
-                marginTop: "1.5rem",
-                marginLeft: "12.5rem",
-                backgroundColor: "orange",
-              }}
-            >
-              Deliver here
-            </Button>
+            <BillAddress handleDeliverClick={handleDeliverClick} />
           </TabPanel>
 
           <TabPanel value="2">
@@ -102,7 +108,7 @@ const BillingPage = () => {
                 width: "14rem",
                 height: "2.6rem",
                 marginTop: "1rem",
-                marginLeft: "9rem",
+                marginLeft: "10rem",
                 backgroundColor: "orange",
               }}
             >
@@ -113,6 +119,9 @@ const BillingPage = () => {
           <TabPanel value="3">
             <PaymentDetail />
           </TabPanel>
+          <TabPanel value="3">
+            <PaymentDetails />
+          </TabPanel>
         </SubContainer>
       </TabContext>
     </Wrapper>
@@ -121,14 +130,36 @@ const BillingPage = () => {
 
 export default BillingPage;
 
-const Wrapper = styled.section``;
+const Wrapper = styled.section`
+  .header {
+    background: linear-gradient(to right, #007bff, #00bfff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+    height: 50px;
+  }
+  .header > img {
+    height: 40px;
+    width: 40px;
+    border-radius: 2rem;
+  }
+  .art {
+    margin-left: 0.5rem;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 550;
+  }
+`;
 const Container = styled.div`
   border-bottom: 1px solid dimgray;
-  /* border: 1px solid black; */
+  border: 1px solid black;
   margin: auto 12%;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 52%;
+  margin-left: 24%;
 
   .item-head {
     text-transform: capitalize;
