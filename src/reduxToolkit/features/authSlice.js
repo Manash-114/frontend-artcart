@@ -24,8 +24,13 @@ const authSlice = createSlice({
       localStorage.removeItem("jwttoken");
       state.token = "";
     },
+    updateAddress: (state, action) => {
+      const { address } = state.currentUser;
+      address.push(action.payload);
+    },
   },
 });
 
-export const { signIn, signUp, currentUser, signout } = authSlice.actions;
+export const { signIn, signUp, currentUser, signout, updateAddress } =
+  authSlice.actions;
 export default authSlice.reducer;
