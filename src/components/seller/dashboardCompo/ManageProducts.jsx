@@ -8,106 +8,51 @@ import { TiTick } from "react-icons/ti";
 import { RxCross1 } from "react-icons/rx";
 import DataTable from 'react-data-table-component';
 
-const data=[
-  {
-      "id": "31f2918e-ca5f-4044-b933-99edaabceb45",
-      "name": "P4",
-      "price": 100,
-      "description": "des1",
-      "stock": true,
-      "productImages": [
-          {
-              "id": "4b83ce76-c3ff-4de9-83e4-8e5407d06928",
-              "name": "iffe"
-          },
-          {
-              "id": "52482d57-ae35-4418-92f1-f24d6523c83a",
-              "name": "fdsm"
-          },
-          {
-              "id": "c1d67ddf-c1fa-49b7-838f-fcd1073c47df",
-              "name": "fdse"
-          }
-      ],
-      "category": {
-          "id": 2,
-          "name": "cat-2"
-      },
-      "seller": {
-          "id": 2,
-          "name": null,
-          "email": "seller2@gmail.com",
-          "profileImage": null,
-          "aadhaarNo": null,
-          "aadhaarImage": null,
-          "phoneNumber": null,
-          "regDate": "2024-04-02T12:29:24.728765",
-          "approved": false,
-          "profileCompleted": false
-      },
-      "reviews": [
-        {
-          "id":1,
-          "cName":"K Behrazi",
-          "description": "It is a good product",
-          "rating":4
-        }
-      ]
-  },
-  {
-      "id": "4ce61481-3c26-460f-a6da-e9e2f338c326",
-      "name": "P3",
-      "price": 100,
-      "description": "des1",
-      "stock": true,
-      "productImages": [
-          {
-              "id": "79d68465-e671-45e9-b4f9-0ce65cc5fe1f",
-              "name": "iffe"
-          },
-          {
-              "id": "2c2a1142-411f-491f-a263-36e52648df73",
-              "name": "fdsm"
-          },
-          {
-              "id": "720a740a-44ef-4e33-ab93-ec010fc4085d",
-              "name": "fdse"
-          }
-      ],
-      "category": {
-          "id": 2,
-          "name": "cat-2"
-      },
-      "seller": {
-          "id": 2,
-          "name": null,
-          "email": "seller2@gmail.com",
-          "profileImage": null,
-          "aadhaarNo": null,
-          "aadhaarImage": null,
-          "phoneNumber": null,
-          "regDate": "2024-04-02T12:29:24.728765",
-          "approved": false,
-          "profileCompleted": false
-      },
-      "reviews": [
-        {
-          "id":1,
-          "cName":"Manash",
-          "description": "It is a good product",
-          "rating":5
-        },
-        {
-          "id":3,
-          "cName":"Chanchal",
-          "description": "It is a nice product",
-          "rating":5
-        }
-      ]
-    }
-]
+import { BASE_URL } from '../../common/config';
+
+
+
+
+
+
+
+
 
 const ManageProducts = () => {
+
+  const [data, setData] = useState([]);
+  const [productName,SetProductName] = useState("");
+  const [price,SetPrice] = useState("");
+  const [stock,SetStock] = useState(false);
+  const [des,SetDes] = useState("");
+
+
+
+  const token="eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtYW5hc2giLCJpYXQiOjE3MTM4MTA0NTIsImV4cCI6MTcxMzg5Njg1MiwiZW1haWwiOiJjaGFuQGdtYWlsLmNvbSIsInJvbGUiOiJST0xFX1NFTExFUiJ9.f0l8-ELIQ55Y5YXnvJuJMJq452Uyxs4LlUmZdOU_x1E";
+  
+  
+  // State to hold fetched data
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/seller/all-products`,{
+          headers: {
+            Authorization: `Bearer ${token}` // Include 'Bearer' prefix for some authentication schemes
+          }
+        });
+        setData(response.data); 
+        // Assuming your API returns an array of objects
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        // Optionally handle errors gracefully
+      }
+    };
+
+    fetchData(); // Call the function to fetch data on component mount
+  }, []);
+
+
 
 
   const columns = [
@@ -135,6 +80,16 @@ const ManageProducts = () => {
     sortable: true,
     
   },
+  // {
+  //   name: 'Delete Product',
+  //   cell: row => {
+
+  //     return(
+  //       <button onClick={handleDelete}>Delete</button>
+  //     )},
+    
+    
+  // },
 
     {
       name: 'Action',
@@ -142,28 +97,51 @@ const ManageProducts = () => {
         
         const [anchorEl1, setAnchorEl1] = useState(null)
 
-      const handleClick1 = (event) => {
+        const handleClick1 = (event) => {
         setAnchorEl1(event.currentTarget);
-    
       };
       const handleClose1 = () => {
         setAnchorEl1(null);
      };
 
 
-  const open1 = Boolean(anchorEl1);
+      const open1 = Boolean(anchorEl1);
 
 
-  const id1 = open1 ? 'simple-popover' : undefined;
+      const id1 = open1 ? 'simple-popover' : undefined;
 
-        
-  const [selectedValue, setSelectedValue] = useState('');
+            
+      const [selectedValue, setSelectedValue] = useState('');
 
   
-  const handleChange = (event) => {
+      const handleChange = (event) => {
+        
+        setSelectedValue(event.target.value);
+      };
+
+      
+
+      const handleSubmit = async (event) => {
+        event.preventDefault(); // Prevent default form submission behavior
     
-    setSelectedValue(event.target.value);
-  };
+        try {
+          const response = await axios.post('https://your-api-endpoint', {
+            productName,
+            productPrice,
+            hasStock,
+            category: selectedValue,
+            // Other data if needed
+          });
+    
+          console.log('Product updated successfully:', response.data);
+          // Handle successful update (e.g., close Popover, display success message)
+    
+        } catch (error) {
+          console.error('Error updating product:', error);
+          // Handle errors (e.g., display error message)
+        }
+      };
+
         
         
         return (
@@ -194,17 +172,28 @@ const ManageProducts = () => {
   </div>
 
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-    <form class="space-y-6" action="#" method="POST">
+    <form class="space-y-6" action="#" method="POST" onSubmit={handleSubmit}>
       <div>
         <label for="pName" class="block text-sm font-medium leading-6 text-gray-900">Product Name</label>
         <div class="mt-2">
-          <input id="pName" name="pName" type="text" autocomplete="pName" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+          <input 
+          id="pName" 
+          name="pName" 
+          type="text" 
+          autocomplete="pName" 
+          onChange={(e) => setProductName(e.target.value)}
+          required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
         </div>
       </div>
       <div>
         <label for="pPrice" class="block text-sm font-medium leading-6 text-gray-900">Product Price</label>
         <div class="mt-2">
-          <input id="pPrice" name="pPrice" type="number" autocomplete="pPice" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+          <input 
+          id="pPrice" 
+          name="pPrice" 
+          type="number" 
+          autocomplete="pPice" 
+          required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
         </div>
       </div>
       <div>
@@ -232,7 +221,12 @@ const ManageProducts = () => {
           
         </div>
         <div class="mt-2">
-          <textarea id="password" name="password" type="text" autocomplete="current-password" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+          <textarea 
+          id="password" 
+          name="password" 
+          type="text" 
+          autocomplete="current-password" 
+          required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
         </div>
       </div>
 
@@ -300,6 +294,7 @@ const ManageProducts = () => {
       pagination
       
 		/>
+    
     
   );
 }

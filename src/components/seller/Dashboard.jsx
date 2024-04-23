@@ -5,8 +5,9 @@ import styled from 'styled-components'
 import Footer2 from '../common/Footer2'
 import Header from '../common/Header'
 import AddProduct from './dashboardCompo/AddProduct'
-import ManageOrders from './dashboardCompo/ManageOrders'
+import ViewAllOrderss from './dashboardCompo/ViewAllOrders'
 import ManageProducts from './dashboardCompo/ManageProducts'
+import NewOrders from './dashboardCompo/NewOrders'
 import SellerRegistration from './SellerRegistration'
 
 const buttons=[
@@ -22,15 +23,21 @@ const buttons=[
         id:"add-product"
     },
     {
-        name:"Manage Orders",
+        name:"New Orders",
         type:"button",
-        id:"manage-orders"
+        id:"new-orders"
+    },
+    {
+        name:"View All orders",
+        type:"button",
+        id:"all-orders"
     },
     {
         name:"Manage Products",
         type:"button",
         id:"manage-products"
-    }
+    },
+   
 ]
 
 
@@ -68,6 +75,8 @@ const Dashboard = () => {
                         {btID === "complete-profile" && navigate("/seller/completeprofile")}
                        
                         {btID === "manage-orders" && <ManageOrders />}
+                        {btID === "new-orders" && <NewOrders />}
+                        {btID === "all-orders" && <ViewAllOrderss />}
                         {btID === "manage-products" && <ManageProducts />}
                     </div>
 
