@@ -22,12 +22,6 @@ const ManageProducts = () => {
   useEffect(() => {
     getAllProducts(token, dispatch);
   }, []);
-
-  const updateProductDetails = (e) => {
-    e.preventDefault();
-    console.log("form submit");
-  };
-
   const columns = [
     {
       name: "Product Name",
@@ -95,7 +89,6 @@ const ManageProducts = () => {
           setIsLoading(true);
           console.log("form submit " + JSON.stringify(productData));
           console.log(productImages);
-
           //if check for image update
           if (showImageTag)
             uploadImageToCloudinaryForUpdate(
@@ -172,7 +165,6 @@ const ManageProducts = () => {
                             id="pName"
                             name="pName"
                             type="text"
-                            value={row.name}
                             autocomplete="pName"
                             required
                             value={productData.name}
@@ -261,7 +253,6 @@ const ManageProducts = () => {
                             id="password"
                             name="password"
                             type="text"
-                            value={row.description}
                             autocomplete="current-password"
                             required
                             value={productData.description}
@@ -290,7 +281,7 @@ const ManageProducts = () => {
                       {showImageTag && (
                         <div className="p-4 block w-[270px] rounded-md border-0  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                           <label htmlFor="ProductImage" className="">
-                            Product Images {`(*Select multiple)`}
+                            Product Images *Select multiple
                           </label>
                           <input
                             type="file"
