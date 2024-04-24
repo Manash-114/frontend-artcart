@@ -6,6 +6,7 @@ const sellerSlice = createSlice({
     newOrders: [],
     allOrders: [],
     productCategory: [],
+    allProduct: [],
   },
   reducers: {
     signIn: (state, action) => {
@@ -28,6 +29,9 @@ const sellerSlice = createSlice({
     updateProductCategory: (state, action) => {
       state.productCategory = action.payload;
     },
+    updateAllProduct: (state, action) => {
+      state.allProduct = action.payload;
+    },
   },
 });
 
@@ -36,5 +40,6 @@ export const {
   updateAllOrders,
   updateProductCategory,
   acceptOrderAndUpdate,
+  updateAllProduct,
 } = sellerSlice.actions;
 export default sellerSlice.reducer;
