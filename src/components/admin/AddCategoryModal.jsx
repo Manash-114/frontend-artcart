@@ -1,16 +1,11 @@
 import React, { useState } from "react";
 import { saveCategory } from "../../apiCalls/admin/saveCategory";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-const AddCategoryModal = ({
-  isOpen,
-  onClose,
-  onSubmit,
-  categories,
-  setCategories,
-}) => {
+const AddCategoryModal = ({ isOpen, onClose, onSubmit }) => {
   const [categoryName, setCategoryName] = useState("");
   const token = useSelector((store) => store.auth.token);
+  const dispatch = useDispatch();
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(categoryName);
@@ -18,8 +13,7 @@ const AddCategoryModal = ({
       alert("enter valid name");
       setCategoryName("");
     } else {
-      saveCategory(token, categoryName, categories);
-      setCategories(categories);
+      saveCategory(token, categoryName, dispatch);
     }
   };
 

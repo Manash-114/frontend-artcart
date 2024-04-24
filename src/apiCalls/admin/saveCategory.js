@@ -1,6 +1,7 @@
+import { addNewCategory } from "../../reduxToolkit/features/authSlice";
 import { BASE_URL, BASE_URL_LOCAL } from "../common-db";
 
-export const saveCategory = async (token, cName, categories) => {
+export const saveCategory = async (token, cName, dispatch) => {
   const data = {
     name: cName,
   };
@@ -17,7 +18,7 @@ export const saveCategory = async (token, cName, categories) => {
   if (res.status === 200) {
     const resData = await res.json();
     console.log(resData);
-    categories.push(resData.data);
+    dispatch(addNewCategory(resData.data));
     alert(resData.message);
   } else {
     alert("Internal server error while adding category");

@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { getAllCategories } from "../../apiCalls/admin/getAllCategories";
+
 import AddCategoryModal from "./AddCategoryModal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { deleteCategory } from "../../apiCalls/admin/deleteCategory";
-import { saveCategory } from "../../apiCalls/admin/saveCategory";
+import { getAllCategoriesFromBackend } from "../../apiCalls/admin/getAllCategoriesFromBackend";
 
 const ProductCategories = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const token = useSelector((store) => store.auth.token);
-  const [categories, setCategories] = useState([]);
+  // const [categories, setCategories] = useState([]);
+
+  const categories = useSelector((store) => store.auth.productCategory);
   const [mainCategoies, setMainCategories] = useState(new Map());
-  console.log("token without useEffect", token);
-  const nav = useNavigate();
+  const dispatch = useDispatch();
+
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -25,7 +27,7 @@ const ProductCategories = () => {
     console.log("delete with id " + id);
     deleteCategory(token, id);
     const c = categories.filter((c) => c.id != id);
-    setCategories(c);
+    // setCategories(c);
   };
 
   const handleAddCategory = (categoryName) => {
@@ -34,8 +36,8 @@ const ProductCategories = () => {
   };
 
   useEffect(() => {
-    // console.log("use effect called with token +", token);
-    // getAllCategories(token, setCategories);
+    console.log("use effect called with token +", token);
+    getAllCategoriesFromBackend(dispatch);
   }, []);
 
   return (
@@ -44,7 +46,7 @@ const ProductCategories = () => {
         <div
           className="p-2 bg-slate-300 m-1 cursor-pointer font-bold"
           onClick={() => {
-            getAllCategories(token, setCategories);
+            // getAllCategories(dispatch);
           }}
         >
           {/* <h1>All Category</h1> */}
@@ -61,8 +63,6 @@ const ProductCategories = () => {
             isOpen={isModalOpen}
             onClose={handleCloseModal}
             onSubmit={handleAddCategory}
-            categories={categories}
-            setCategories={setCategories}
           />
         </div>
       </div>

@@ -17,7 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { categories, price } from "../landingPage/data";
+// import { categories, price } from "../landingPage/data";
 import ProductList from "./ProductList";
 import { useDispatch, useSelector } from "react-redux";
 import { searchAndFilter } from "../../reduxToolkit/features/productList/ProductSlice";
@@ -26,7 +26,7 @@ const Products = () => {
   const itemsPerPage = 9;
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
+  const categories = useSelector((state) => state.auth.productCategory);
   const product = useSelector((state) => state.product);
   console.log(product);
 
@@ -166,15 +166,15 @@ const Products = () => {
             <AccordionDetails>
               <Typography>
                 {categories.map((item, index) => (
-                  <FormGroup key={index}>
+                  <FormGroup key={item.id}>
                     <FormControlLabel
                       control={
                         <Checkbox
-                          checked={selectedCategory.includes(item.category)} // Check based on selectedCategory array
-                          onChange={() => handleCategoryChange(item.category)}
+                          checked={selectedCategory.includes(item.name)} // Check based on selectedCategory array
+                          onChange={() => handleCategoryChange(item.name)}
                         />
                       }
-                      label={item.category}
+                      label={item.name}
                     />
                   </FormGroup>
                 ))}

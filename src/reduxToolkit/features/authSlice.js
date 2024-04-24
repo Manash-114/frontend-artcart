@@ -6,6 +6,7 @@ const authSlice = createSlice({
     signin: false,
     currentUser: {},
     token: "",
+    productCategory: [],
   },
   reducers: {
     signIn: (state, action) => {
@@ -28,9 +29,22 @@ const authSlice = createSlice({
       const { address } = state.currentUser;
       address.push(action.payload);
     },
+    updateCategory: (state, action) => {
+      state.productCategory = action.payload;
+    },
+    addNewCategory: (state, action) => {
+      state.productCategory.push(action.payload);
+    },
   },
 });
 
-export const { signIn, signUp, currentUser, signout, updateAddress } =
-  authSlice.actions;
+export const {
+  signIn,
+  signUp,
+  currentUser,
+  signout,
+  updateAddress,
+  updateCategory,
+  addNewCategory,
+} = authSlice.actions;
 export default authSlice.reducer;

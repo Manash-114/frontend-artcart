@@ -5,6 +5,7 @@ import Products from "../../components/users/Products";
 import getCurrentUser from "../../apiCalls/getCurrentUser";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { getAllCategoriesFromBackend } from "../../apiCalls/admin/getAllCategoriesFromBackend";
 
 const ProductPage = ({ data }) => {
   const dispatch = useDispatch();
@@ -19,6 +20,7 @@ const ProductPage = ({ data }) => {
     });
     console.log("get");
     getCurrentUser(token, navigate, dispatch);
+    getAllCategoriesFromBackend(dispatch);
   }, [currentUser.name]);
   return (
     <div>
