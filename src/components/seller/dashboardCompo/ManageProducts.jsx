@@ -137,26 +137,7 @@ const ManageProducts = () => {
                         </label>
                         <input type="checkbox" />
                       </div>
-                      <div>
-                        <div className="mt-5 pb-3 ">
-                          <label htmlFor="category " className="pb-6">
-                            Select Category
-                          </label>
-                          <select
-                            id="category"
-                            name="category"
-                            value={selectedValue}
-                            onChange={handleChange}
-                            className="w-full   border rounded focus:outline-none focus:border-blue-500"
-                          >
-                            <option value="">Select Courier</option>
-                            <option value="e-kart">E-Kart</option>
-                            <option value="ecom-express">Ecom-Express</option>
-                            <option value="delhivery">Delhivery</option>
-                          </select>
-                          <p className="mt-2">You selected: {selectedValue}</p>
-                        </div>
-                      </div>
+                      
 
                       <div>
                         <div class="flex items-center justify-between">
@@ -178,6 +159,23 @@ const ManageProducts = () => {
                           />
                         </div>
                       </div>
+
+                      <div className="p-4 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                          <label htmlFor="ProductImage" className="mb-6">
+                            Product Images {`(*Select multiple image)`}
+                          </label>
+                          <input
+                            type="file"
+                            id="pImage"
+                            name="pImage"
+                            accept=" .jpg, .jpeg, .png ,.webp"
+                            multiple
+                            className="mt-4"
+                            onChange={(e) => {
+                              setProductImages(e.target.files);
+                            }}
+                          />
+                       </div>
 
                       <div>
                         <button
@@ -201,48 +199,4 @@ const ManageProducts = () => {
   return <DataTable columns={columns} data={data} pagination />;
 };
 
-<<<<<<< HEAD
-
-  
-  
-
-  // Function to fetch order data from the API using Axios
-  // const fetchOrders = async () => {
-  //   setIsLoading(true);
-  //   setError(null);
-
-  //   try {
-  //     const response = await axios.get('https://fakestoreapi.com/carts'); // Replace with your API URL
-  //     setOrders(response.data);
-  //   } catch (err) {
-  //     setError(err.message);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  // Fetch orders on component mount
-  // useEffect(() => {
-  //   fetchOrders();
-  //   console.log(address);
-  // }, []);
-
-  return (
-   
-    
-
-    <DataTable
-			columns={columns}
-			data={data}
-      pagination
-      
-		/>
-    
-    
-  );
-}
-
-export default ManageProducts
-=======
 export default ManageProducts;
->>>>>>> 91aa5fd228e5ffa043b8d65159f7f44db788edd2
