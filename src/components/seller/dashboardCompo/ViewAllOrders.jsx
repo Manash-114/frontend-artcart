@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllnewOrders } from "../../../apiCalls/seller/getAllnewOrders";
 import { acceptOrder } from "../../../apiCalls/seller/acceptOrder";
 
-const ManageOrders = () => {
+const ViewAllOrders = () => {
   // const [orders, setOrders] = useState([]); // State to hold fetched order data
   // const [isLoading, setIsLoading] = useState(false); // State for loading indicator
   // const [error, setError] = useState(null); // State for error handling
@@ -248,7 +248,7 @@ const ManageOrders = () => {
   return <DataTable columns={columns} data={data} pagination />;
 };
 
-export default ManageOrders;
+export default ViewAllOrders;
 
 // <div>
 //           {orders.map((order) => (

@@ -137,9 +137,8 @@ const ManageProducts = () => {
                         <label htmlFor="stock" className="m-3 ml-0">
                           Stock
                         </label>
-                        <input type="checkbox" checked />
+                        <input type="checkbox" />
                       </div>
-                      <div></div>
 
                       <div>
                         <div class="flex items-center justify-between">
@@ -160,6 +159,23 @@ const ManageProducts = () => {
                             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                           />
                         </div>
+                      </div>
+
+                      <div className="p-4 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        <label htmlFor="ProductImage" className="mb-6">
+                          Product Images {`(*Select multiple image)`}
+                        </label>
+                        <input
+                          type="file"
+                          id="pImage"
+                          name="pImage"
+                          accept=" .jpg, .jpeg, .png ,.webp"
+                          multiple
+                          className="mt-4"
+                          onChange={(e) => {
+                            setProductImages(e.target.files);
+                          }}
+                        />
                       </div>
 
                       <div>
