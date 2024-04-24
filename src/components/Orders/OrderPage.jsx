@@ -4,6 +4,7 @@ import Footer2 from "../common/Footer2";
 import Order from "./Order";
 import { getAllOrders } from "../../apiCalls/users/getAllOrders";
 import { useDispatch, useSelector } from "react-redux";
+import { getAllUndeliveredOrders } from "../../apiCalls/users/getAllUndeliveredOrders";
 
 const OrderPage = () => {
   const { token } = useSelector((store) => store.auth);
@@ -11,6 +12,7 @@ const OrderPage = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     console.log("order page");
+    getAllUndeliveredOrders(token, dispatch);
     getAllOrders(token, dispatch);
   }, []);
   return (
