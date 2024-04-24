@@ -1,5 +1,11 @@
 import { BASE_URL_LOCAL } from "../common-db";
-export const generatePaymentWithRazopay = async (data, token, dispatch) => {
+import { createOrder } from "./createOrder";
+export const generatePaymentWithRazopay = async (
+  data,
+  token,
+  dispatch,
+  orderReqData
+) => {
   const res = await fetch(
     `${BASE_URL_LOCAL}/api/customer/order/razor-payment`,
     {
@@ -29,13 +35,9 @@ export const generatePaymentWithRazopay = async (data, token, dispatch) => {
         // alert(response.razorpay_signature);
         console.log("payment done");
         //now create a order to your backend
-
-        const orderData = {
-          billingAddress: {},
-          products: [],
-          paymentReq: {},
-          status: "CREATED",
-        };
+        orderReqData.paymentReq.id = response.razorpay_payment_id;
+        console.log("order data ", JSON.stringify(orderReqData));
+        createOrder(orderReqData, token, dispatch);
       },
       prefill: {
         //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number

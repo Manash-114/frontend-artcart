@@ -22,7 +22,7 @@ import ShoppingCartCheckoutOutlinedIcon from "@mui/icons-material/ShoppingCartCh
 import CurrencyRupeeOutlinedIcon from "@mui/icons-material/CurrencyRupeeOutlined";
 import { CurrencyRupee } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { addressData } from "./addressData";
+// import { addressData } from "./addressData";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addBillingAddress,
@@ -30,6 +30,7 @@ import {
   updateBillingAddress,
   updateCustomerDetails,
 } from "../../reduxToolkit/features/productList/BillingAddressSlice";
+import { addAddress } from "../../apiCalls/users/addAddress";
 
 const BillAddress = ({
   setNextButtonDisabled,
@@ -44,7 +45,7 @@ const BillAddress = ({
   const [selectedAddressId, setSelectedAddressId] = useState(null);
 
   const handleAddressSelection = (id) => {
-    console.log(id);
+    console.log("selected address id ", id);
     dispatch(updateAddressId(id));
     setSelectedAddressId(id);
   };
@@ -58,6 +59,9 @@ const BillAddress = ({
     landmark: "",
   };
 
+  const addressData = useSelector((store) => store.auth.currentUser.address);
+  const token = useSelector((store) => store.auth.token);
+
   const validationSchema = yup.object({
     address: yup.string().required("Address is required"),
     city: yup.string().required("City/District/Town is required"),
@@ -70,7 +74,12 @@ const BillAddress = ({
   });
 
   const onSubmit = (values) => {
-    dispatch(addBillingAddress(values));
+    //api call to store customer address
+    console.log("address data ", values);
+    //after that update the state variable
+    addAddress(values, token, dispatch);
+
+    // dispatch(addBillingAddress(values));
   };
   const onSubmit2 = (values) => {
     dispatch(
@@ -176,7 +185,7 @@ const BillAddress = ({
                             control={
                               <Radio checked={ad.id === selectedAddressId} />
                             }
-                            label={`${ad.landmark}, ${ad.city}, ${ad.state} - ${ad.zipCode}`}
+                            label={`${ad.landmark}, ${ad.city}, ${ad.state} - ${ad.pincode}`}
                             style={{ width: "calc(100% - 100px)" }}
                           />
                           {!expandedAddresses[ad.id] && ( // Show Edit button only if accordion is not expanded

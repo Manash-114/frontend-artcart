@@ -9,6 +9,7 @@ import ManageOrders from "./dashboardCompo/ManageOrders";
 import ManageProducts from "./dashboardCompo/ManageProducts";
 import SellerRegistration from "./SellerRegistration";
 import { useSelector } from "react-redux";
+import SellerNav from "./SellerNav";
 
 const buttons = [
   {
@@ -60,7 +61,7 @@ const Dashboard = () => {
   return (
     // <Wrapper>
     <>
-      <Header />
+      <SellerNav />
       {showMessage ? (
         <div
           className="bg-gray-100 border border-gray-400 text-gray-700 px-4 py-3 rounded relative"

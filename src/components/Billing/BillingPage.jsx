@@ -116,9 +116,9 @@ const BillingPage = () => {
             </Button>
             {/* <PaymentButton /> */}
           </TabPanel>
-          <TabPanel value="3">
+          {/* <TabPanel value="3">
             <PaymentDetail />
-          </TabPanel>
+          </TabPanel> */}
           <TabPanel value="3">
             <PaymentDetails />
           </TabPanel>
