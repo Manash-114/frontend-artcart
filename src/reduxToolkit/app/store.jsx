@@ -6,6 +6,7 @@ import cartReducer from "../features/productList/CartSlice";
 import wishlistReducer from "../features/productList/WishListSlice";
 import billingAddressReducer from "../features/productList/BillingAddressSlice";
 import sellerReducer from "../features/sellerSlice";
+import customerReducer from "../features/customerSlice";
 const store = configureStore({
   reducer: {
     product: productReducer,
@@ -14,6 +15,7 @@ const store = configureStore({
     billingAddress: billingAddressReducer,
     auth: authReducer,
     seller: sellerReducer,
+    customer: customerReducer,
   },
 });
 

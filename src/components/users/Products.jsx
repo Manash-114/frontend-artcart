@@ -21,6 +21,8 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ProductList from "./ProductList";
 import { useDispatch, useSelector } from "react-redux";
 import { searchAndFilter } from "../../reduxToolkit/features/productList/ProductSlice";
+import toast from "react-hot-toast";
+import { orderSuccess } from "../../reduxToolkit/features/authSlice";
 
 const Products = () => {
   const itemsPerPage = 9;
@@ -28,7 +30,8 @@ const Products = () => {
   const [totalPages, setTotalPages] = useState(1);
   const categories = useSelector((state) => state.auth.productCategory);
   const product = useSelector((state) => state.product);
-  console.log(product);
+
+  const { auth } = useSelector((store) => store);
 
   const { products, filterProducts } = product;
 
@@ -120,6 +123,12 @@ const Products = () => {
     applyFilters(term, filter, selectedValue);
   }, [term, filter, selectedValue, selectedCategory]);
 
+  useEffect(() => {
+    if (auth.orderCreate) {
+      toast.success("Order done Successfully!");
+    }
+    dispatch(orderSuccess(false));
+  }, []);
   return (
     <Container>
       <ImageSection>

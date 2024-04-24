@@ -4,7 +4,8 @@ export const generatePaymentWithRazopay = async (
   data,
   token,
   dispatch,
-  orderReqData
+  orderReqData,
+  navigate
 ) => {
   const res = await fetch(
     `${BASE_URL_LOCAL}/api/customer/order/razor-payment`,
@@ -20,7 +21,6 @@ export const generatePaymentWithRazopay = async (
 
   if (res.status === 200) {
     const resData = await res.json();
-    console.log(resData);
     var options = {
       key: "rzp_test_b7cdwAk8TAVDye", // Enter the Key ID generated from the Dashboard
       amount: resData.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
@@ -36,8 +36,7 @@ export const generatePaymentWithRazopay = async (
         console.log("payment done");
         //now create a order to your backend
         orderReqData.paymentReq.id = response.razorpay_payment_id;
-        console.log("order data ", JSON.stringify(orderReqData));
-        createOrder(orderReqData, token, dispatch);
+        createOrder(orderReqData, token, dispatch.navigate);
       },
       prefill: {
         //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number

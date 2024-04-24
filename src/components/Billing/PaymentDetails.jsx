@@ -8,16 +8,16 @@ import { updatePaymentDetails } from "../../reduxToolkit/features/productList/Bi
 import toast, { Toaster } from "react-hot-toast";
 import { createOrder } from "../../apiCalls/users/createOrder";
 import { generatePaymentWithRazopay } from "../../apiCalls/users/generatePaymentWithRazopay";
+import { useNavigate } from "react-router-dom";
 const PaymentDetails = () => {
   const dispatch = useDispatch();
 
   const amount = useSelector((state) => state.cart.cartTotalAmount);
-  console.log(amount);
-
   const { billingAddress } = useSelector((store) => store);
   const { cartTotalAmount } = useSelector((store) => store.cart);
   const { token } = useSelector((store) => store.auth);
 
+  const navigate = useNavigate();
   const handleCodPayment = () => {
     //preparedata for backend
     const orderReqData = {
@@ -35,10 +35,7 @@ const PaymentDetails = () => {
       },
     };
 
-    createOrder(orderReqData, token, dispatch, "COD");
-    // dispatch(updatePaymentDetails({ amount, mode: "cod" }));
-    // toast.success("Payment done Successfully!");
-    console.log("orderreq data", orderReqData);
+    createOrder(orderReqData, token, dispatch, navigate);
   };
   const handleOnlinePayment = () => {
     const paymentReqData = {
@@ -59,7 +56,13 @@ const PaymentDetails = () => {
         mode: "ONLINE",
       },
     };
-    generatePaymentWithRazopay(paymentReqData, token, dispatch, orderReqData);
+    generatePaymentWithRazopay(
+      paymentReqData,
+      token,
+      dispatch,
+      orderReqData,
+      navigate
+    );
   };
   return (
     <Wrapper>

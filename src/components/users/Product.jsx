@@ -31,7 +31,7 @@ const Product = () => {
   const [value, setValue] = React.useState(2);
 
   const selectedProduct = useSelector((state) =>
-    state.product.products.find((product) => product.id === parseInt(id))
+    state.product.products.find((product) => product.id === id)
   );
   console.log(selectedProduct);
   const dispatch = useDispatch();
@@ -63,8 +63,8 @@ const Product = () => {
                   <br />
                   <div className="date">publish Date</div>
                   <div className="rating">
-                    <Rating name="read-only" value={items.rating} readOnly /> (
-                    {items.rating})
+                    <Rating name="read-only" value={items?.rating} readOnly /> (
+                    {items?.rating})
                   </div>
                   <div className="price">
                     <img src="/images/ruppee.png" alt="price" />

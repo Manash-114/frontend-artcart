@@ -7,6 +7,7 @@ const authSlice = createSlice({
     currentUser: {},
     token: "",
     productCategory: [],
+    orderCreate: false,
   },
   reducers: {
     signIn: (state, action) => {
@@ -35,6 +36,9 @@ const authSlice = createSlice({
     addNewCategory: (state, action) => {
       state.productCategory.push(action.payload);
     },
+    orderSuccess: (state, action) => {
+      state.orderCreate = action.payload;
+    },
   },
 });
 
@@ -46,5 +50,6 @@ export const {
   updateAddress,
   updateCategory,
   addNewCategory,
+  orderSuccess,
 } = authSlice.actions;
 export default authSlice.reducer;
