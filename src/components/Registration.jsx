@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import TextError from "./TextError";
 import axios from "axios";
 import { BASE_URL } from "./common/config";
 import { BASE_URL_LOCAL } from "../apiCalls/common-db";
+import { useSelector } from "react-redux";
 
 const initialValues = {
   email: "",
@@ -39,9 +40,17 @@ const validationSchema = Yup.object({
 });
 
 const Registration = () => {
+  const navigate = useNavigate();
   const url = window.location.href;
   const d = url.split("/");
   let s = d[3];
+  const { auth } = useSelector((store) => store);
+
+  useEffect(() => {
+    if (auth.signin == true) {
+      navigate("/product");
+    }
+  }, []);
   return (
     <Wrapper>
       <div className="container">

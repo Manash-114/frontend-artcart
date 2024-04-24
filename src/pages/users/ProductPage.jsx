@@ -11,17 +11,17 @@ const ProductPage = ({ data }) => {
   const dispatch = useDispatch();
   const token = localStorage.getItem("jwttoken");
   const navigate = useNavigate();
-  const { currentUser } = useSelector((store) => store.auth);
+  // const { currentUser } = useSelector((store) => store.auth);
   useEffect(() => {
     // Scroll to the top when the component mounts
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
-    console.log("get");
-    getCurrentUser(token, navigate, dispatch);
-    getAllCategoriesFromBackend(dispatch);
-  }, [currentUser.name]);
+
+    // getCurrentUser(token, navigate, dispatch);
+    // getAllCategoriesFromBackend(dispatch);
+  }, []);
   return (
     <div>
       <Header />

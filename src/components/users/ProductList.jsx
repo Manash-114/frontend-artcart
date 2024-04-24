@@ -61,7 +61,7 @@ const ProductList = ({ currentProducts }) => {
   };
 
   const wishlistColor = useSelector((state) => state.wishlist.items);
-  console.log(wishlistColor)
+  console.log(wishlistColor);
   return (
     <Container>
       <Toaster position="top-center" reverseOrder={false} />
@@ -99,7 +99,7 @@ const ProductList = ({ currentProducts }) => {
                     />
                   </div>
                   <div className="image">
-                    <img src={p.productImages[0].name} alt="image"></img>
+                    <img src={p.productImages[0]?.name} alt="image"></img>
                   </div>
                   <div className="content">
                     <div className="rate">

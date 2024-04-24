@@ -132,7 +132,7 @@ const FeatureProducts = () => {
                     />
                   </div>
                   <div className="image">
-                    <img src={p.productImages[0].name} alt={p.name}></img>
+                    <img src={p.productImages[0]?.name} alt={p.name}></img>
                   </div>
                   <div className="content">
                     <div className="rate">
