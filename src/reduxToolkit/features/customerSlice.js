@@ -3,15 +3,15 @@ import { createSlice } from "@reduxjs/toolkit";
 const customerSlice = createSlice({
   name: "customerSlice",
   initialState: {
-    allNotDeliveredorders: [],
-    allorders: [],
+    allNotDeliveredOrders: [],
+    allDeliveredOrders: [],
   },
   reducers: {
     updateAllOrders: (state, action) => {
-      state.allorders = action.payload;
+      state.allDeliveredOrders = action.payload;
     },
     updateAllNotDeliverdOrders: (state, action) => {
-      state.allNotDeliveredorders = action.payload;
+      state.allNotDeliveredOrders = action.payload;
     },
   },
 });
