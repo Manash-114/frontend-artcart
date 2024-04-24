@@ -9,6 +9,7 @@ import { RxCross1 } from "react-icons/rx";
 import DataTable from 'react-data-table-component';
 
 import { BASE_URL } from '../../common/config';
+import { useSelector } from 'react-redux';
 
 
 
@@ -27,8 +28,7 @@ const ManageProducts = () => {
   const [des,SetDes] = useState("");
 
 
-
-  const token="eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtYW5hc2giLCJpYXQiOjE3MTM4MTA0NTIsImV4cCI6MTcxMzg5Njg1MiwiZW1haWwiOiJjaGFuQGdtYWlsLmNvbSIsInJvbGUiOiJST0xFX1NFTExFUiJ9.f0l8-ELIQ55Y5YXnvJuJMJq452Uyxs4LlUmZdOU_x1E";
+  const {token} = useSelector(store=>store.auth);
   
   
   // State to hold fetched data
