@@ -15,7 +15,8 @@ import { updateProduct } from "../../../apiCalls/seller/updateProduct";
 import Spinner from "../../common/Spinner";
 
 import { uploadImageToCloudinaryForUpdate } from "../../../apiCalls/uploadImageToCloudinaryForUpdate";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+
 
 
 
@@ -26,6 +27,7 @@ const ManageProducts = () => {
   useEffect(() => {
     getAllProducts(token, dispatch);
   }, []);
+
   const columns = [
     {
       name: "Product Name",
@@ -91,7 +93,10 @@ const ManageProducts = () => {
         });
 
         const navigate=useNavigate();
+
         const handleFormSubmit = (e) => {
+         
+
           e.preventDefault();
           setIsLoading(true);
           console.log("form submit " + JSON.stringify(productData));
@@ -111,6 +116,8 @@ const ManageProducts = () => {
             console.log(jsonData);
             updateProduct(jsonData,token,setIsLoading,pID)
           }
+
+          window.location.reload();
           
 
 
@@ -124,14 +131,7 @@ const ManageProducts = () => {
 
         };
 
-        useEffect(() => {
-          // Perform navigation when the component mounts
-          if(isLoading)
-            navigate("/");
-      
-          // Optionally, return a cleanup function if needed
-          
-        }, []);
+       
       
         
 

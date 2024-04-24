@@ -25,15 +25,15 @@ const buttons = [
     id: "add-product",
   },
   {
-    name: "New Orders",
+    name: "Orders",
     type: "button",
     id: "new-orders",
   },
-  {
-    name: "All Orders",
-    type: "button",
-    id: "all-orders",
-  },
+  // {
+  //   name: "All Orders",
+  //   type: "button",
+  //   id: "all-orders",
+  // },
   {
     name: "Manage Products",
     type: "button",
@@ -103,7 +103,7 @@ const Dashboard = () => {
               {btID === "complete-profile" && <SellerRegistration />}
               {btID === "add-product" && <AddProduct />}
               {btID === "new-orders" && <NewOrders />}
-              {btID === "all-orders" && <ViewAllOrders />}
+              {/* {btID === "all-orders" && <ViewAllOrders />} */}
               {btID === "manage-products" && <ManageProducts />}
               
             </div>
