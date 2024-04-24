@@ -29,13 +29,14 @@ const Wrapper = styled.section`
   height: 80vh;
 `
 const GridItem = styled.div`
+  border: 1px solid #938c8cb9;
   position: relative;
   overflow: hidden;
   border-radius: 8px;
   transition: box-shadow 0.3s ease; 
   cursor: pointer;
   &:hover {
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.7); 
+    box-shadow: 0px 6px 8px rgba(44, 211, 172, 0.7); 
   }
 
 `;
@@ -44,11 +45,15 @@ const Title = styled.h2`
   justify-content: center;
   height: 40px;
   padding-top: 20px;
-  text-transform: uppercase;
+  font-size: 2rem;
+  text-transform: capitalize;
+  color: #4eedad;
+  margin: 1rem;
+  margin-bottom: 2rem;
 `
 
 const Container = styled.div`
-
+ 
  height: 75%;
  position: relative;
  display: grid;
@@ -58,7 +63,7 @@ const Container = styled.div`
  padding: 20px 100px;
 
   .grid-item {
-  background-color: rgba(255, 255, 255, 0.8);
+  
   text-align: center;
   display: flex;
   justify-content: center;
@@ -73,12 +78,13 @@ const Container = styled.div`
     height: 35px;
     width: 110px;
     background: linear-gradient(rgba(59, 59, 58, 0.692), rgba(0, 0, 0, 0.3));
-    color: #e9efec;
+    color: #ccdfd6;
     border: none;
     cursor: pointer;
+    font-size: 1rem;
     transition: box-shadow 0.3s ease; 
   &:hover {
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4); 
+    box-shadow: 0px 4px 8px rgba(84, 80, 80, 0.4); 
   }
 
   }

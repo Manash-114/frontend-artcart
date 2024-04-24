@@ -15,7 +15,7 @@ const Services = () => {
         <div className="delivery-container">
         <div className="image-section payment" />
            <h1>Safe Payment</h1>
-           <p>secure payment gateway, dont worry about your information</p>
+           <p>secure payment gateway</p>
         </div>
 
         <div className="delivery-container">
@@ -27,7 +27,7 @@ const Services = () => {
         <div className="delivery-container">
         <div className="image-section return" />
            <h1>Return Policy</h1>
-           <p>you have 30 - days return guarantee for every single order</p>
+           <p>30 - days return guarantee for every single order</p>
         </div>
         
       </Container>
@@ -39,13 +39,15 @@ export default Services
 
 const Wrapper = styled.section`
     height: 52vh;
-    background-color: #ffffff;
+    background-color: inherit;
 `
 const Container = styled.div`
-    height: 70%;    
+    margin: auto 8%;
+    
+    height: 60%;    
     display: grid;
     grid-template-columns: repeat(4,1fr);
-    gap: 20px;
+    gap: 35px;
     padding: 10px 120px;
 
     .delivery-container{
@@ -91,8 +93,11 @@ const Container = styled.div`
     }
 `
 const Title = styled.h1`
-    font-size: 2rem;
-    text-transform: uppercase;
+    font-size: 2.2rem;
+    text-transform: capitalize;
     display: flex;
     justify-content: center;
+    font-weight: 560;
+    color: #23cf8a;
+    margin-bottom: 1rem;
 `

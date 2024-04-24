@@ -5,6 +5,7 @@ import { sliderItems } from './data'
 
 
 const Container = styled.div`
+    
     width: 100%;
     height: 90vh;
     display: flex;
@@ -31,6 +32,7 @@ const Arrow = styled.div`
     z-index: 2;
 `
 const Wrapper = styled.div`
+
     height: 100%;
     display: flex;
     transform: translateX(${props => props.sildeIndex * -100}vw);
@@ -45,32 +47,44 @@ const Slide = styled.div`
 
 `
 const ImgContainer = styled.div`
-height: 100%;
+ background-image: linear-gradient(155deg, rgba(239, 234, 220, 0.5),rgba(33, 31, 31, 0.5), rgba(41, 8, 5, 0.852));
+    height: 100%;
     flex: 1;
 `
 const Image = styled.img`
-    height: 80%;
+    height: 100%;
+    object-fit: cover;
 `
 
 const InfoContainer = styled.div`
-    flex: 1;
+    flex: .5;
     padding: 50px;
+    height: 100%;
+
+    background-image: linear-gradient(155deg, rgba(239, 234, 220, 0.5),rgba(33, 31, 31, 0.5), rgba(41, 8, 5, 0.852)), url('./images/background.jpg');
+  background-size: cover;
+  background-position: center;
+
 `
 
 const Title = styled.h1`
     font-size: 70px;
+    color: #f2ecec;
 `
 const Desc = styled.p`
     margin: 50px 0px;
     font-size: 20px;
     font-weight: 500;
     letter-spacing: 2px;
+    color: #ffffffc6;
 `
 const Button = styled.button`
     padding: 10px;
     font-size: 20px;
     background-color: transparent;
     cursor: pointer;
+    color: #e7e1d3;
+    border: 2px solid #eb6f0a;
 `
 
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Header from "../common/Header";
 import HeroSection from "./HeroSection";
 import Footer from "../common/Footer";
@@ -8,10 +8,7 @@ import { categories1 } from "./data";
 import Services from "./Services";
 import Footer2 from "../common/Footer2";
 import FeaturedProducts from "./FeaturedProducts";
-import getCurrentUser from "../../apiCalls/getCurrentUser";
-import { getAllCategoriesFromBackend } from "../../apiCalls/admin/getAllCategoriesFromBackend";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
 
 const LandingPage = () => {
   const { currentUser } = useSelector((store) => store.auth);
@@ -23,7 +20,7 @@ const LandingPage = () => {
     getAllCategoriesFromBackend(dispatch);
   }, [currentUser.name]);
   return (
-    <div>
+    <Wrapper>
       <Header />
       <SliderSection />
       <Categories data={categories1} />
@@ -31,8 +28,18 @@ const LandingPage = () => {
       <HeroSection />
       <FeaturedProducts />
       <Footer2 />
-    </div>
+    </Wrapper>
   );
 };
 
 export default LandingPage;
+const Wrapper = styled.div`
+  background-image: linear-gradient(
+      130deg,
+      rgba(79, 12, 33, 0.566),
+      rgba(44, 75, 100, 0.852)
+    ),
+    url("./images/background.jpg");
+  background-size: contain;
+  background-position: center;
+`;
