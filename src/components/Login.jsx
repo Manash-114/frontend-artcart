@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -10,6 +10,8 @@ import { BASE_URL_LOCAL } from "../apiCalls/common-db";
 import { useDispatch } from "react-redux";
 import { signIn } from "../reduxToolkit/features/authSlice";
 import getCurrentUser from "../apiCalls/getCurrentUser";
+import CircularProgress from '@mui/material/CircularProgress';
+import toast, { Toaster } from "react-hot-toast";
 
 const initialValues = {
   email: "",
@@ -24,44 +26,46 @@ const validationSchema = Yup.object({
 });
 
 const Login = () => {
+  const[loading, setLoading] = useState();
   const dispatch = useDispatch();
   const url = window.location.href;
   const d = url.split("/");
   const s = d[3];
 
-  const onSubmit = (values) => {
-    axios
-      .post(`${BASE_URL_LOCAL}/auth/signin`, values)
-      .then((res) => {
-        //  navigate('/')
-        //  console.log(res.data.auth)
-        if (res.data.auth && res.data.role === "ROLE_CUSTOMER") {
-          console.log(res.data);
-          localStorage.setItem("jwttoken", res.data.token);
-          const token = localStorage.getItem("jwttoken");
-          getCurrentUser(res.data.token, navigate, dispatch);
-          navigate("/");
-        } else if (res.data.auth && res.data.role === "ROLE_SELLER") {
-          console.log(res.data);
-          localStorage.setItem("jwttoken", res.data.token);
-          navigate("/seller");
-        } else if (res.data.auth && res.data.role === "ROLE_ADMIN") {
-          console.log(res.data);
-          localStorage.setItem("jwttoken", res.data.token);
-          dispatch(signIn(res.data.token));
-          navigate("/admin/dashboard");
-        } else {
-          console.log(res.data);
-          alert(res.data.message);
-        }
-      })
-      .then((err) => console.log(err));
+  const onSubmit = async (values) => {
+    setLoading(true); // Set loading to true during form submission
+  
+    try {
+      const res = await axios.post(`${BASE_URL_LOCAL}/auth/signin`, values);
+      if (res.data.auth && res.data.role === "ROLE_CUSTOMER") {
+        localStorage.setItem("jwttoken", res.data.token);
+        navigate("/products");
+      } else if (res.data.auth && res.data.role === "ROLE_SELLER") {
+        localStorage.setItem("jwttoken", res.data.token);
+        navigate("/seller");
+      } else if (res.data.auth && res.data.role === "ROLE_ADMIN") {
+        localStorage.setItem("jwttoken", res.data.token);
+        dispatch(signIn(res.data.token));
+        navigate("/admin/dashboard");
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Login failed");
+    } finally {
+      setLoading(false); // Set loading to false after form submission
+    }
   };
 
   const navigate = useNavigate();
 
   return (
     <Wrapper>
+    <Toaster
+  position="top-center"
+  reverseOrder={false}
+/>
       <div className="container">
         <div className="imageSection">
           <div className="content">
@@ -102,7 +106,9 @@ const Login = () => {
                 <ErrorMessage name="password" component={TextError} />
               </div>
 
-              <button type="submit">Login</button>
+              <button type="submit">
+                {loading ? <CircularProgress size={20} /> : 'Login'}
+              </button>
             </Form>
           </Formik>
         </div>

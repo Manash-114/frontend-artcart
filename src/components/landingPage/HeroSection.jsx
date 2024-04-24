@@ -49,6 +49,7 @@ const Wrapper = styled.section`
         width: 95%;
         font-size: 2rem;
         margin-bottom: 50px;
+        color: #f3f8f8;
         
     }
     ul{ 
@@ -63,9 +64,10 @@ const Wrapper = styled.section`
         font-size: 20px;
         font-weight: 450;
         margin-bottom: 12px;
+        color: #fbfefe;
     }
     .hero-image{
-        background: url('./public/images/theme9.jpg') center/cover;
+        background: url('./images/theme9.jpg') center/cover;
         flex: 1.5;
         height: 70vh;
         

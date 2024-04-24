@@ -8,12 +8,12 @@ import { categories1 } from './data'
 import Services from './Services'
 import Footer2 from '../common/Footer2'
 import FeaturedProducts from './FeaturedProducts'
+import styled from 'styled-components'
 
 const 
 LandingPage = () => {
   return (
-    <div>
-   
+    <Wrapper>
       <Header/>
       <SliderSection />
       <Categories data={categories1}/>
@@ -21,8 +21,13 @@ LandingPage = () => {
        <HeroSection /> 
         <FeaturedProducts />
        <Footer2 /> 
-    </div>
+    </Wrapper>
   )
 }
 
 export default LandingPage
+const Wrapper = styled.div`
+background-image: linear-gradient(130deg, rgba(79, 12, 33, 0.566), rgba(44, 75, 100, 0.852)), url('./images/background.jpg');
+  background-size: contain;
+  background-position: center;
+`

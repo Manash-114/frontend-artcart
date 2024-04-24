@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { NavLink, useLocation } from "react-router-dom";
@@ -7,49 +7,57 @@ import TextError from "./TextError";
 import axios from "axios";
 import { BASE_URL } from "./common/config";
 import { BASE_URL_LOCAL } from "../apiCalls/common-db";
+import CircularProgress from '@mui/material/CircularProgress';
+import toast, { Toaster } from "react-hot-toast";
+
 
 const initialValues = {
   email: "",
   password: "",
 };
 
-const onSubmit = (values) => {
-  values["role"] = "seller";
-  const url = window.location.href;
-  const d = url.split("/");
-  const r = d[3];
-
-  if (r === "seller") values["role"] = "seller";
-  else values["role"] = "customer";
-  console.log(values);
-  // console.log( values)
-  axios
-    .post(`${BASE_URL_LOCAL}/auth/signup`, values)
-    .then((res) => {
-      console.log("res", res.data);
-    })
-    .then((err) => console.log(err));
-};
-
-const validationSchema = Yup.object({
-  email: Yup.string().required("Email Required").email("Invalid Email Format"),
-  password: Yup.string()
-    .required("Password Required")
-    .min(8, "Password must be at least 8 characters"),
-});
-
 const Registration = () => {
-  const url = window.location.href;
-  const d = url.split("/");
-  let s = d[3];
+  const [loading, setLoading] = useState(false);
+
+  const onSubmit = (values) => {
+    setLoading(true); // Set loading to true during form submission
+
+    values["role"] = window.location.href.split("/")[3] === "seller" ? "seller" : "customer";
+
+    axios
+      .post(`${BASE_URL_LOCAL}/auth/signup`, values)
+      .then((res) => {
+        toast.success('Registration successful!'); // Show success toast
+        console.log("res", res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error('Registration failed!'); // Show error toast
+      })
+      .finally(() => {
+        setLoading(false); // Set loading to false after registration
+      });
+  };
+
+  const validationSchema = Yup.object({
+    email: Yup.string().required("Email Required").email("Invalid Email Format"),
+    password: Yup.string()
+      .required("Password Required")
+      .min(8, "Password must be at least 8 characters"),
+  });
+
   return (
     <Wrapper>
+      <Toaster
+  position="top-center"
+  reverseOrder={false}
+/>
       <div className="container">
         <div className="imageSection">
           <div className="content">
             <h1>Join the largest artwork community</h1>
             <p id="content-p">
-              Get free access to millions peice of art, showcase, promote, sell
+              Get free access to millions pieces of art, showcase, promote, sell
               & share your work with other members in the ArtWork Community.
             </p>
           </div>
@@ -75,12 +83,15 @@ const Registration = () => {
                 <ErrorMessage name="password" component={TextError} />
               </div>
 
-              <button type="submit">Submit</button>
+              <button type="submit" disabled={loading}>
+                {loading ? <CircularProgress size={20} /> : 'Submit'}
+              </button>
+
               <p>
                 Already a member?{" "}
                 <NavLink
                   className="log-in"
-                  to={s === "seller" ? "/seller/login" : "/login"}
+                  to={window.location.href.split("/")[3] === "seller" ? "/seller/login" : "/login"}
                 >
                   Log in
                 </NavLink>

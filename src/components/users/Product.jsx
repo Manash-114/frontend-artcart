@@ -8,7 +8,7 @@ import {
 import React from "react";
 import styled from "styled-components";
 import BoltIcon from "@mui/icons-material/Bolt";
-
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import ImageProduct from "./ImageProduct";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -67,7 +67,10 @@ const Product = () => {
                     {items?.rating})
                   </div>
                   <div className="price">
-                    <img src="/images/ruppee.png" alt="price" />
+                  <CurrencyRupeeIcon style={{
+                            color: 'black',
+                            height: "1rem"
+                          }}/>
                     {items.price}
                   </div>
                 </div>

@@ -10,6 +10,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import { FavoriteOutlined } from '@mui/icons-material';
 import toast, { Toaster, useToaster } from 'react-hot-toast';
 import { addToWishList, clearToastMessage, removeFromWishList} from '../../reduxToolkit/features/productList/WishListSlice';
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 
 const FeatureProducts = () => {
  
@@ -135,7 +136,7 @@ const FeatureProducts = () => {
                     <img src={p.productImages[0].name} alt={p.name}></img>
                   </div>
                   <div className="content">
-                    <div className="rate">
+                    {/* <div className="rate">
                       <Rating
                         className='star'
                         size='small'
@@ -147,7 +148,7 @@ const FeatureProducts = () => {
                         readOnly
                       />
                       ( {p.rating} )
-                    </div>
+                    </div> */}
                     <div className="miniContainer">
                       <div className="dp">
                         <img src='public/images/profile.png' alt='profile'></img>
@@ -160,7 +161,10 @@ const FeatureProducts = () => {
                           }
                         </div>
                         <div className="price">
-                          <img src='/images/ruppee.png' />
+                          <CurrencyRupeeIcon style={{
+                            color: 'black',
+                            height: "1rem"
+                          }}/>
                           {p.price}</div>
 
                       </div>
@@ -220,9 +224,10 @@ const Wrapper = styled.div`
   .dp{
     flex: 0.2;
     padding-left: 5px;
+    padding-top: 2px;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     img{
       height: 25px;
       width: 25px;
@@ -248,11 +253,12 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+
   }
   .price > img{
     padding-right: 5px;
-    height: 12px;
-    width: 10px;
+    height: 1rem;
+    width: 1rem;
   }
   .star{
     padding-left: 1.2rem;
@@ -267,7 +273,7 @@ const Wrapper = styled.div`
 const Carousel = styled.div`
  padding: 1rem 4rem 4rem;
   padding-right: 8rem;
-  background-color: #f1ebeb;
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.231), rgba(0, 0, 0, 0.5));
   color: #fff;
   
 .Flink{
