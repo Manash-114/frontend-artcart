@@ -107,6 +107,7 @@ const ManageProducts = () => {
                             id="pName"
                             name="pName"
                             type="text"
+                            value={row.name}
                             autocomplete="pName"
                             required
                             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -127,6 +128,7 @@ const ManageProducts = () => {
                             type="number"
                             autocomplete="pPice"
                             required
+                            value={row.price}
                             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                           />
                         </div>
@@ -135,28 +137,9 @@ const ManageProducts = () => {
                         <label htmlFor="stock" className="m-3 ml-0">
                           Stock
                         </label>
-                        <input type="checkbox" />
+                        <input type="checkbox" checked />
                       </div>
-                      <div>
-                        <div className="mt-5 pb-3 ">
-                          <label htmlFor="category " className="pb-6">
-                            Select Category
-                          </label>
-                          <select
-                            id="category"
-                            name="category"
-                            value={selectedValue}
-                            onChange={handleChange}
-                            className="w-full   border rounded focus:outline-none focus:border-blue-500"
-                          >
-                            <option value="">Select Courier</option>
-                            <option value="e-kart">E-Kart</option>
-                            <option value="ecom-express">Ecom-Express</option>
-                            <option value="delhivery">Delhivery</option>
-                          </select>
-                          <p className="mt-2">You selected: {selectedValue}</p>
-                        </div>
-                      </div>
+                      <div></div>
 
                       <div>
                         <div class="flex items-center justify-between">

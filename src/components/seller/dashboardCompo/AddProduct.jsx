@@ -10,7 +10,8 @@ const AddProduct = () => {
   const [showProductName, setShowProductName] = useState(false);
   const [productImages, setProductImages] = useState([]);
   const token = useSelector((store) => store.auth.token);
-  const [productCategory, setProductCategory] = useState([]);
+  // const [productCategory, setProductCategory] = useState([]);
+  const productCategory = useSelector((store) => store.auth.productCategory);
   const [isLoading, setIsLoading] = useState(false);
   const [productData, setProductData] = useState({
     name: "",
