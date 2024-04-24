@@ -24,23 +24,9 @@ const AddProduct = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log("form submit " + JSON.stringify(productData));
-    console.log(productImages);
     uploadImageToCloudinary(productImages, productData, token, setIsLoading);
   };
 
-  useEffect(() => {
-    fetch(`${BASE_URL_LOCAL}/public/category`, {
-      method:"GET",
-      headers: {
-        "Content-type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        setProductCategory(res);
-      });
-  }, []);
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-5 lg:px-8">

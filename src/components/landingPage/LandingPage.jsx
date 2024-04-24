@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../common/Header";
 import HeroSection from "./HeroSection";
 import Footer from "../common/Footer";
@@ -9,6 +9,10 @@ import Services from "./Services";
 import Footer2 from "../common/Footer2";
 import FeaturedProducts from "./FeaturedProducts";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import getCurrentUser from "../../apiCalls/getCurrentUser";
+import { getAllCategoriesFromBackend } from "../../apiCalls/admin/getAllCategoriesFromBackend";
 
 const LandingPage = () => {
   const { currentUser } = useSelector((store) => store.auth);
