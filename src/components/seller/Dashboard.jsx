@@ -1,95 +1,115 @@
-import React from 'react'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import styled from 'styled-components'
-import Footer2 from '../common/Footer2'
-import Header from '../common/Header'
-import AddProduct from './dashboardCompo/AddProduct'
-import ViewAllOrderss from './dashboardCompo/ViewAllOrders'
-import ManageProducts from './dashboardCompo/ManageProducts'
-import NewOrders from './dashboardCompo/NewOrders'
-import SellerRegistration from './SellerRegistration'
+import React, { useEffect } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import Footer2 from "../common/Footer2";
+import Header from "../common/Header";
+import AddProduct from "./dashboardCompo/AddProduct";
+import ManageOrders from "./dashboardCompo/NewOrders";
+import ManageProducts from "./dashboardCompo/ManageProducts";
+import SellerRegistration from "./SellerRegistration";
+import { useSelector } from "react-redux";
+import SellerNav from "./SellerNav";
 
-const buttons=[
-    {
-        name:"Complete your profile", 
-        type:"button",
-        id:"complete-profile",
-    },
-    ,
-    {
-        name:"Add Product",
-        type:"button",
-        id:"add-product"
-    },
-    {
-        name:"New Orders",
-        type:"button",
-        id:"new-orders"
-    },
-    {
-        name:"View All orders",
-        type:"button",
-        id:"all-orders"
-    },
-    {
-        name:"Manage Products",
-        type:"button",
-        id:"manage-products"
-    },
-   
-]
-
-
-
-
-
+const buttons = [
+  {
+    name: "Complete your profile",
+    type: "button",
+    id: "complete-profile",
+  },
+  ,
+  {
+    name: "Add Product",
+    type: "button",
+    id: "add-product",
+  },
+  {
+    name: "Manage Orders",
+    type: "button",
+    id: "manage-orders",
+  },
+  {
+    name: "Manage Products",
+    type: "button",
+    id: "manage-products",
+  },
+];
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const auth = useSelector((store) => store.auth);
+  const [btID, SetbtID] = useState();
 
-   const navigate =  useNavigate();
-    
+  const handleClick = (e) => {
+    SetbtID(e.target.id);
+  };
+  const [showMessage, setShowMessage] = useState(false);
 
-    const [btID,SetbtID] =useState("add-product");
-    
-    const handleClick = (e) =>{
-        SetbtID(e.target.id);
-        
+  const { currentUser } = useSelector((store) => store.auth);
+
+  useEffect(() => {
+    if (currentUser.name === null) {
+      console.log("use effect");
+      SetbtID("complete-profile");
+    } else if (currentUser.approved == false) {
+      setShowMessage(true);
+    } else {
+      setShowMessage(false);
     }
-    return (
-        // <Wrapper>
-        <>
-         <Header/>
-            <div className='p-32 pt-8'>
-                <div className='con1'>
-                    <div className=''>
-                            {buttons.map((button, index) => (
-                                <button className='p-2  bg-indigo-700 text-white m-3 rounded-md hover:bg-indigo-600' key={index} id={button.id} type={button.type} onClick={handleClick}>{button.name}</button>
-                            ))}
-                        
-                    </div>
-                    <VerticalLine />
-                    <div className='secondSec'>
-                        {console.log(btID)}
-                        {btID === "add-product" && <AddProduct />}
-                        {btID === "complete-profile" && navigate("/seller/completeprofile")}
-                       
-                        {btID === "manage-orders" && <ManageOrders />}
-                        {btID === "new-orders" && <NewOrders />}
-                        {btID === "all-orders" && <ViewAllOrderss />}
-                        {btID === "manage-products" && <ManageProducts />}
-                    </div>
+  }, [currentUser]);
 
-                </div>
+  return (
+    // <Wrapper>
+    <>
+      <SellerNav />
+      {showMessage ? (
+        <div
+          className="bg-gray-100 border border-gray-400 text-gray-700 px-4 py-3 rounded relative"
+          role="alert"
+        >
+          <span className="block sm:inline">
+            Please wait until admin approved your request
+          </span>
+        </div>
+      ) : (
+        <div className="p-32 pt-8">
+          <div className="con1">
+            <div className="">
+              {currentUser.approved == false
+                ? ""
+                : buttons.map((button, index) => {
+                    if (index != 0)
+                      return (
+                        <button
+                          className="p-2  bg-indigo-700 text-white m-3 rounded-md hover:bg-indigo-600"
+                          key={index}
+                          id={button.id}
+                          type={button.type}
+                          onClick={handleClick}
+                        >
+                          {button.name}
+                        </button>
+                      );
+                  })}
             </div>
-            <Footer2 />
-        </>
-           
-        // </Wrapper>
-    )
-}
+            <VerticalLine />
+            <div className="secondSec">
+              {btID === "complete-profile" && <SellerRegistration />}
+              {btID === "add-product" && <AddProduct />}
+              {btID === "manage-orders" && <ManageOrders />}
+              {btID === "manage-products" && <ManageProducts />}
+            </div>
+          </div>
+        </div>
+      )}
+      <Footer2 className="" />
+    </>
 
-export default Dashboard
+    // </Wrapper>
+  );
+};
+
+export default Dashboard;
 
 const Wrapper = styled.section`
     overflow-y: scroll;
@@ -149,12 +169,10 @@ const Wrapper = styled.section`
         border-radius:7px;
     }
 
-`
+`;
 
 const VerticalLine = styled.div`
-  border-left: 3px solid #333; 
-  height: 70%; 
-  margin-top:70px;
-  
-
-  `;
+  border-left: 3px solid #333;
+  height: 70%;
+  margin-top: 70px;
+`;
