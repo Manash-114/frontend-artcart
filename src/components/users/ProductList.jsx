@@ -61,6 +61,7 @@ const ProductList = ({ currentProducts }) => {
   };
 
   const wishlistColor = useSelector((state) => state.wishlist.items);
+  console.log(wishlistColor)
   return (
     <Container>
       <Toaster position="top-center" reverseOrder={false} />
