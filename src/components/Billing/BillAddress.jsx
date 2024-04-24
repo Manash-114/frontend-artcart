@@ -3,15 +3,13 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Formik, Field, ErrorMessage, Form } from 'formik';
 import * as yup from 'yup'
-import ShoppingCartCheckoutOutlinedIcon from '@mui/icons-material/ShoppingCartCheckoutOutlined';
-import CurrencyRupeeOutlinedIcon from '@mui/icons-material/CurrencyRupeeOutlined';
-import { CurrencyRupee } from '@mui/icons-material';
+
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { addressData } from './addressData';
 import { useDispatch, useSelector } from 'react-redux';
 import { addBillingAddress, updateAddressId, updateBillingAddress, updateCustomerDetails } from '../../reduxToolkit/features/productList/BillingAddressSlice';
 
-const BillAddress = ({ setNextButtonDisabled, nextButtonDisabled, handleDeliverClick }) => {
+const BillAddress = ({  nextButtonDisabled, handleDeliverClick }) => {
 
     const dispatch = useDispatch();
     //Radio-buttons
@@ -151,12 +149,9 @@ const BillAddress = ({ setNextButtonDisabled, nextButtonDisabled, handleDeliverC
                                                         </Button>
                                                     )}
                                                 </div>
-
                                             </div>
                                         ))
                                         }
-
-
                                     </RadioGroup>
 
                                 </FormControl>
