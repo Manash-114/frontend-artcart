@@ -64,18 +64,19 @@ const Order = () => {
 
           {/* order-product */}
 
-          <NavLink to="/orders/details" className="product-container">
+          <div className="product-container">
             <div className="image">
-              <img src="/images/scenery4.jpg" alt="title" />
+              <img src="/images/scenery3.jpg" alt="title" />
             </div>
             <div className="title">
               <p>Lakmé Sunscreen - SPF 50 .. </p>
+              <p>OrderId: <span className="OId">id12345</span></p>
             </div>
             <div className="status">
               <p>Status</p>
               <span>Your order has been packed</span>
             </div>
-          </NavLink>
+          </div>
         </Right>
       </Container>
     </Wrapper>
@@ -107,7 +108,7 @@ const Left = styled.div`
 `;
 const Right = styled.div`
   border: 1px solid black;
-  flex: 1;
+  flex: .8;
   padding: 1rem;
 
   .search-bar {
@@ -118,12 +119,12 @@ const Right = styled.div`
     display: flex;
     margin-top: 1.5rem;
     padding: 10px;
-    height: 100px;
+   
   }
   .image {
-    height: 100px;
-    width: 100px;
-    flex: 0.5;
+    height: 120px;
+    flex: 0.4;
+    /* border: 1px solid black; */
     img {
       height: 100%;
       width: 100%;
@@ -132,8 +133,8 @@ const Right = styled.div`
   }
   .title {
     flex: 0.8;
-    /* border: 1px solid black; */
-    padding-left: 1rem;
+    border: 1px solid black;
+    padding: 1rem;
   }
   .price {
     flex: 0.3;
