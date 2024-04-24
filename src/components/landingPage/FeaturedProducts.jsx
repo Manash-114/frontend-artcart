@@ -80,7 +80,7 @@ const FeatureProducts = () => {
       event.preventDefault();
       event.stopPropagation();
       //finding individual item
-      const product = featuredProducts.find(product => product.id === parseInt(id))
+      const product = featuredProducts.find(product => product.id ===id)
       dispatch(addToWishList({ product, quantity: 1 })); 
     };
 
@@ -103,8 +103,8 @@ const FeatureProducts = () => {
     setClickedProducts(newClickedProducts);
   };
 
-  const wishlistColor = useSelector(state => state.wishlist.items);
-
+  const wishlistColor = useSelector((state) => state.wishlist.items);
+  // console.log(wishlistColor)
   return (
     <Carousel>
       <Toaster
@@ -115,7 +115,7 @@ const FeatureProducts = () => {
 
       <Slider {...settings}>
         {
-          featuredProducts.slice(3, 8).map((p, index) => {
+          featuredProducts.slice(0, 7).map((p) => {
 
             return (
               
@@ -126,14 +126,13 @@ const FeatureProducts = () => {
                   <div className="wish" onClick={(event) => handleFavoriteClick(p.id, event)}>
                     <FavoriteOutlined
                       style={{
-                        // color: clickedProducts.includes(p.id) ? 'crimson' : 'lightgray',
                         color: wishlistColor.some(item => item.product.id === p.id) ? 'crimson' : 'lightgray',
                       }}
                       onClick={() => handleColorClick(p.id)}
                     />
                   </div>
                   <div className="image">
-                    <img src={p.thumbnail} alt='image'></img>
+                    <img src={p.productImages[0].name} alt={p.name}></img>
                   </div>
                   <div className="content">
                     <div className="rate">
@@ -156,8 +155,8 @@ const FeatureProducts = () => {
                       <div className="subContent">
                         <div className="title">
                           {
-                            p.title.length > 20 ? `${p.title.slice(0, 18)}..`
-                              : p.title
+                            p.name.length > 20 ? `${p.name.slice(0, 18)}..`
+                              : p.name
                           }
                         </div>
                         <div className="price">
@@ -167,7 +166,7 @@ const FeatureProducts = () => {
                       </div>
 
                     </div>
-                    <span id='author'>{p.category}</span>
+                    <span id='author'>{p.category.name}</span>
                   </div>
                 </Wrapper>
               </NavLink>

@@ -35,6 +35,7 @@ import BillingPage from "./components/Billing/BillingPage.jsx";
 import OrderPage from "./components/Orders/OrderPage.jsx";
 import OrderDetails from "./components/Orders/OrderDetails.jsx";
 import Cart from "./components/users/Cart.jsx";
+import CartPage from "./pages/users/CartPage.jsx";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -49,14 +50,14 @@ const App = () => {
         <Route path="/register" element={<Registration />} />
 
         <Route path="/hero" element={<HeroSection />} />
-        <Route path="/" element={<ProductPage />} />
-        <Route path="/ff" element={<LandingPage />} />
+        {/* <Route path="/" element={<FeaturedProducts />} /> */}
+        <Route path="/" element={<LandingPage />} />
         <Route path="/test" element={<Test />} />
         <Route path="/products" element={<ProductPage />} />
         <Route path="/product/:id" element={<SingleProduct />} />
         <Route path="/login" element={<Login />} />
         <Route path="/wishlist" element={<WishListPage />} />
-        <Route path="/cartPage" element={<Cart />} />
+        <Route path="/cartPage" element={<CartPage />} />
         <Route path="/billing" element={<BillingPage />} />
         <Route path="/orders" element={<OrderPage />} />
         <Route path="/orders/details" element={<OrderDetails />} />

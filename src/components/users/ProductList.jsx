@@ -14,7 +14,7 @@ const ProductList = ({ currentProducts }) => {
   const [value, setValue] = useState(2);
   const selectedProducts = useSelector((state) => state.product.products);
   const product = useSelector((state) => state.product);
-  console.log(product);
+  // console.log(product);
   const dispatch = useDispatch();
 
   const toastMessage = useSelector((state) => state.wishlist.toastMessage);
@@ -44,7 +44,7 @@ const ProductList = ({ currentProducts }) => {
   const [clickedProducts, setClickedProducts] = useState([]);
 
   const handleColorClick = (productId) => {
-    console.log("wish list", productId);
+    // console.log("wish list", productId);
 
     const newClickedProducts = [...clickedProducts]; // Create a copy
     const productIndex = newClickedProducts.indexOf(productId);
@@ -61,6 +61,7 @@ const ProductList = ({ currentProducts }) => {
   };
 
   const wishlistColor = useSelector((state) => state.wishlist.items);
+  console.log(wishlistColor)
   return (
     <Container>
       <Toaster position="top-center" reverseOrder={false} />
@@ -71,7 +72,7 @@ const ProductList = ({ currentProducts }) => {
       )}
       {!product.loading && product.products.length
         ? currentProducts.map((p) => {
-            console.log("current product ", p.id);
+            // console.log("current product ", p.id);
             return (
               <NavLink
                 key={p.id}
