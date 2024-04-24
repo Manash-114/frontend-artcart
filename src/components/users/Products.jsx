@@ -74,6 +74,7 @@ const Products = () => {
 
   const handleSearchChange = (e) => {
     const searchTerm = e.target.value;
+    console.log("Search term:", searchTerm);
     setTerm(searchTerm);
   };
 
@@ -100,8 +101,7 @@ const Products = () => {
     }
     setSelectedCategory(newselectedCategory);
   };
-
-  console.log(selectedCategory);
+  
   // All Filters working simultaneously
   const applyFilters = (searchTerm, priceFilter, sortOption) => {
     dispatch(

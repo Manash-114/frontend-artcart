@@ -14,8 +14,7 @@ export const fetchProducts = createAsyncThunk(
   "products/fetchProduct",
   async () => {
     const res = await axios.get(`${BASE_URL_LOCAL}/public/product`);
-    console.log(res.data.products);
-    // console.log(res.data);
+    // console.log(res.data.data);
     return res.data.data;
   }
 );
@@ -27,22 +26,18 @@ const ProductSlice = createSlice({
   reducers: {
     searchAndFilter: (state, action) => {
       const { term, price, sort, category } = action.payload;
-      let filteredProducts = state.products; // Start with all products
 
-      // Apply search filter (if term exists)
+      let filteredProducts = [...state.products];
+
       if (term) {
         filteredProducts = filteredProducts.filter((product) =>
-          product.title.toLowerCase().includes(term.toLowerCase())
+          product.name.toLowerCase().includes(term.toLowerCase())
         );
       }
 
-      // Apply category filter (if selected)
-      if (category.length > 0) {
-        // Check if any category is selected
-        filteredProducts = filteredProducts.filter((product) =>
-          category.includes(product.category)
-        );
-      }
+      if (category.length > 0) { // Check if any category is selected
+        filteredProducts = filteredProducts.filter(product => category.includes(product.category.name));
+    }
 
       // Apply price filter (if selected)
       switch (price) {
@@ -74,6 +69,7 @@ const ProductSlice = createSlice({
       state.filterProducts = filteredProducts;
     },
   },
+  
   extraReducers: (builder) => {
     builder.addCase(fetchProducts.pending, (state) => {
       state.loading = true;
