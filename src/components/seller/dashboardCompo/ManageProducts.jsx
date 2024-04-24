@@ -12,8 +12,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { BASE_URL_LOCAL } from "../../../apiCalls/common-db";
 import { getAllProducts } from "../../../apiCalls/seller/getAllProducts";
 import { updateProduct } from "../../../apiCalls/seller/updateProduct";
+import Spinner from "../../common/Spinner";
 
 import { uploadImageToCloudinaryForUpdate } from "../../../apiCalls/uploadImageToCloudinaryForUpdate";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -62,6 +64,7 @@ const ManageProducts = () => {
         const handleClose1 = () => {
           setAnchorEl1(null);
           SetShowImageTag(false)
+          setIsLoading(false);
         };
 
         const open1 = Boolean(anchorEl1);
@@ -84,15 +87,15 @@ const ManageProducts = () => {
           price: row.price,
           description: row.description,
           stock: row.stock,
-          productImages:[]
           
         });
 
+        const navigate=useNavigate();
         const handleFormSubmit = (e) => {
           e.preventDefault();
           setIsLoading(true);
           console.log("form submit " + JSON.stringify(productData));
-          console.log(productImages);
+          // console.log(productImages);
 
           //if check for image update
           if(showImageTag)
@@ -101,11 +104,16 @@ const ManageProducts = () => {
             
             const productImagesUrl = [];
             row.productImages.map((productImage) => productImagesUrl.push(productImage.name));
-            // productData["productImages"] = productImagesUrl;
-            setProductData({...productData,["productImages"] :productImagesUrl})
-            const jsonData = JSON.stringify(productData);
+            productData["productImages"] = productImagesUrl;
+            const updatedProductData = { ...productData, productImages: productImagesUrl };
+            setProductData(updatedProductData)
+            const jsonData = JSON.stringify(updatedProductData);
+            console.log(jsonData);
             updateProduct(jsonData,token,setIsLoading,pID)
           }
+          
+
+
 
           
 
@@ -115,6 +123,15 @@ const ManageProducts = () => {
           // updateProduct = async (data, token, setIsLoading,pID) => {
 
         };
+
+        useEffect(() => {
+          // Perform navigation when the component mounts
+          if(isLoading)
+            navigate("/");
+      
+          // Optionally, return a cleanup function if needed
+          
+        }, []);
       
         
 
@@ -310,6 +327,11 @@ const ManageProducts = () => {
                           Update
                         </button>
                       </div>
+                        {isLoading && (
+                          <div className="mt-4">
+                            <Spinner />
+                          </div>
+                        )}
                     </form>
                   </div>
                 </div>
