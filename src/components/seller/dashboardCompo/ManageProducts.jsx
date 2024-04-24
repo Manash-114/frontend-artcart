@@ -119,13 +119,51 @@ const ManageProducts = () => {
         setSelectedValue(event.target.value);
       };
 
-      
+      //--------------
+
+      const [showProductName, setShowProductName] = useState(false);
+  const [productImages, setProductImages] = useState([]);
+  const token = useSelector((store) => store.auth.token);
+  const [productCategory, setProductCategory] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [productData, setProductData] = useState({
+    name: "",
+    price: "",
+    description: "",
+    stock: true,
+    category: "",
+  });
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    console.log("form submit " + JSON.stringify(productData));
+    console.log(productImages);
+    uploadImageToCloudinary(productImages, productData, token, setIsLoading);
+  };
+
+  useEffect(() => {
+    fetch(`${BASE_URL_LOCAL}/public/category`, {
+      method:"GET",
+      headers: {
+        "Content-type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setProductCategory(res);
+      });
+  }, []);
+
+
+
+      //-------------
 
       const handleSubmit = async (event) => {
         event.preventDefault(); // Prevent default form submission behavior
     
         try {
-          const response = await axios.post('https://your-api-endpoint', {
+          const response = await axios.post(`${BASE_URL}`, {
             productName,
             productPrice,
             hasStock,
@@ -165,85 +203,145 @@ const ManageProducts = () => {
           }}
         >
           <Typography sx={{ p: 2 }}>
-          <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-    
-    <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Update Product Details</h2>
-  </div>
+          <>
+      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-5 lg:px-8">
+        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+          <h2 className="mt-2 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+            Add Product
+          </h2>
+        </div>
 
-  <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-    <form class="space-y-6" action="#" method="POST" onSubmit={handleSubmit}>
-      <div>
-        <label for="pName" class="block text-sm font-medium leading-6 text-gray-900">Product Name</label>
-        <div class="mt-2">
-          <input 
-          id="pName" 
-          name="pName" 
-          type="text" 
-          autocomplete="pName" 
-          onChange={(e) => setProductName(e.target.value)}
-          required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+          <form className="space-y-6" onSubmit={handleFormSubmit}>
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Product Name
+              </label>
+              <div className="mt-2">
+                <input
+                  id="pName"
+                  name="pName"
+                  type="text"
+                  required
+                  onChange={(e) => {
+                    setProductData({
+                      ...productData,
+                      ["name"]: e.target.value,
+                    });
+                  }}
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between">
+                <label
+                  htmlFor="price"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Price
+                </label>
+              </div>
+              <div className="mt-2">
+                <input
+                  id="pPrice"
+                  name="pPrice"
+                  type="number"
+                  required
+                  onChange={(e) => {
+                    setProductData({
+                      ...productData,
+                      ["price"]: e.target.value,
+                    });
+                  }}
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Product Description
+              </label>
+              <div className="mt-2">
+                <textarea
+                  required
+                  onChange={(e) => {
+                    setProductData({
+                      ...productData,
+                      ["description"]: e.target.value,
+                    });
+                  }}
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+            <div className="p-4 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+              <label htmlFor="productCategory" className="mr-5">
+                Product Category
+              </label>
+              <select
+                id="productCategory"
+                name="productCategory"
+                value={productData.category}
+                onChange={(e) => {
+                  setProductData({
+                    ...productData,
+                    ["category"]: e.target.value,
+                  });
+                }}
+              >
+                <option value="">Select a category</option>
+                {productCategory.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="p-4 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+              <label htmlFor="ProductImage" className="mb-6">
+                Product Images {`(*Select multiple image)`}
+              </label>
+              <input
+                type="file"
+                id="pImage"
+                name="pImage"
+                accept=" .jpg, .jpeg, .png ,.webp"
+                multiple
+                className="mt-4"
+                onChange={(e) => {
+                  setProductImages(e.target.files);
+                }}
+              />
+            </div>
+
+            <div>
+              <button
+                type="submit"
+                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                Add Product
+              </button>
+            </div>
+            {isLoading && (
+              <div className="mt-4">
+                <Spinner />
+              </div>
+            )}
+          </form>
         </div>
       </div>
-      <div>
-        <label for="pPrice" class="block text-sm font-medium leading-6 text-gray-900">Product Price</label>
-        <div class="mt-2">
-          <input 
-          id="pPrice" 
-          name="pPrice" 
-          type="number" 
-          autocomplete="pPice" 
-          required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
-        </div>
-      </div>
-      <div>
-          <label htmlFor="stock" className='m-3 ml-0'>Stock</label>
-          <input type="checkbox"  />
-      </div>
-      <div>
-      <div className="mt-5 pb-3 ">
-          <label htmlFor="category " className='pb-6'>Select Category</label>
-          <select id="category" name="category" value={selectedValue} onChange={handleChange} className="w-full   border rounded focus:outline-none focus:border-blue-500">
-            <option value="">Select Courier</option>
-            <option value="e-kart">E-Kart</option>
-            <option value="ecom-express">Ecom-Express</option>
-            <option value="delhivery">Delhivery</option>
-            
-          </select>
-          <p className="mt-2">You selected: {selectedValue}</p>
-        </div>
-      </div>
-
-
-      <div>
-        <div class="flex items-center justify-between">
-          <label for="pDes" class="block text-sm font-medium leading-6 text-gray-900">Product Description</label>
-          
-        </div>
-        <div class="mt-2">
-          <textarea 
-          id="password" 
-          name="password" 
-          type="text" 
-          autocomplete="current-password" 
-          required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
-        </div>
-      </div>
-
-
-
-
-
-
-
-      <div>
-        <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Update</button>
-      </div>
-    </form>
-
-    
-  </div>
-</div>
+    </>
+  
           </Typography>
         </Popover>
       </div>

@@ -5,7 +5,8 @@ import styled from "styled-components";
 import Footer2 from "../common/Footer2";
 import Header from "../common/Header";
 import AddProduct from "./dashboardCompo/AddProduct";
-import ManageOrders from "./dashboardCompo/NewOrders";
+import NewOrders from "./dashboardCompo/NewOrders";
+import ViewAllOrders from "./dashboardCompo/ViewAllOrders";
 import ManageProducts from "./dashboardCompo/ManageProducts";
 import SellerRegistration from "./SellerRegistration";
 import { useSelector } from "react-redux";
@@ -24,9 +25,14 @@ const buttons = [
     id: "add-product",
   },
   {
-    name: "Manage Orders",
+    name: "New Orders",
     type: "button",
-    id: "manage-orders",
+    id: "new-orders",
+  },
+  {
+    name: "All Orders",
+    type: "button",
+    id: "all-orders",
   },
   {
     name: "Manage Products",
@@ -96,8 +102,10 @@ const Dashboard = () => {
             <div className="secondSec">
               {btID === "complete-profile" && <SellerRegistration />}
               {btID === "add-product" && <AddProduct />}
-              {btID === "manage-orders" && <ManageOrders />}
+              {btID === "new-orders" && <NewOrders />}
+              {btID === "all-orders" && <ViewAllOrders />}
               {btID === "manage-products" && <ManageProducts />}
+              
             </div>
           </div>
         </div>

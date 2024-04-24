@@ -29,10 +29,10 @@ const AddProduct = () => {
   };
 
   useEffect(() => {
-    fetch(`${BASE_URL_LOCAL}/api/category`, {
+    fetch(`${BASE_URL_LOCAL}/public/category`, {
+      method:"GET",
       headers: {
         "Content-type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => res.json())
