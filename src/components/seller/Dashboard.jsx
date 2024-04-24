@@ -67,7 +67,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     getAllCategoriesFromBackend(dispatch);
-  });
+  }, []);
 
   return (
     // <Wrapper>
@@ -110,7 +110,6 @@ const Dashboard = () => {
               {btID === "new-orders" && <NewOrders />}
               {btID === "all-orders" && <ViewAllOrders />}
               {btID === "manage-products" && <ManageProducts />}
-              
             </div>
           </div>
         </div>

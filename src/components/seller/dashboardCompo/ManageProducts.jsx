@@ -18,6 +18,12 @@ const ManageProducts = () => {
   useEffect(() => {
     getAllProducts(token, dispatch);
   }, []);
+
+  const updateProductDetails = (e) => {
+    e.preventDefault();
+    console.log("form submit");
+  };
+
   const columns = [
     {
       name: "Product Name",
@@ -61,7 +67,10 @@ const ManageProducts = () => {
         const handleChange = (event) => {
           setSelectedValue(event.target.value);
         };
-
+        const toggleCheckbox = (pId) => {
+          console.log("toggle");
+          // setIsChecked(!isChecked); // Toggle the checked state
+        };
         return (
           <div className="m2-2 ">
             <Button
@@ -94,7 +103,7 @@ const ManageProducts = () => {
                   </div>
 
                   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form class="space-y-6" action="#" method="POST">
+                    <form class="space-y-6" onSubmit={updateProductDetails}>
                       <div>
                         <label
                           for="pName"
@@ -137,7 +146,11 @@ const ManageProducts = () => {
                         <label htmlFor="stock" className="m-3 ml-0">
                           Stock
                         </label>
-                        <input type="checkbox" />
+                        <input
+                          type="checkbox"
+                          checked={row.stock}
+                          onChange={toggleCheckbox}
+                        />
                       </div>
 
                       <div>
@@ -154,6 +167,7 @@ const ManageProducts = () => {
                             id="password"
                             name="password"
                             type="text"
+                            value={row.description}
                             autocomplete="current-password"
                             required
                             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
