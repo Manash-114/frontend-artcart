@@ -91,22 +91,22 @@ const Container = styled.div`
     .delivery{
         height: 20%;
         width: 26%;
-        background-image: url('./public/images/shipment.png');
+        background-image: url('./images/shipment.png');
     }
     .payment{
         height: 22%;
         width: 20%;
-        background-image: url('./public/images/safe.png');
+        background-image: url('./images/safe.png');
     }
     .support{
         height: 24%;
         width: 18%;
-        background-image: url('./public/images/support.png');
+        background-image: url('./images/support.png');
     }
     .return{
         height: 24%;
         width: 20%;
-        background-image: url('./public/images/return.png');
+        background-image: url('./images/return.png');
         }
     p{  
         font-weight: 500;
