@@ -27,8 +27,12 @@ const Registration = () => {
     axios
       .post(`${BASE_URL_LOCAL}/auth/signup`, values)
       .then((res) => {
-        toast.success("Registration successful!"); // Show success toast
         console.log("res", res.data);
+        if (res.data.status === false) {
+          toast.success(res.data.message); // Show success toast
+        } else {
+          toast.success("Registration successful!"); // Show success toast
+        }
       })
       .catch((err) => {
         console.log(err);

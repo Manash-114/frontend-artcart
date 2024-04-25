@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { acceptOrderAndUpdate } from "../../reduxToolkit/features/sellerSlice";
 import { BASE_URL_LOCAL } from "../common-db";
 
@@ -13,9 +14,9 @@ export const acceptOrder = async (data, token, dispatch) => {
 
   if (res.status === 200) {
     const resData = await res.json();
-    // setIsLoading(false);
-    // alert("Product add successfully");
     console.log(resData);
+    // toast.success("Successfully Shipped");
+    alert("Successfully shipped");
     dispatch(acceptOrderAndUpdate(data.orderId));
   } else {
     alert("Internal server error while accept order");

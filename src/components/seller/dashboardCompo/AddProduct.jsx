@@ -25,6 +25,13 @@ const AddProduct = () => {
     e.preventDefault();
     setIsLoading(true);
     uploadImageToCloudinary(productImages, productData, token, setIsLoading);
+    setProductData({
+      name: "",
+      price: "",
+      description: "",
+      stock: true,
+      category: "",
+    });
   };
 
   return (

@@ -45,6 +45,7 @@ const BillAddress = ({
   );
   const [selectedAddressId, setSelectedAddressId] = useState(null);
 
+  const billAddId = useSelector((store) => store.billingAddress.addressId);
   const handleAddressSelection = (id) => {
     console.log("selected address id ", id);
     dispatch(updateAddressId(id));
@@ -630,20 +631,22 @@ const BillAddress = ({
                     </div>
                   </div>
                 </div>
-                <Button
-                  variant="contained"
-                  type="submit3"
-                  disabled={nextButtonDisabled}
-                  style={{
-                    width: "14rem",
-                    height: "2.6rem",
-                    marginTop: "1.5rem",
-                    marginLeft: "0rem",
-                    backgroundColor: "orange",
-                  }}
-                >
-                  deliver here
-                </Button>
+                {billAddId !== 0 && (
+                  <Button
+                    variant="contained"
+                    type="submit3"
+                    disabled={nextButtonDisabled}
+                    style={{
+                      width: "14rem",
+                      height: "2.6rem",
+                      marginTop: "1.5rem",
+                      marginLeft: "0rem",
+                      backgroundColor: "orange",
+                    }}
+                  >
+                    deliver here
+                  </Button>
+                )}
               </form>
             )}
           </Formik>

@@ -83,8 +83,8 @@ const NewOrders = () => {
                 <div>
                   <div>City: {row.address.city}</div>
                   <div>State: {row.address.state}</div>
-                  <div>Zip Code: {row.address.zipCode}</div>
-                  <div>Street: {row.address.street}</div>
+                  <div>Zip Code: {row.address.pincode}</div>
+                  <div>Street: {row.address.address}</div>
                 </div>
               </Typography>
             </Popover>
@@ -194,10 +194,7 @@ const NewOrders = () => {
 
         const handleClick = () => {
           SetDis("disabled");
-          console.log(dis);
-          console.log("shipped");
           //send data to backend
-
           const orderAccept = {
             orderId: row.orderId,
             courierName: selectedValue,
@@ -383,5 +380,5 @@ const Address = styled.div`
 
 const ProductDetails = styled.div`
   margin-right: 10px; /* Add spacing between product details */
-  width: 100px;
+  width: 100px;
 `;

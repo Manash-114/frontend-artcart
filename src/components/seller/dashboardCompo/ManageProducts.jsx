@@ -38,7 +38,7 @@ const ManageProducts = () => {
     },
     {
       name: "Stock",
-      cell: (row) => (row.price ? "inStock" : "Out of Stock"),
+      cell: (row) => (row.stock === true ? "inStock" : "Out of Stock"),
       sortable: true,
     },
     {
@@ -120,7 +120,7 @@ const ManageProducts = () => {
             updateProduct(jsonData, token, setIsLoading, pID);
           }
 
-          window.location.reload();
+          // window.location.reload();
 
           // updateProduct = async (data, token, setIsLoading,pID) => {
         };
