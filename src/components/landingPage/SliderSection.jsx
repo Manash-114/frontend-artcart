@@ -11,7 +11,7 @@ const Container = styled.div`
     display: flex;
     position: relative;
     overflow: hidden;
-    
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5));
 `
 const Arrow = styled.div`
     width: 50px;
@@ -60,7 +60,10 @@ const InfoContainer = styled.div`
     flex: .5;
     padding: 50px;
     height: 100%;
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     background-image: linear-gradient(155deg, rgba(239, 234, 220, 0.5),rgba(33, 31, 31, 0.5), rgba(41, 8, 5, 0.852)), url('./images/background.jpg');
   background-size: cover;
   background-position: center;
@@ -68,8 +71,13 @@ const InfoContainer = styled.div`
 `
 
 const Title = styled.h1`
-    font-size: 70px;
+    font-size: 50px;
     color: #f2ecec;
+    text-align: center;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `
 const Desc = styled.p`
     margin: 50px 0px;
@@ -77,6 +85,7 @@ const Desc = styled.p`
     font-weight: 500;
     letter-spacing: 2px;
     color: #ffffffc6;
+    width: 80%;
 `
 const Button = styled.button`
     padding: 10px;

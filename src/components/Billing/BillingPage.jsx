@@ -138,6 +138,7 @@ const Wrapper = styled.section`
     align-items: center;
     margin-bottom: 1rem;
     height: 50px;
+    
   }
   .header > img {
     height: 40px;
@@ -153,13 +154,15 @@ const Wrapper = styled.section`
 `;
 const Container = styled.div`
   border-bottom: 1px solid dimgray;
-  border: 1px solid black;
+  border: 1px solid #bd9393;
   margin: auto 12%;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 52%;
+  background-image: linear-gradient(30deg, rgba(228, 219, 219, 0.046),rgba(244, 238, 195, 0.575), rgba(169, 206, 225, 0.37));
   margin-left: 24%;
+  border-radius: 12px;
 
   .item-head {
     text-transform: capitalize;

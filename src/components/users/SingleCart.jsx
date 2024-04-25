@@ -56,7 +56,10 @@ const SingleCart = ({ item }) => {
             <h4>Each</h4>
             <div className="amount">
               {" "}
-              <CurrencyRupeeIcon />
+              <CurrencyRupeeIcon style={{
+                          color: 'black',
+                          height: "1.2rem"
+                        }} />
               <span className="price">{item.price}</span>
             </div>
           </div>
@@ -81,7 +84,10 @@ const SingleCart = ({ item }) => {
           <div className="item total">
             <h4>Total</h4>
             <div className="currency">
-              <CurrencyRupeeIcon />
+            <CurrencyRupeeIcon style={{
+                          color: 'black',
+                          height: "1.2rem"
+                        }} />
               <p className="price">{item.price * item.cartQuantity}</p>
             </div>
           </div>
@@ -119,7 +125,8 @@ const Container = styled.div`
     display: grid;
     grid-template-columns: 1.5fr 1.5fr repeat(3, 1fr) 0.5fr;
     height: 100%;
-    border: 1px solid black;
+    border: 1px solid #6e6262;
+    border-radius: 10px;
   }
   .item {
     overflow: hidden;
@@ -156,7 +163,10 @@ const Container = styled.div`
     padding-right: 20px;
   }
   h4 {
+    font-weight: 500;
     text-align: center;
+    font-size: 15px;
+    margin-bottom: 10px;
   }
   .amount {
     display: flex;
@@ -165,6 +175,7 @@ const Container = styled.div`
   }
   .price {
     font-weight: 450;
+    font-size: 14px;
   }
   .quantity-holder {
     display: flex;

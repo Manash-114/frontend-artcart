@@ -265,13 +265,14 @@ const Products = () => {
 export default Products;
 
 const StyledPagination = styled.div`
-  border-top: 0.4px solid black;
+  border-top: 0.4px solid #baa95f;
   padding: 12px;
   margin-top: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: 500;
+  
 `;
 const List = styled.div`
   width: auto;
@@ -301,6 +302,7 @@ const ImageSection = styled.div`
     font-size: 40px;
     width: 50%;
     text-align: center;
+    font-weight: 600;
   }
 `;
 const FilterTop = styled.div`
@@ -309,10 +311,14 @@ const FilterTop = styled.div`
   justify-content: center;
   align-items: center;
 
+  .title{
+    font-weight: 500;
+    color: #020d17;
+  }
   .filter-content {
     height: 60px;
     width: 100%;
-    background-color: #e3ecec;
+    background-image: linear-gradient(90deg, rgb(255, 254, 254), rgba(224, 194, 149, 0.84), rgba(125, 158, 209, 0.756));
     display: flex;
     justify-content: space-between;
     padding: 0 15%;
@@ -339,7 +345,7 @@ const FilterTop = styled.div`
     }
   }
   .sort {
-    width: 30%;
+    width: 40%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -350,6 +356,8 @@ const FilterTop = styled.div`
     border-radius: 10px;
     width: 40%;
     padding-left: 10px;
+    color: #070000;
+    
   }
 `;
 const SubContainer = styled.div`
@@ -358,13 +366,12 @@ const SubContainer = styled.div`
   gap: 50px;
 `;
 const LeftFilter = styled.div`
-  background-color: #e5ebeb91;
+  background-image: linear-gradient(180deg, rgba(228, 219, 219, 0.046),rgba(207, 198, 113, 0.575), rgba(141, 171, 215, 0.553));
   display: flex;
   flex-direction: column;
-
   padding: 10px;
   flex: 0.3;
-  border: 1px solid black;
+  border: 1px solid #a19581;
 
   #form-left {
     padding-left: 15px;
@@ -373,6 +380,8 @@ const LeftFilter = styled.div`
     text-transform: uppercase;
     text-align: center;
     margin-bottom: 40px;
+    font-weight: 550;
+    font-size: 1.2rem;
   }
   #category {
     width: 100%;

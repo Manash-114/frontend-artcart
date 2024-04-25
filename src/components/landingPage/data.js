@@ -1,7 +1,7 @@
 export const sliderItems = [
     {
       id: 1,
-      img: "https://r4.wallpaperflare.com/wallpaper/343/798/469/fantasy-art-dragon-sky-anime-wallpaper-620192804d06be5b3a58d28580f8b9a2.jpg",
+      img: "https://i.etsystatic.com/12258042/r/il/d1658d/3257054076/il_794xN.3257054076_ggdf.jpg",
       title: "SUMMER SALE",
       desc: "DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF FOR NEW ARRIVALS.",
       bg: "f5fafd",

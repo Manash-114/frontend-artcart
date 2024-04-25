@@ -36,6 +36,7 @@ import OrderPage from "./components/Orders/OrderPage.jsx";
 import OrderDetails from "./components/Orders/OrderDetails.jsx";
 import Cart from "./components/users/Cart.jsx";
 import CartPage from "./pages/users/CartPage.jsx";
+import SuggestedProducts from "./components/users/SuggestedProducts.jsx";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -52,6 +53,7 @@ const App = () => {
         <Route path="/hero" element={<HeroSection />} />
         {/* <Route path="/" element={<FeaturedProducts />} /> */}
         <Route path="/" element={<LandingPage />} />
+        <Route path="/s" element={<SuggestedProducts />} />
         <Route path="/test" element={<Test />} />
         <Route path="/products" element={<ProductPage />} />
         <Route path="/product/:id" element={<SingleProduct />} />

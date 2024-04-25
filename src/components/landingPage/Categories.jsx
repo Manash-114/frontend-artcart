@@ -26,17 +26,18 @@ const Categories = ({ data }) => {
 export default Categories
 
 const Wrapper = styled.section`
+ background-image: linear-gradient(to top, rgba(78, 77, 77, 0.041),rgba(0, 0, 0, 0.495), rgba(14, 1, 1, 0.687));
   height: 80vh;
 `
 const GridItem = styled.div`
-  border: 1px solid #938c8cb9;
+  border: 1px solid #d8ce6fb8;
   position: relative;
   overflow: hidden;
   border-radius: 8px;
   transition: box-shadow 0.3s ease; 
   cursor: pointer;
   &:hover {
-    box-shadow: 0px 6px 8px rgba(44, 211, 172, 0.7); 
+    box-shadow: 0px 7px 8px rgba(53, 244, 200, 0.7); 
   }
 
 `;
@@ -44,12 +45,12 @@ const Title = styled.h2`
   display: flex;
   justify-content: center;
   height: 40px;
-  padding-top: 20px;
-  font-size: 2rem;
+  padding-top: 60px;
+  font-size: 2.2rem;
   text-transform: capitalize;
-  color: #4eedad;
-  margin: 1rem;
-  margin-bottom: 2rem;
+  color: #e9fdf5;
+  font-weight: 560;
+  margin: 0rem 2rem 4rem;
 `
 
 const Container = styled.div`

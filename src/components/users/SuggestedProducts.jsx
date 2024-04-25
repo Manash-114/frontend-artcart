@@ -13,11 +13,12 @@ import {
   clearToastMessage,
 } from "../../reduxToolkit/features/productList/WishListSlice";
 import Test from "./Test";
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 
 const SuggestedProducts = () => {
   const settings = {
     dots: false,
-    infinite: false,
+    infinite: true,
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
@@ -54,11 +55,11 @@ const SuggestedProducts = () => {
   const { id } = useParams();
   const featuredProducts = useSelector((state) => state.product.products);
   const selectedProducts = featuredProducts.find(
-    (product) => product.id === parseInt(id)
+    (product) => product.id === id
   );
   const similarProducts = featuredProducts.filter(
     (individualProduct) =>
-      individualProduct.category === selectedProducts.category &&
+      individualProduct.category.name === selectedProducts.category.name &&
       individualProduct.id !== selectedProducts.id
   );
   const filterItems = similarProducts.slice(0, 7);
@@ -91,7 +92,7 @@ const SuggestedProducts = () => {
     event.stopPropagation();
     //finding individual item
     const product = selectedProduct.find(
-      (product) => product.id === parseInt(id)
+      (product) => product.id === id
     );
     dispatch(addToWishList({ product, quantity: 1 }));
   };
@@ -148,7 +149,7 @@ const SuggestedProducts = () => {
                   <img src={p.productImages[0].name} alt="image"></img>
                 </div>
                 <div className="content">
-                  <div className="rate">
+                  {/* <div className="rate">
                     <Rating
                       className="star"
                       size="small"
@@ -160,7 +161,7 @@ const SuggestedProducts = () => {
                       readOnly
                     />
                     ( {p?.review} )
-                  </div>
+                  </div> */}
                   <div className="miniContainer">
                     <div className="dp">
                       <img src="/images/profile.png" alt="profile"></img>
@@ -172,12 +173,17 @@ const SuggestedProducts = () => {
                           : p.name}
                       </div>
                       <div className="price">
-                        <img src="/images/ruppee.png" />
+                      <CurrencyRupeeIcon style={{
+                          color: 'black',
+                          height: "1rem"
+                        }} />
                         {p.price}
                       </div>
+                      
                     </div>
                   </div>
-                  <span id="author">{p.category.name}</span>
+                  <span id="author">~ {p.seller.name}</span><br></br>
+                  <span id="name">{p.category?.name}</span>
                 </div>
               </Wrapper>
             </NavLink>
@@ -199,10 +205,11 @@ const SuggestedProducts = () => {
 
 export default SuggestedProducts;
 const Wrapper = styled.div`
-  border: 1px solid black;
+  border: 1px solid #847a3e;
   border-radius: 15px;
   height: 330px;
   width: 85%;
+  background-image: linear-gradient(to top, rgb(255, 254, 254), rgba(250, 237, 217, 0.84), rgba(248, 244, 238, 0.674));
   position: relative;
   .image {
     height: 70%;
@@ -262,11 +269,18 @@ const Wrapper = styled.div`
     font-size: 13px;
     padding-left: 20%;
   }
+  #name{
+    color: #861d1d;
+    font-weight: 500;
+    font-size: 15px;
+    padding-left: 20%;
+    margin-top: 1.5rem;
+  }
 `;
 const Carousel = styled.div`
   padding: 1rem 4rem 4rem;
   padding-right: 8rem;
-  /* background-color: #fffdfd; */
+  background-image: linear-gradient(180deg, rgba(228, 224, 219, 0.046),rgba(207, 163, 113, 0.575), rgba(26, 33, 43, 0.557));
   color: #fff;
 
   .wish {
@@ -293,12 +307,15 @@ const Carousel = styled.div`
     text-align: center;
     margin-bottom: 4rem;
     color: black;
+    font-size: 1.8rem;
+    font-weight: 600; 
   }
 
   .box {
     background-color: #60b060;
     height: 400px;
     border-radius: 10%;
+
   }
   .box h3 {
     text-align: center;

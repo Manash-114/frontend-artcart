@@ -6,6 +6,7 @@ import getCurrentUser from "../../apiCalls/getCurrentUser";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getAllCategoriesFromBackend } from "../../apiCalls/admin/getAllCategoriesFromBackend";
+import styled from "styled-components";
 
 const ProductPage = ({ data }) => {
   const dispatch = useDispatch();
@@ -23,12 +24,16 @@ const ProductPage = ({ data }) => {
     getAllCategoriesFromBackend(dispatch);
   }, [currentUser.name]);
   return (
-    <div>
+    <Wrapper>
       <Header />
       <Products />
       <Footer2 />
-    </div>
+    </Wrapper>
   );
 };
 
 export default ProductPage;
+const Wrapper = styled.div`
+  background-size: cover;
+  background-position: center;
+`

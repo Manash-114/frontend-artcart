@@ -170,7 +170,8 @@ const FeatureProducts = () => {
                       </div>
 
                     </div>
-                    <span id='author'>{p.category.name}</span>
+                    <p id='author'>~ {p.seller.name}</p>
+                    <span id='cat'>{p.category.name}</span>
                   </div>
                 </Wrapper>
               </NavLink>
@@ -185,15 +186,20 @@ const FeatureProducts = () => {
 
 export default FeatureProducts
 const Wrapper = styled.div`
-  background-color: #ffffff;
+  /* background-image: linear-gradient(to bottom, rgba(78, 77, 77, 0.041),rgba(118, 114, 114, 0.151), rgba(122, 119, 119, 0.356)); */
+  background-image: linear-gradient(to top, rgb(255, 254, 254), rgba(250, 237, 217, 0.84), rgba(248, 244, 238, 0.674));
   border: 1px solid black;
   border-radius: 15px;
   height: 330px;
   width: 85%;
   position: relative;
-
+  &:hover {
+    box-shadow: 0px 6px 8px rgba(229, 142, 12, 0.703); 
+  }
+  .Flink{
+    
+  }
   .wish{
-        border: 1px solid black;
         position: absolute;
         right: .2rem;
         top: .2rem;
@@ -203,14 +209,20 @@ const Wrapper = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
-        background-color: #ffffff;
+        background-color: #f9f9f9;
         opacity: 95%;
         cursor: pointer;
+        border: 1.5px solid #8b2703;
     }
   
   .image{
-    height: 70%;
+    /* background-color: #ded6e1aa; */
+    /* border: 1px solid yellow; */
+    border-radius: 15px;
+    height: 90%;
     padding-top: 10px;
+    /* background-color: inherit; */
+    
   }
   img{
     height: 80%;
@@ -242,7 +254,8 @@ const Wrapper = styled.div`
   }
   .title{
     font-weight: 540;
-    font-size: 16px;
+    font-size: 14px;
+    margin-bottom: 10px;
   }
   .price{
     width: 30%;
@@ -268,24 +281,37 @@ const Wrapper = styled.div`
     font-size: 13px;
     padding-left: 20%;
   }
+  #cat{
+    font-weight: 600;
+    padding-left: 22%;
+    font-size: 15px;
+    color: #82400b;
+  }
   
 `
 const Carousel = styled.div`
  padding: 1rem 4rem 4rem;
   padding-right: 8rem;
-  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.231), rgba(0, 0, 0, 0.5));
+  background-image: linear-gradient(to bottom, rgba(78, 77, 77, 0.041),rgba(0, 0, 0, 0.178), rgba(0, 0, 0, 0.804));
   color: #fff;
+  /* border: 1px solid white; */
   
 .Flink{
+  
   margin-left: 3rem;
   text-decoration: none;
     color: black;
+    /* border: 1px solid white; */
+    height: 350px;
 }
 
     h2{
         text-align: center;
-        margin-bottom: 4rem;
-        color: black;
+        margin: 1.5rem auto 3.5rem ;
+        font-size: 2rem;
+        color: #fff;
+        font-weight: 600;
+
     }
 
   .box{
@@ -339,6 +365,7 @@ const Carousel = styled.div`
     justify-content: center;
     align-items: center;
     overflow: hidden;
+   
   }
   img{
 

@@ -116,7 +116,9 @@ const Container = styled.div`
   }
   .product-detail {
     margin-top: 1rem;
-    border: 1px solid black;
+    border: 1px solid #a38787;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.26); 
     flex: 1;
     display: flex;
 
@@ -141,10 +143,12 @@ const Container = styled.div`
       width: 65%;
 
       .title {
+        padding-top: 1rem;
         font-weight: 550;
-        font-size: 1.2rem;
+        font-size: 1rem;
       }
       .itemPrice {
+        color: #24a00b;
         margin-top: 1rem;
         display: flex;
         justify-content: flex-start;
@@ -170,13 +174,18 @@ const Container = styled.div`
   }
   .price-detail {
     flex: 0.5;
-    border: 1px solid black;
+    border: 1px solid #ac8383;
     width: 200px;
     height: 350px;
+    border-radius: 15px;
 
     h2 {
       text-align: center;
       border-bottom: 1px dotted grey;
+      padding: 1rem;
+      font-weight: 550;
+      text-transform: uppercase;
+      color: #52240f;
     }
   }
   .mini-container {
@@ -193,6 +202,7 @@ const Container = styled.div`
     margin-top: 1rem;
   }
   .desc1 {
+    padding-top: 1rem;
     display: flex;
     align-items: center;
   }

@@ -27,7 +27,7 @@ LandingPage = () => {
 
 export default LandingPage
 const Wrapper = styled.div`
-background-image: linear-gradient(130deg, rgba(79, 12, 33, 0.566), rgba(44, 75, 100, 0.852)), url('./images/background.jpg');
+background-image: linear-gradient(130deg, rgba(27, 2, 10, 0.671), rgba(44, 75, 100, 0.852)), url('./images/background.jpg');
   background-size: contain;
   background-position: center;
 `

@@ -9,25 +9,25 @@ const Services = () => {
         <div className="delivery-container">
         <div className="image-section delivery" />
            <h1>Free Delivery</h1>
-           <p>Free Shipping on Order above 500</p>
+           <p className='shipping'>Free Shipping on Order above 500</p>
         </div>
 
         <div className="delivery-container">
         <div className="image-section payment" />
            <h1>Safe Payment</h1>
-           <p>secure payment gateway</p>
+           <p className='secure'>secure payment gateway</p>
         </div>
 
         <div className="delivery-container">
         <div className="image-section support" />
            <h1>Support</h1>
-           <p>24/7 hours support ready</p>
+           <p className='payment2'>24/7 hours support ready</p>
         </div>
 
         <div className="delivery-container">
         <div className="image-section return" />
            <h1>Return Policy</h1>
-           <p>30 - days return guarantee for every single order</p>
+           <p className='return2'>30 - days return guarantee </p>
         </div>
         
       </Container>
@@ -43,13 +43,36 @@ const Wrapper = styled.section`
 `
 const Container = styled.div`
     margin: auto 8%;
-    
     height: 60%;    
     display: grid;
     grid-template-columns: repeat(4,1fr);
     gap: 35px;
     padding: 10px 120px;
 
+    .shipping{
+        margin-top: 1rem;
+        font-size: 13px;
+        width: 70%;
+        font-weight: 550;
+    }
+    .secure{
+        margin-top: 1rem;
+        font-size: 15px;
+        width: 70%;
+        font-weight: 550;
+    }
+    .payment2{
+        margin-top: 1rem;
+        font-size: 15px;
+        width: 70%;
+        font-weight: 550;
+    }
+    .return2{
+        margin-top: 1rem;
+        font-size: 15px;
+        width: 70%;
+        font-weight: 550;
+    }
     .delivery-container{
         border-radius: 10px;
         border: .3px solid #efed6c;
@@ -97,7 +120,7 @@ const Title = styled.h1`
     text-transform: capitalize;
     display: flex;
     justify-content: center;
-    font-weight: 560;
-    color: #23cf8a;
+    font-weight: 600;
+    color: #e4fdf3;
     margin-bottom: 1rem;
 `
