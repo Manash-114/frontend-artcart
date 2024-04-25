@@ -28,9 +28,11 @@ const HeroSection = () => {
 export default HeroSection
 
 const Wrapper = styled.section`
+    border-top: 1px solid #d5b851;
     height: 80vh;
-    width: 90vw;
-    padding: 30px;
+    
+    margin: auto 5%;
+    padding: 40px 30px;
 
 
     .hero-section{

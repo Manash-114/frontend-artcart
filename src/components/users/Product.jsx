@@ -56,6 +56,7 @@ const Product = () => {
           <div className="product-container">
             {/* image-section */}
             <ImageProduct data={items} />
+
             {/* content-section */}
             <div className="content-section">
               <div className="content-container">
@@ -66,16 +67,25 @@ const Product = () => {
                   <h1>{items.name}</h1>
                   <span id="author">~ {items.seller.name}</span>
                   <br />
-                  <div className="date">publish Date</div>
-                  <div className="rating">
+                  <div className="cat">
+                    <span className="cat2"> {items.category.name}</span>
+                  </div>
+                  {/* <div className="date">
+                    Order Date: {new Date(items.orderDate).toLocaleDateString('en-IN', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                  </div> */}
+                  {/* <div className="rating">
                     <Rating name="read-only" value={items?.rating} readOnly /> (
                     {items?.rating})
-                  </div>
+                  </div> */}
                   <div className="price">
                     <CurrencyRupeeIcon
                       style={{
-                        color: "black",
-                        height: "1rem",
+                        color: "green",
+                        height: "1.2rem",
                       }}
                     />
                     {items.price}
@@ -122,12 +132,16 @@ const Wrapper = styled.section`
   height: auto;
 `;
 const Routing = styled.div`
-  height: 40px;
+  height: 60px;
   display: flex;
   align-items: center;
-
   padding: 20px 8%;
-  background-color: #e0d9d9;
+  background-image: linear-gradient(
+    50deg,
+    rgba(228, 219, 219, 0.046),
+    rgba(245, 232, 117, 0.575),
+    rgba(109, 156, 226, 0.553)
+  );
   text-transform: uppercase;
 
   #home {
@@ -189,12 +203,14 @@ const Container = styled.section`
   .content-section {
     flex: 0.6;
     height: 90%;
-    border: 1px solid black;
+    border-radius: 15px;
+    border: 1px solid #caa886;
   }
   .content-container {
     height: 200px;
     display: flex;
     justify-content: space-between;
+    padding-left: 1rem;
   }
   .dp-section {
     img {
@@ -208,6 +224,22 @@ const Container = styled.section`
   }
   .info {
     flex: 1;
+    padding-top: 1.8rem;
+
+    h1 {
+      font-weight: 550;
+      font-size: 1.2rem;
+    }
+  }
+  #author {
+    margin-top: 3rem;
+  }
+  .cat {
+    margin-top: 1rem;
+  }
+  .cat2 {
+    color: #0b707e;
+    font-weight: 500;
   }
   .action-container {
     height: 10%;
@@ -231,8 +263,12 @@ const Container = styled.section`
     padding-top: 15px;
   }
   .price {
+    color: #11b00e;
     padding-top: 10px;
     text-transform: uppercase;
     font-weight: 500;
+    display: flex;
+    font-size: 1.2rem;
+    align-items: center;
   }
 `;

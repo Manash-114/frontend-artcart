@@ -9,6 +9,7 @@ import {
   clearToastMessage,
 } from "../../reduxToolkit/features/productList/WishListSlice";
 import toast, { Toaster } from "react-hot-toast";
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 
 const ProductList = ({ currentProducts }) => {
   const [value, setValue] = useState(2);
@@ -99,10 +100,10 @@ const ProductList = ({ currentProducts }) => {
                     />
                   </div>
                   <div className="image">
-                    <img src={p.productImages[0]?.name} alt="image"></img>
+                    <img src={p.productImages[0].name} alt="image"></img>
                   </div>
                   <div className="content">
-                    <div className="rate">
+                    {/* <div className="rate">
                       <Rating
                         className="star"
                         size="small"
@@ -113,7 +114,7 @@ const ProductList = ({ currentProducts }) => {
                         }}
                       />
                       ({p?.reviews})
-                    </div>
+                    </div> */}
                     <div className="miniContainer">
                       <div className="dp">
                         <img
@@ -128,12 +129,18 @@ const ProductList = ({ currentProducts }) => {
                             : p.name}
                         </div>
                         <div className="price">
-                          <img src="/images/ruppee.png" />
+                          <CurrencyRupeeIcon
+                            style={{
+                              color: "black",
+                              height: "1rem",
+                            }}
+                          />
                           {p.price}
                         </div>
                       </div>
                     </div>
-                    <span id="author">{p.category.name}</span>
+                    <span id="author">{p.seller.name}</span>
+                    <p id="category">{p.category.name}</p>
                   </div>
                 </GridItem>
               </NavLink>
@@ -158,9 +165,18 @@ const Container = styled.section`
   }
 `;
 const GridItem = styled.div`
-  border: 1px solid black;
+  background-image: linear-gradient(
+    to top,
+    rgb(255, 254, 254),
+    rgba(249, 238, 220, 0.84),
+    rgba(247, 236, 220, 0.674)
+  );
+  border: 1px solid #8f7f68;
   border-radius: 15px;
   height: 330px;
+  &:hover {
+    box-shadow: 0px 8px 10px rgba(229, 142, 12, 0.813);
+  }
   width: 85%;
   position: relative;
 
@@ -205,7 +221,6 @@ const GridItem = styled.div`
   }
   .subContent {
     flex: 1;
-    gap: 10px;
     display: flex;
     justify-content: space-between;
     padding: 0 10px;
@@ -233,5 +248,12 @@ const GridItem = styled.div`
     font-weight: 500;
     font-size: 13px;
     padding-left: 20%;
+  }
+  #category {
+    font-weight: 600;
+    padding-left: 20%;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #82400b;
   }
 `;

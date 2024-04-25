@@ -91,15 +91,18 @@ const PaymentDetails = () => {
 
 export default PaymentDetails;
 const Wrapper = styled.div`
-  border: 1px solid black;
+  border: 1px solid #9d8c8c;
   margin: auto 12rem;
   h3 {
     text-align: center;
+    padding: 1rem;
+    font-size: 1.2rem;
+    font-weight: 500;
   }
 `;
 const Container = styled.div`
   padding: 0 10rem;
-  border: 1px solid black;
+  border: 1px solid #e1c7c7;
   height: 200px;
   display: flex;
   justify-content: space-around;

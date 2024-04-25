@@ -115,6 +115,9 @@ const Order = () => {
                     <p className="orderId">
                       OrderId: <span className="OId">{order.orderId}</span>
                     </p>
+                    <p className="orderId">
+                      Quantity: <span className="OId">{order.productBelongsToOrder.productQuantity}</span>
+                    </p>
                     {order.productBelongsToOrder.courierName !== "NULL" && (
                       <p className="courier">
                         Courier Name: <span className="cId">{order.productBelongsToOrder.courierName}</span>

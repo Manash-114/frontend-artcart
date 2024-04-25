@@ -7,6 +7,7 @@ import SingleCart from "./SingleCart";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 const Cart = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
@@ -32,7 +33,9 @@ const Cart = () => {
         </div>
 
         <div className="continue-shop">
-          <StyledNavLink to="/products">Continue Shopping </StyledNavLink>
+          <StyledNavLink to="/products"><ArrowBackIosIcon style={{
+            height: "15px"
+          }}/>Continue Shopping </StyledNavLink>
           <span id="items">
             <span className="quantity">{totalQuantity}</span> items
           </span>

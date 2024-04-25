@@ -64,9 +64,12 @@ const Wrapper = styled.section`
     height: 100%;
     width: 100%;
     object-fit: cover;
+    box-shadow: 0px 5px 8px rgba(25, 76, 98, 0.468);
   }
+  
   .grid-cols {
-    background-color: #eef2f5;
+    border-radius: 8px;
+    background-image: linear-gradient(-150deg, rgba(223, 186, 209, 0.041),rgba(220, 203, 193, 0.068), rgba(196, 175, 105, 0.338));
     flex: 1;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -75,13 +78,24 @@ const Wrapper = styled.section`
     margin-top: 5%;
   }
   .figure {
-    height: 80%;
-    padding: 10px;
-  }
+  height: 80%;
+  padding: 10px;
+  /* Add shadow */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Adjust values as needed */
+  /* Or add border */
+  border: 2px solid transparent; /* Transparent border by default */
+}
+
+.figure:hover {
+  /* Adjust shadow or border on hover */
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.4); /* Example shadow on hover */
+  border-color: #e2e596; /* Example border color on hover */
+}
   .figure > img {
     cursor: pointer;
     height: 100%;
     width: 100%;
     object-fit: cover;
   }
+  
 `;

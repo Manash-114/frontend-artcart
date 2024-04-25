@@ -178,7 +178,7 @@ const StyledLink = styled(Link)`
 `;
 const Wrapper = styled.section`
   height: 4.2rem;
-  background: linear-gradient(30deg, #978ad3a9, #2452a0ee);
+  background: linear-gradient(30deg, #a093d6a9,#5852a9a9, #113267bb);
   top: 0;
   bottom: 0;
   left: 0;
