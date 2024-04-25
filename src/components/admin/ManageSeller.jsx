@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "./DataTable";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getAllUnapprovedSeller } from "../../apiCalls/admin/getAllUnapprovedSeller";
 import { approvedSeller } from "../../apiCalls/admin/approvedSeller";
+import { useNavigate } from "react-router-dom";
 // import { getAllUnapprovedSeller } from "../../api/getAllUnapprovedSeller";
 
 const ManageSeller = () => {
   const token = useSelector((store) => store.auth.token);
 
-  const [unapprovedSellerList, setUnapprovedSellerList] = useState([]);
-
+  const unapprovedSellerList = useSelector(
+    (store) => store.admin.sellerRequest
+  );
   const data = [
     {
       id: 1,
@@ -31,10 +33,13 @@ const ManageSeller = () => {
     window.open(imagePath);
   };
 
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
   const onApprove = (id) => {
     // Logic to handle approval
-    console.log("Approved seller with ID:", id);
-    approvedSeller(token, id, 1);
+    approvedSeller(token, id, 1, navigate, dispatch);
   };
 
   const onReject = (id) => {
@@ -44,17 +49,14 @@ const ManageSeller = () => {
   };
 
   // const token = localStorage.getItem("token");
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getAllUnapprovedSeller(token, dispatch);
+  }, []);
   return (
     <div className="flex p-4">
       {/* left side */}
       <div className="border-2 border-red-600 h-72 w-[25%]">
-        <div
-          className="bg-gray-300 h-12 m-2 text-center p-3 cursor-pointer"
-          onClick={() => {
-            getAllUnapprovedSeller(token, setUnapprovedSellerList);
-          }}
-        >
+        <div className="bg-gray-300 h-12 m-2 text-center p-3">
           <h1>View All Request</h1>
         </div>
         <div className="bg-gray-300 h-12 m-2 text-center p-3">

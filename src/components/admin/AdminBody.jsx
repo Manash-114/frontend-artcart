@@ -44,7 +44,7 @@ const AdminBody = () => {
           alt=""
         />
       </div>
-      <div className="border-4 bg-gray-500 p-3 w-[30%] h-52 flex flex-col justify-center items-center">
+      {/* <div className="border-4 bg-gray-500 p-3 w-[30%] h-52 flex flex-col justify-center items-center">
         <h2 className="font-semibold text-3xl">Manage Courier</h2>
         <img
           onClick={handleClickCourier}
@@ -52,7 +52,7 @@ const AdminBody = () => {
           src="https://cdn.pixabay.com/photo/2022/02/08/02/56/shipping-7000647_1280.png"
           alt=""
         />
-      </div>
+      </div> */}
     </div>
   );
 };

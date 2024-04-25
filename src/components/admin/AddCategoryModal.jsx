@@ -13,7 +13,9 @@ const AddCategoryModal = ({ isOpen, onClose, onSubmit }) => {
       alert("enter valid name");
       setCategoryName("");
     } else {
-      saveCategory(token, categoryName, dispatch);
+      // console.log("category", categoryName.toLocaleUpperCase());
+
+      saveCategory(token, categoryName.toLocaleUpperCase(), dispatch);
     }
   };
 

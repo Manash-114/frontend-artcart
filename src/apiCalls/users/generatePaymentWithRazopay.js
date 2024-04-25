@@ -36,7 +36,7 @@ export const generatePaymentWithRazopay = async (
         console.log("payment done");
         //now create a order to your backend
         orderReqData.paymentReq.id = response.razorpay_payment_id;
-        createOrder(orderReqData, token, dispatch.navigate);
+        createOrder(orderReqData, token, dispatch, navigate);
       },
       prefill: {
         //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number

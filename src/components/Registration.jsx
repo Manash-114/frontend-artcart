@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import TextError from "./TextError";
 import axios from "axios";
 import { BASE_URL } from "./common/config";
 import { BASE_URL_LOCAL } from "../apiCalls/common-db";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
 import toast, { Toaster } from "react-hot-toast";
-
 
 const initialValues = {
   email: "",
@@ -22,17 +21,22 @@ const Registration = () => {
   const onSubmit = (values) => {
     setLoading(true); // Set loading to true during form submission
 
-    values["role"] = window.location.href.split("/")[3] === "seller" ? "seller" : "customer";
+    values["role"] =
+      window.location.href.split("/")[3] === "seller" ? "seller" : "customer";
 
     axios
       .post(`${BASE_URL_LOCAL}/auth/signup`, values)
       .then((res) => {
-        toast.success('Registration successful!'); // Show success toast
         console.log("res", res.data);
+        if (res.data.status === false) {
+          toast.success(res.data.message); // Show success toast
+        } else {
+          toast.success("Registration successful!"); // Show success toast
+        }
       })
       .catch((err) => {
         console.log(err);
-        toast.error('Registration failed!'); // Show error toast
+        toast.error("Registration failed!"); // Show error toast
       })
       .finally(() => {
         setLoading(false); // Set loading to false after registration
@@ -40,7 +44,9 @@ const Registration = () => {
   };
 
   const validationSchema = Yup.object({
-    email: Yup.string().required("Email Required").email("Invalid Email Format"),
+    email: Yup.string()
+      .required("Email Required")
+      .email("Invalid Email Format"),
     password: Yup.string()
       .required("Password Required")
       .min(8, "Password must be at least 8 characters"),
@@ -48,10 +54,7 @@ const Registration = () => {
 
   return (
     <Wrapper>
-      <Toaster
-  position="top-center"
-  reverseOrder={false}
-/>
+      <Toaster position="top-center" reverseOrder={false} />
       <div className="container">
         <div className="imageSection">
           <div className="content">
@@ -84,14 +87,18 @@ const Registration = () => {
               </div>
 
               <button type="submit" disabled={loading}>
-                {loading ? <CircularProgress size={20} /> : 'Submit'}
+                {loading ? <CircularProgress size={20} /> : "Submit"}
               </button>
 
               <p>
                 Already a member?{" "}
                 <NavLink
                   className="log-in"
-                  to={window.location.href.split("/")[3] === "seller" ? "/seller/login" : "/login"}
+                  to={
+                    window.location.href.split("/")[3] === "seller"
+                      ? "/seller/login"
+                      : "/login"
+                  }
                 >
                   Log in
                 </NavLink>

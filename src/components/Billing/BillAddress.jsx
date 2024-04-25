@@ -14,7 +14,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Formik, Field, ErrorMessage, Form } from "formik";
 import * as yup from "yup";
@@ -31,6 +31,7 @@ import {
   updateCustomerDetails,
 } from "../../reduxToolkit/features/productList/BillingAddressSlice";
 import { addAddress } from "../../apiCalls/users/addAddress";
+import { useNavigate } from "react-router-dom";
 
 const BillAddress = ({
   setNextButtonDisabled,
@@ -44,6 +45,7 @@ const BillAddress = ({
   );
   const [selectedAddressId, setSelectedAddressId] = useState(null);
 
+  const billAddId = useSelector((store) => store.billingAddress.addressId);
   const handleAddressSelection = (id) => {
     console.log("selected address id ", id);
     dispatch(updateAddressId(id));
@@ -148,12 +150,20 @@ const BillAddress = ({
     //     .required('Contact number is required')
   });
 
+  const navigate = useNavigate();
+  const { signin } = useSelector((store) => store.auth);
+  useEffect(() => {
+    if (signin === false) {
+      console.log("usdj");
+      navigate("/login");
+    }
+  }, []);
   return (
     <Wrapper>
       <Container>
         <div className="person-address">
           {/* first-part */}
-          {addressData.length > 0 && (
+          {addressData?.length > 0 && (
             <Accordion>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
@@ -621,20 +631,22 @@ const BillAddress = ({
                     </div>
                   </div>
                 </div>
-                <Button
-                  variant="contained"
-                  type="submit3"
-                  disabled={nextButtonDisabled}
-                  style={{
-                    width: "14rem",
-                    height: "2.6rem",
-                    marginTop: "1.5rem",
-                    marginLeft: "0rem",
-                    backgroundColor: "orange",
-                  }}
-                >
-                  deliver here
-                </Button>
+                {billAddId !== 0 && (
+                  <Button
+                    variant="contained"
+                    type="submit3"
+                    disabled={nextButtonDisabled}
+                    style={{
+                      width: "14rem",
+                      height: "2.6rem",
+                      marginTop: "1.5rem",
+                      marginLeft: "0rem",
+                      backgroundColor: "orange",
+                    }}
+                  >
+                    deliver here
+                  </Button>
+                )}
               </form>
             )}
           </Formik>

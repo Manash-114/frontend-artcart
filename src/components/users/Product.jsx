@@ -8,10 +8,10 @@ import {
 import React from "react";
 import styled from "styled-components";
 import BoltIcon from "@mui/icons-material/Bolt";
-import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import ImageProduct from "./ImageProduct";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../reduxToolkit/features/productList/CartSlice";
 import toast, { Toaster } from "react-hot-toast";
@@ -30,6 +30,7 @@ const Product = () => {
 
   const [value, setValue] = React.useState(2);
 
+  const navigate = useNavigate();
   const selectedProduct = useSelector((state) =>
     state.product.products.find((product) => product.id === id)
   );
@@ -41,6 +42,10 @@ const Product = () => {
     dispatch(addToCart(selectedProduct));
   };
 
+  const handleBuyNow = () => {
+    dispatch(addToCart(selectedProduct));
+    navigate("/billing");
+  };
   return (
     <Wrapper>
       <Routing>
@@ -77,10 +82,12 @@ const Product = () => {
                     {items?.rating})
                   </div> */}
                   <div className="price">
-                  <CurrencyRupeeIcon style={{
-                            color: 'green',
-                            height: "1.2rem"
-                          }}/>
+                    <CurrencyRupeeIcon
+                      style={{
+                        color: "green",
+                        height: "1.2rem",
+                      }}
+                    />
                     {items.price}
                   </div>
                 </div>
@@ -101,6 +108,7 @@ const Product = () => {
                   <Button
                     variant="outlined"
                     color="success"
+                    onClick={handleBuyNow}
                     startIcon={<BoltIcon />}
                   >
                     Buy Now
@@ -128,7 +136,12 @@ const Routing = styled.div`
   display: flex;
   align-items: center;
   padding: 20px 8%;
-  background-image: linear-gradient(50deg, rgba(228, 219, 219, 0.046),rgba(245, 232, 117, 0.575), rgba(109, 156, 226, 0.553));
+  background-image: linear-gradient(
+    50deg,
+    rgba(228, 219, 219, 0.046),
+    rgba(245, 232, 117, 0.575),
+    rgba(109, 156, 226, 0.553)
+  );
   text-transform: uppercase;
 
   #home {
@@ -213,18 +226,18 @@ const Container = styled.section`
     flex: 1;
     padding-top: 1.8rem;
 
-    h1{
+    h1 {
       font-weight: 550;
       font-size: 1.2rem;
     }
   }
-  #author{
+  #author {
     margin-top: 3rem;
   }
-  .cat{
+  .cat {
     margin-top: 1rem;
   }
-  .cat2{
+  .cat2 {
     color: #0b707e;
     font-weight: 500;
   }

@@ -9,7 +9,7 @@ import {
   clearToastMessage,
 } from "../../reduxToolkit/features/productList/WishListSlice";
 import toast, { Toaster } from "react-hot-toast";
-import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 
 const ProductList = ({ currentProducts }) => {
   const [value, setValue] = useState(2);
@@ -62,7 +62,7 @@ const ProductList = ({ currentProducts }) => {
   };
 
   const wishlistColor = useSelector((state) => state.wishlist.items);
-  console.log(wishlistColor)
+  console.log(wishlistColor);
   return (
     <Container>
       <Toaster position="top-center" reverseOrder={false} />
@@ -73,37 +73,37 @@ const ProductList = ({ currentProducts }) => {
       )}
       {!product.loading && product.products.length
         ? currentProducts.map((p) => {
-          // console.log("current product ", p.id);
-          return (
-            <NavLink
-              key={p.id}
-              to={`/product/${p.id}`}
-              className="grid-item-link"
-            >
-              <GridItem className={`grid-items`}>
-                <div
-                  className="wish"
-                  onClick={(event) => handleFavoriteClick(p.id, event)}
-                >
-                  <FavoriteOutlined
-                    style={{
-                      // color: clickedProducts.includes(p.id)
-                      //   ? "crimson"
-                      //   : "lightgray",
-                      color: wishlistColor.some(
-                        (item) => item.product.id === p.id
-                      )
-                        ? "crimson"
-                        : "lightgray",
-                    }}
-                    onClick={() => handleColorClick(p.id)}
-                  />
-                </div>
-                <div className="image">
-                  <img src={p.productImages[0].name} alt="image"></img>
-                </div>
-                <div className="content">
-                  {/* <div className="rate">
+            // console.log("current product ", p.id);
+            return (
+              <NavLink
+                key={p.id}
+                to={`/product/${p.id}`}
+                className="grid-item-link"
+              >
+                <GridItem className={`grid-items`}>
+                  <div
+                    className="wish"
+                    onClick={(event) => handleFavoriteClick(p.id, event)}
+                  >
+                    <FavoriteOutlined
+                      style={{
+                        // color: clickedProducts.includes(p.id)
+                        //   ? "crimson"
+                        //   : "lightgray",
+                        color: wishlistColor.some(
+                          (item) => item.product.id === p.id
+                        )
+                          ? "crimson"
+                          : "lightgray",
+                      }}
+                      onClick={() => handleColorClick(p.id)}
+                    />
+                  </div>
+                  <div className="image">
+                    <img src={p.productImages[0].name} alt="image"></img>
+                  </div>
+                  <div className="content">
+                    {/* <div className="rate">
                       <Rating
                         className="star"
                         size="small"
@@ -115,35 +115,37 @@ const ProductList = ({ currentProducts }) => {
                       />
                       ({p?.reviews})
                     </div> */}
-                  <div className="miniContainer">
-                    <div className="dp">
-                      <img
-                        src="public/images/profile.png"
-                        alt="profile"
-                      ></img>
-                    </div>
-                    <div className="subContent">
-                      <div className="title">
-                        {p.name.length > 20
-                          ? `${p.name.slice(0, 18)}..`
-                          : p.name}
+                    <div className="miniContainer">
+                      <div className="dp">
+                        <img
+                          src="public/images/profile.png"
+                          alt="profile"
+                        ></img>
                       </div>
-                      <div className="price">
-                        <CurrencyRupeeIcon style={{
-                          color: 'black',
-                          height: "1rem"
-                        }} />
-                        {p.price}
+                      <div className="subContent">
+                        <div className="title">
+                          {p.name.length > 20
+                            ? `${p.name.slice(0, 18)}..`
+                            : p.name}
+                        </div>
+                        <div className="price">
+                          <CurrencyRupeeIcon
+                            style={{
+                              color: "black",
+                              height: "1rem",
+                            }}
+                          />
+                          {p.price}
+                        </div>
                       </div>
                     </div>
+                    <span id="author">{p.seller.name}</span>
+                    <p id="category">{p.category.name}</p>
                   </div>
-                  <span id="author">{p.seller.name}</span>
-                  <p id="category">{p.category.name}</p>
-                </div>
-              </GridItem>
-            </NavLink>
-          );
-        })
+                </GridItem>
+              </NavLink>
+            );
+          })
         : null}
     </Container>
   );
@@ -163,12 +165,17 @@ const Container = styled.section`
   }
 `;
 const GridItem = styled.div`
-background-image: linear-gradient(to top, rgb(255, 254, 254), rgba(249, 238, 220, 0.84), rgba(247, 236, 220, 0.674));
+  background-image: linear-gradient(
+    to top,
+    rgb(255, 254, 254),
+    rgba(249, 238, 220, 0.84),
+    rgba(247, 236, 220, 0.674)
+  );
   border: 1px solid #8f7f68;
   border-radius: 15px;
   height: 330px;
   &:hover {
-    box-shadow: 0px 8px 10px rgba(229, 142, 12, 0.813); 
+    box-shadow: 0px 8px 10px rgba(229, 142, 12, 0.813);
   }
   width: 85%;
   position: relative;
@@ -242,7 +249,7 @@ background-image: linear-gradient(to top, rgb(255, 254, 254), rgba(249, 238, 220
     font-size: 13px;
     padding-left: 20%;
   }
-  #category{
+  #category {
     font-weight: 600;
     padding-left: 20%;
     font-size: 14px;

@@ -1,6 +1,14 @@
+import toast from "react-hot-toast";
 import { BASE_URL, BASE_URL_LOCAL } from "../common-db";
+import { approveSeller } from "../../reduxToolkit/features/adminSlice";
 
-export const approvedSeller = async (token, id, approvedStatus) => {
+export const approvedSeller = async (
+  token,
+  id,
+  approvedStatus,
+  navigate,
+  dispatch
+) => {
   const res = await fetch(
     `${BASE_URL_LOCAL}/api/admin/approve-seller/${id}/${approvedStatus}`,
     {
@@ -14,8 +22,8 @@ export const approvedSeller = async (token, id, approvedStatus) => {
 
   if (res.status === 200) {
     const resData = await res.json();
-    console.log(resData);
-    alert(resData.message);
+    toast.success(resData.message);
+    dispatch(approveSeller(id));
   } else {
     alert("Internal server error");
   }

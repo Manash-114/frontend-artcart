@@ -10,7 +10,8 @@ const AddProduct = () => {
   const [showProductName, setShowProductName] = useState(false);
   const [productImages, setProductImages] = useState([]);
   const token = useSelector((store) => store.auth.token);
-  const [productCategory, setProductCategory] = useState([]);
+  // const [productCategory, setProductCategory] = useState([]);
+  const productCategory = useSelector((store) => store.auth.productCategory);
   const [isLoading, setIsLoading] = useState(false);
   const [productData, setProductData] = useState({
     name: "",
@@ -23,23 +24,16 @@ const AddProduct = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log("form submit " + JSON.stringify(productData));
-    console.log(productImages);
     uploadImageToCloudinary(productImages, productData, token, setIsLoading);
+    setProductData({
+      name: "",
+      price: "",
+      description: "",
+      stock: true,
+      category: "",
+    });
   };
 
-  useEffect(() => {
-    fetch(`${BASE_URL_LOCAL}/api/category`, {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        setProductCategory(res);
-      });
-  }, []);
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-5 lg:px-8">

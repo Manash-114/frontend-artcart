@@ -5,11 +5,13 @@ import styled from "styled-components";
 import Footer2 from "../common/Footer2";
 import Header from "../common/Header";
 import AddProduct from "./dashboardCompo/AddProduct";
-import ManageOrders from "./dashboardCompo/ManageOrders";
+import NewOrders from "./dashboardCompo/NewOrders";
+import ViewAllOrders from "./dashboardCompo/ViewAllOrders";
 import ManageProducts from "./dashboardCompo/ManageProducts";
 import SellerRegistration from "./SellerRegistration";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SellerNav from "./SellerNav";
+import { getAllCategoriesFromBackend } from "../../apiCalls/admin/getAllCategoriesFromBackend";
 
 const buttons = [
   {
@@ -24,10 +26,15 @@ const buttons = [
     id: "add-product",
   },
   {
-    name: "Manage Orders",
+    name: "Orders",
     type: "button",
-    id: "manage-orders",
+    id: "new-orders",
   },
+  // {
+  //   name: "All Orders",
+  //   type: "button",
+  //   id: "all-orders",
+  // },
   {
     name: "Manage Products",
     type: "button",
@@ -46,7 +53,7 @@ const Dashboard = () => {
   const [showMessage, setShowMessage] = useState(false);
 
   const { currentUser } = useSelector((store) => store.auth);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     if (currentUser.name === null) {
       console.log("use effect");
@@ -57,6 +64,10 @@ const Dashboard = () => {
       setShowMessage(false);
     }
   }, [currentUser]);
+
+  useEffect(() => {
+    getAllCategoriesFromBackend(dispatch);
+  }, []);
 
   return (
     // <Wrapper>
@@ -96,7 +107,8 @@ const Dashboard = () => {
             <div className="secondSec">
               {btID === "complete-profile" && <SellerRegistration />}
               {btID === "add-product" && <AddProduct />}
-              {btID === "manage-orders" && <ManageOrders />}
+              {btID === "new-orders" && <NewOrders />}
+              {/* {btID === "all-orders" && <ViewAllOrders />} */}
               {btID === "manage-products" && <ManageProducts />}
             </div>
           </div>

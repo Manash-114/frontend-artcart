@@ -8,9 +8,9 @@ import axios from "axios";
 import { BASE_URL } from "./common/config";
 import { BASE_URL_LOCAL } from "../apiCalls/common-db";
 import { useDispatch } from "react-redux";
-import { signIn } from "../reduxToolkit/features/authSlice";
+import { currentUser, signIn } from "../reduxToolkit/features/authSlice";
 import getCurrentUser from "../apiCalls/getCurrentUser";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
 import toast, { Toaster } from "react-hot-toast";
 
 const initialValues = {
@@ -26,7 +26,7 @@ const validationSchema = Yup.object({
 });
 
 const Login = () => {
-  const[loading, setLoading] = useState();
+  const [loading, setLoading] = useState();
   const dispatch = useDispatch();
   const url = window.location.href;
   const d = url.split("/");
@@ -34,14 +34,17 @@ const Login = () => {
 
   const onSubmit = async (values) => {
     setLoading(true); // Set loading to true during form submission
-  
+
     try {
       const res = await axios.post(`${BASE_URL_LOCAL}/auth/signin`, values);
       if (res.data.auth && res.data.role === "ROLE_CUSTOMER") {
         localStorage.setItem("jwttoken", res.data.token);
+        dispatch(signIn(res.data.token));
+        getCurrentUser(res.data.token, navigate, dispatch);
         navigate("/products");
       } else if (res.data.auth && res.data.role === "ROLE_SELLER") {
         localStorage.setItem("jwttoken", res.data.token);
+        dispatch(signIn(res.data.token));
         navigate("/seller");
       } else if (res.data.auth && res.data.role === "ROLE_ADMIN") {
         localStorage.setItem("jwttoken", res.data.token);
@@ -62,10 +65,7 @@ const Login = () => {
 
   return (
     <Wrapper>
-    <Toaster
-  position="top-center"
-  reverseOrder={false}
-/>
+      <Toaster position="top-center" reverseOrder={false} />
       <div className="container">
         <div className="imageSection">
           <div className="content">
@@ -107,7 +107,7 @@ const Login = () => {
               </div>
 
               <button type="submit">
-                {loading ? <CircularProgress size={20} /> : 'Login'}
+                {loading ? <CircularProgress size={20} /> : "Login"}
               </button>
             </Form>
           </Formik>

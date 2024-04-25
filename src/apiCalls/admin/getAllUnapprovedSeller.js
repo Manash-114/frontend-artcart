@@ -1,9 +1,7 @@
+import { updateSellerRequest } from "../../reduxToolkit/features/adminSlice";
 import { BASE_URL, BASE_URL_LOCAL } from "../common-db";
 
-export const getAllUnapprovedSeller = async (
-  token,
-  setUnapprovedSellerList
-) => {
+export const getAllUnapprovedSeller = async (token, dispatch) => {
   const res = await fetch(`${BASE_URL_LOCAL}/api/admin/all-unapproved-seller`, {
     headers: {
       "Content-type": "application/json",
@@ -14,7 +12,8 @@ export const getAllUnapprovedSeller = async (
   if (res.status === 200) {
     const resData = await res.json();
     console.log(resData);
-    setUnapprovedSellerList(resData);
+    dispatch(updateSellerRequest(resData));
+    // setUnapprovedSellerList(resData);
     // setCategories(resData);
   } else {
     alert("Internal server error");
