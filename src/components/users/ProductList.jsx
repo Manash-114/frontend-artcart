@@ -116,12 +116,12 @@ const ProductList = ({ currentProducts }) => {
                       ({p?.reviews})
                     </div> */}
                     <div className="miniContainer">
-                      <div className="dp">
+                      {/* <div className="dp">
                         <img
-                          src="public/images/profile.png"
+                          src="/images/profile.png"
                           alt="profile"
                         ></img>
-                      </div>
+                      </div> */}
                       <div className="subContent">
                         <div className="title">
                           {p.name.length > 20
