@@ -151,7 +151,7 @@ const FeatureProducts = () => {
                     </div> */}
                     <div className="miniContainer">
                       <div className="dp">
-                        <img src='public/images/profile.png' alt='profile'></img>
+                        <img src='/images/profile.png' alt='profile'></img>
                       </div>
                       <div className="subContent">
                         <div className="title">
