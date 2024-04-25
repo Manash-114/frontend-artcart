@@ -1,6 +1,6 @@
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Button, Tab } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import DescriptionIcon from "@mui/icons-material/Description";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -11,6 +11,7 @@ import PaymentDetail from "./PaymentDetail";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProductInCart } from "../../reduxToolkit/features/productList/BillingAddressSlice";
 import PaymentDetails from "./PaymentDetails";
+import { useNavigate } from "react-router-dom";
 const BillingPage = () => {
   const [value, setValue] = useState("1");
   const [deliverClicked, setDeliverClicked] = useState(false);

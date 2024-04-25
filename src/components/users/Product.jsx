@@ -8,10 +8,10 @@ import {
 import React from "react";
 import styled from "styled-components";
 import BoltIcon from "@mui/icons-material/Bolt";
-import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import ImageProduct from "./ImageProduct";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../reduxToolkit/features/productList/CartSlice";
 import toast, { Toaster } from "react-hot-toast";
@@ -30,6 +30,7 @@ const Product = () => {
 
   const [value, setValue] = React.useState(2);
 
+  const navigate = useNavigate();
   const selectedProduct = useSelector((state) =>
     state.product.products.find((product) => product.id === id)
   );
@@ -41,6 +42,10 @@ const Product = () => {
     dispatch(addToCart(selectedProduct));
   };
 
+  const handleBuyNow = () => {
+    dispatch(addToCart(selectedProduct));
+    navigate("/billing");
+  };
   return (
     <Wrapper>
       <Routing>
@@ -67,10 +72,12 @@ const Product = () => {
                     {items?.rating})
                   </div>
                   <div className="price">
-                  <CurrencyRupeeIcon style={{
-                            color: 'black',
-                            height: "1rem"
-                          }}/>
+                    <CurrencyRupeeIcon
+                      style={{
+                        color: "black",
+                        height: "1rem",
+                      }}
+                    />
                     {items.price}
                   </div>
                 </div>
@@ -91,6 +98,7 @@ const Product = () => {
                   <Button
                     variant="outlined"
                     color="success"
+                    onClick={handleBuyNow}
                     startIcon={<BoltIcon />}
                   >
                     Buy Now

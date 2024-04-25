@@ -1,6 +1,6 @@
 import { Avatar, Badge, Menu, MenuItem } from "@mui/material";
 import React, { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,9 +26,12 @@ const Header = () => {
     setAnchorEl(null);
   };
 
+  const navigate = useNavigate();
+
   const handleLogout = () => {
     console.log("logout");
     dispatch(signout());
+    navigate("/");
   };
 
   const scrollToHero = () => {
