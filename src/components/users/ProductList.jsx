@@ -10,7 +10,7 @@ import {
 } from "../../reduxToolkit/features/productList/WishListSlice";
 import toast, { Toaster } from "react-hot-toast";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const ProductList = ({ currentProducts }) => {
   const [value, setValue] = useState(2);
@@ -117,9 +117,7 @@ const ProductList = ({ currentProducts }) => {
                       ({p?.reviews})
                     </div> */}
                     <div className="miniContainer">
-                      <div className="dp">
-                        <AccountCircleIcon/>
-                      </div>
+                      <div className="dp">{/* <AccountCircleIcon /> */}</div>
                       <div className="subContent">
                         <div className="title">
                           {p.name.length > 20
@@ -127,12 +125,7 @@ const ProductList = ({ currentProducts }) => {
                             : p.name}
                         </div>
                         <div className="price">
-                          <CurrencyRupeeIcon
-                            style={{
-                              color: "black",
-                              height: "1rem",
-                            }}
-                          />
+                          {"\u20B9 "}
                           {p.price}
                         </div>
                       </div>

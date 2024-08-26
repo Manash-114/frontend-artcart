@@ -12,6 +12,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateProductInCart } from "../../reduxToolkit/features/productList/BillingAddressSlice";
 import PaymentDetails from "./PaymentDetails";
 import { useNavigate } from "react-router-dom";
+import Header from "../common/Header";
+import Footer2 from "../common/Footer2";
 const BillingPage = () => {
   const [value, setValue] = useState("1");
   const [deliverClicked, setDeliverClicked] = useState(false);
@@ -65,9 +67,8 @@ const BillingPage = () => {
 
   return (
     <Wrapper>
-      <div className="header">
-        <img src="/images/Logo.jpg" alt="Logo"></img>{" "}
-        <span className="art"> ArtCart</span>
+      <div>
+        <Header />
       </div>
       <TabContext value={value}>
         <Container>
@@ -125,6 +126,9 @@ const BillingPage = () => {
           </TabPanel>
         </SubContainer>
       </TabContext>
+      <div>
+        <Footer2 />
+      </div>
     </Wrapper>
   );
 };
@@ -139,7 +143,6 @@ const Wrapper = styled.section`
     align-items: center;
     margin-bottom: 1rem;
     height: 50px;
-    
   }
   .header > img {
     height: 40px;
@@ -156,12 +159,17 @@ const Wrapper = styled.section`
 const Container = styled.div`
   border-bottom: 1px solid dimgray;
   border: 1px solid #bd9393;
-  margin: auto 12%;
+  margin: 2% 12%;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 52%;
-  background-image: linear-gradient(30deg, rgba(228, 219, 219, 0.046),rgba(244, 238, 195, 0.575), rgba(169, 206, 225, 0.37));
+  background-image: linear-gradient(
+    30deg,
+    rgba(228, 219, 219, 0.046),
+    rgba(244, 238, 195, 0.575),
+    rgba(169, 206, 225, 0.37)
+  );
   margin-left: 24%;
   border-radius: 12px;
 

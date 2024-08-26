@@ -37,6 +37,8 @@ import OrderDetails from "./components/Orders/OrderDetails.jsx";
 import Cart from "./components/users/Cart.jsx";
 import CartPage from "./pages/users/CartPage.jsx";
 import SuggestedProducts from "./components/users/SuggestedProducts.jsx";
+import LoginPage from "./pages/LoginPage.jsx";
+import RegisterPage from "./pages/RegisterPage.jsx";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -48,7 +50,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/register" element={<Registration />} />
+        <Route path="/register" element={<RegisterPage />} />
 
         <Route path="/hero" element={<HeroSection />} />
         {/* <Route path="/" element={<FeaturedProducts />} /> */}
@@ -57,7 +59,7 @@ const App = () => {
         <Route path="/test" element={<Test />} />
         <Route path="/products" element={<ProductPage />} />
         <Route path="/product/:id" element={<SingleProduct />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/wishlist" element={<WishListPage />} />
         <Route path="/cartPage" element={<CartPage />} />
         <Route path="/billing" element={<BillingPage />} />
@@ -72,8 +74,8 @@ const App = () => {
           <Route path="completeprofile" element={<SellerRegistration />} />
         </Route>
 
-        <Route path="/seller/register" element={<Registration />} />
-        <Route path="/seller/login" element={<Login />} />
+        <Route path="/seller/register" element={<RegisterPage />} />
+        <Route path="/seller/login" element={<LoginPage />} />
 
         {/* admin route */}
         <Route

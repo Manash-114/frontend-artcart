@@ -12,6 +12,7 @@ import { currentUser, signIn } from "../reduxToolkit/features/authSlice";
 import getCurrentUser from "../apiCalls/getCurrentUser";
 import CircularProgress from "@mui/material/CircularProgress";
 import toast, { Toaster } from "react-hot-toast";
+import Header from "./common/Header";
 
 const initialValues = {
   email: "",

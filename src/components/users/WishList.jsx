@@ -7,7 +7,6 @@ import toast, { Toaster } from "react-hot-toast";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromWishList } from "../../reduxToolkit/features/productList/WishListSlice";
-import Lottie from "react-lottie";
 import animationData from "./Animation - 1713385936637.json";
 import { addToCart } from "../../reduxToolkit/features/productList/CartSlice";
 
@@ -20,7 +19,6 @@ const WishList = () => {
 
   const CustomModal = ({ isOpen, onCancel, onConfirm }) => {
     if (!isOpen) return null;
-
     return (
       <ModalOverlay>
         <ModalContent>
@@ -67,7 +65,7 @@ const WishList = () => {
   const defaultOptions = {
     loop: true,
     autoplay: true,
-    animationData: animationData, // Lottie JSON object
+    // animationData: animationData, // Lottie JSON object
     rendererSettings: {
       preserveAspectRatio: "xMidYMid slice",
     },
@@ -125,7 +123,7 @@ const WishList = () => {
                 <div className="nameless"></div>
                 <div className="empty">
                   <span id="tag">Your wishList is empty!</span>
-                  <Lottie options={defaultOptions} height={400} width={400} />
+                  {/* <Lottie options={defaultOptions} height={400} width={400} /> */}
                 </div>
               </>
             ) : (
@@ -163,18 +161,18 @@ const WishList = () => {
                     <div className="content">
                       <div className="miniContainer">
                         <div className="dp">
-                          <img src="/images/profile.png" alt="profile" />
+                          {/* <img src="/images/profile.png" alt="profile" /> */}
                         </div>
                         <div className="subContent">
                           <div className="title">{item.product.name}</div>
                           <div className="price">
-                            <img src="/images/ruppee.png" />
+                            {"\u20B9 "}
                             {item.product.price}
                           </div>
                         </div>
                       </div>
                       <span id="author">{item.product.category.name}</span>
-                      <div className="rate">
+                      {/* <div className="rate">
                         <Rating
                           className="star"
                           size="small"
@@ -183,7 +181,7 @@ const WishList = () => {
                           readOnly
                         />
                         ({item.product?.reviews})
-                      </div>
+                      </div> */}
                       <Button
                         variant="contained"
                         style={{
@@ -329,7 +327,8 @@ const DownSection = styled.div`
     /* border: 1px solid black; */
   }
   .image {
-    padding: auto 1rem;
+    padding: 1rem 1rem;
+    width: 80%;
     height: 50%;
     /* border: 1px solid black; */
   }
@@ -368,10 +367,9 @@ const DownSection = styled.div`
   }
   .price {
     width: 30%;
-    margin-right: 2px;
     color: green;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 17px;
   }
   .price > img {
     padding-right: 5px;

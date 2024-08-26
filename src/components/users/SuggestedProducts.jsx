@@ -13,7 +13,7 @@ import {
   clearToastMessage,
 } from "../../reduxToolkit/features/productList/WishListSlice";
 import Test from "./Test";
-import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 
 const SuggestedProducts = () => {
   const settings = {
@@ -27,7 +27,7 @@ const SuggestedProducts = () => {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 3,
           slidesToScroll: 3,
           infinite: true,
           dots: false,
@@ -36,7 +36,7 @@ const SuggestedProducts = () => {
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 2,
           slidesToScroll: 1,
           initialSlide: 1,
         },
@@ -50,7 +50,7 @@ const SuggestedProducts = () => {
       },
     ],
   };
-  const [value, setValue] = useState(3);
+  const [value, setValue] = useState(2);
 
   const { id } = useParams();
   const featuredProducts = useSelector((state) => state.product.products);
@@ -91,9 +91,7 @@ const SuggestedProducts = () => {
     event.preventDefault();
     event.stopPropagation();
     //finding individual item
-    const product = selectedProduct.find(
-      (product) => product.id === id
-    );
+    const product = selectedProduct.find((product) => product.id === id);
     dispatch(addToWishList({ product, quantity: 1 }));
   };
 
@@ -118,7 +116,6 @@ const SuggestedProducts = () => {
   return (
     <Carousel>
       <h2>Similar Products</h2>
-
       <Slider {...settings}>
         {filterItems.map((p, index) => {
           return (
@@ -173,16 +170,18 @@ const SuggestedProducts = () => {
                           : p.name}
                       </div>
                       <div className="price">
-                      <CurrencyRupeeIcon style={{
-                          color: 'black',
-                          height: "1rem"
-                        }} />
+                        <CurrencyRupeeIcon
+                          style={{
+                            color: "black",
+                            height: "1rem",
+                          }}
+                        />
                         {p.price}
                       </div>
-                      
                     </div>
                   </div>
-                  <span id="author">~ {p.seller.name}</span><br></br>
+                  <span id="author">~ {p.seller.name}</span>
+                  <br></br>
                   <span id="name">{p.category?.name}</span>
                 </div>
               </Wrapper>
@@ -209,7 +208,12 @@ const Wrapper = styled.div`
   border-radius: 15px;
   height: 330px;
   width: 85%;
-  background-image: linear-gradient(to top, rgb(255, 254, 254), rgba(250, 237, 217, 0.84), rgba(248, 244, 238, 0.674));
+  background-image: linear-gradient(
+    to top,
+    rgb(255, 254, 254),
+    rgba(250, 237, 217, 0.84),
+    rgba(248, 244, 238, 0.674)
+  );
   position: relative;
   .image {
     height: 70%;
@@ -269,7 +273,7 @@ const Wrapper = styled.div`
     font-size: 13px;
     padding-left: 20%;
   }
-  #name{
+  #name {
     color: #861d1d;
     font-weight: 500;
     font-size: 15px;
@@ -280,7 +284,12 @@ const Wrapper = styled.div`
 const Carousel = styled.div`
   padding: 1rem 4rem 4rem;
   padding-right: 8rem;
-  background-image: linear-gradient(180deg, rgba(228, 224, 219, 0.046),rgba(207, 163, 113, 0.575), rgba(26, 33, 43, 0.557));
+  background-image: linear-gradient(
+    180deg,
+    rgba(228, 224, 219, 0.046),
+    rgba(207, 163, 113, 0.575),
+    rgba(26, 33, 43, 0.557)
+  );
   color: #fff;
 
   .wish {
@@ -308,14 +317,13 @@ const Carousel = styled.div`
     margin-bottom: 4rem;
     color: black;
     font-size: 1.8rem;
-    font-weight: 600; 
+    font-weight: 600;
   }
 
   .box {
     background-color: #60b060;
     height: 400px;
     border-radius: 10%;
-
   }
   .box h3 {
     text-align: center;
