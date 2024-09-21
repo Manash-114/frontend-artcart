@@ -1,5 +1,5 @@
 import { updateCategory } from "../../reduxToolkit/features/authSlice";
-import { BASE_URL, BASE_URL_LOCAL } from "../common-db";
+import { BASE_URL_LOCAL } from "../common-db";
 
 export const getAllCategoriesFromBackend = async (dispatch) => {
   const res = await fetch(`${BASE_URL_LOCAL}/public/category`, {

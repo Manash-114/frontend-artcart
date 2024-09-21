@@ -54,10 +54,11 @@ const Dashboard = () => {
 
   const { currentUser } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
+  console.log(`auth current user  = ${currentUser.name}`);
   useEffect(() => {
     if (currentUser.name === null) {
-      console.log("use effect");
-      SetbtID("complete-profile");
+      // console.log("use effect");
+      // SetbtID("complete-profile");
     } else if (currentUser.approved == false) {
       setShowMessage(true);
     } else {
@@ -73,7 +74,9 @@ const Dashboard = () => {
     // <Wrapper>
     <>
       <SellerNav />
-      {showMessage ? (
+      {currentUser.name === null ? (
+        <SellerRegistration />
+      ) : showMessage ? (
         <div
           className="bg-gray-100 border border-gray-400 text-gray-700 px-4 py-3 rounded relative"
           role="alert"
@@ -105,7 +108,7 @@ const Dashboard = () => {
             </div>
             <VerticalLine />
             <div className="secondSec">
-              {btID === "complete-profile" && <SellerRegistration />}
+              {/* {btID === "complete-profile" && <SellerRegistration />} */}
               {btID === "add-product" && <AddProduct />}
               {btID === "new-orders" && <NewOrders />}
               {/* {btID === "all-orders" && <ViewAllOrders />} */}
@@ -114,7 +117,7 @@ const Dashboard = () => {
           </div>
         </div>
       )}
-      <Footer2 className="" />
+      <Footer2 className="footer" />
     </>
 
     // </Wrapper>

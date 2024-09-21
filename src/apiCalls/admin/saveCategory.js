@@ -1,5 +1,5 @@
 import { addNewCategory } from "../../reduxToolkit/features/authSlice";
-import { BASE_URL, BASE_URL_LOCAL } from "../common-db";
+import { BASE_URL_LOCAL } from "../common-db";
 
 export const saveCategory = async (token, cName, dispatch) => {
   const data = {

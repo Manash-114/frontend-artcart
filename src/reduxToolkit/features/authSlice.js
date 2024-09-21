@@ -8,23 +8,28 @@ const authSlice = createSlice({
     token: "",
     productCategory: [],
     orderCreate: false,
+    role: "",
   },
   reducers: {
     signIn: (state, action) => {
       state.signin = true;
-      state.token = action.payload;
+      state.token = action.payload.token;
+      console.log(`role = ${action.payload.role}`);
+      state.role = action.payload.role;
     },
     signUp: (state, action) => {
       console.log("sign up ", action.payload);
     },
     currentUser: (state, action) => {
       state.currentUser = action.payload;
+      state.role = action.payload.role;
     },
     signout: (state, action) => {
       state.signin = false;
       state.currentUser = {};
       localStorage.removeItem("jwttoken");
       state.token = "";
+      state.role = "";
     },
     updateAddress: (state, action) => {
       const { address } = state.currentUser;

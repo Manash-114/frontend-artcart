@@ -50,16 +50,13 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/register" element={<RegisterPage />} />
-
-        <Route path="/hero" element={<HeroSection />} />
-        {/* <Route path="/" element={<FeaturedProducts />} /> */}
         <Route path="/" element={<LandingPage />} />
-        <Route path="/s" element={<SuggestedProducts />} />
-        <Route path="/test" element={<Test />} />
+        {/* <Route path="/s" element={<SuggestedProducts />} /> */}
+        {/* <Route path="/test" element={<Test />} /> */}
         <Route path="/products" element={<ProductPage />} />
         <Route path="/product/:id" element={<SingleProduct />} />
         <Route path="/login" element={<LoginPage />} />
+
         <Route path="/wishlist" element={<WishListPage />} />
         <Route path="/cartPage" element={<CartPage />} />
         <Route path="/billing" element={<BillingPage />} />
@@ -86,7 +83,6 @@ const App = () => {
           <Route path="manageseller" element={<ManageSeller />} />
           <Route path="categories" element={<ProductCategories />} />
         </Route>
-        <Route path="/main" element=""></Route>
       </Routes>
     </Router>
   );

@@ -38,18 +38,23 @@ const Login = () => {
 
     try {
       const res = await axios.post(`${BASE_URL_LOCAL}/auth/signin`, values);
+      const authData = {
+        token: res.data.token,
+        role: res.data.role,
+      };
+      console.log(`auth data = ${authData}`);
+      localStorage.setItem("jwttoken", res.data.token);
+      dispatch(signIn(authData));
+      // getCurrentUser(res.data.token, navigate, dispatch);
       if (res.data.auth && res.data.role === "ROLE_CUSTOMER") {
-        localStorage.setItem("jwttoken", res.data.token);
-        dispatch(signIn(res.data.token));
-        getCurrentUser(res.data.token, navigate, dispatch);
         navigate("/products");
       } else if (res.data.auth && res.data.role === "ROLE_SELLER") {
-        localStorage.setItem("jwttoken", res.data.token);
-        dispatch(signIn(res.data.token));
+        // localStorage.setItem("jwttoken", res.data.token);
+        // dispatch(signIn(res.data.token));
         navigate("/seller");
       } else if (res.data.auth && res.data.role === "ROLE_ADMIN") {
-        localStorage.setItem("jwttoken", res.data.token);
-        dispatch(signIn(res.data.token));
+        // localStorage.setItem("jwttoken", res.data.token);
+        // dispatch(signIn(res.data.token));
         navigate("/admin/dashboard");
       } else {
         toast.error(res.data.message);

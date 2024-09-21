@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { BASE_URL, BASE_URL_LOCAL } from "../common-db";
+import { BASE_URL_LOCAL } from "../common-db";
 import { approveSeller } from "../../reduxToolkit/features/adminSlice";
 
 export const approvedSeller = async (

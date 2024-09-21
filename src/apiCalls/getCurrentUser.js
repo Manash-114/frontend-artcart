@@ -10,10 +10,15 @@ const getCurrentUser = async (tokenFromLocal, navigate, dispatch) => {
     let res = null;
 
     if (s === "" && tokenFromLocal === null) {
+      console.log(`hey token = ${tokenFromLocal} and s = ${s}`);
       navigate("/");
       return;
     }
 
+    if (s === "") {
+      navigate("/");
+      return;
+    }
     if (s === "admin") {
       res = await fetch(`${BASE_URL_LOCAL}/api/admin/profile`, {
         method: "GET",
@@ -31,6 +36,11 @@ const getCurrentUser = async (tokenFromLocal, navigate, dispatch) => {
         },
       });
     } else {
+      // if (s != "customer") {
+      //   localStorage.removeItem("token");
+      //   navigate("/");
+      //   return;
+      // }
       res = await fetch(`${BASE_URL_LOCAL}/api/customer`, {
         method: "GET",
         headers: {
