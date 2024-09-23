@@ -1,24 +1,37 @@
 import React, { useState } from "react";
-import { saveCategory } from "../../apiCalls/admin/saveCategory";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  logOut,
+  selectCurrentToken,
+} from "../../reduxToolkit/features/auth/authSlice";
+import { addNewCategory } from "../../reduxToolkit/features/productList/ProductSlice";
+import { useNavigate } from "react-router-dom";
 
 const AddCategoryModal = ({ isOpen, onClose, onSubmit }) => {
   const [categoryName, setCategoryName] = useState("");
-  const token = useSelector((store) => store.auth.token);
+  const token = useSelector(selectCurrentToken);
   const dispatch = useDispatch();
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+  const handleSubmit = async (e) => {
     e.preventDefault();
     onSubmit(categoryName);
     if (categoryName.length < 2) {
       alert("enter valid name");
       setCategoryName("");
     } else {
-      // console.log("category", categoryName.toLocaleUpperCase());
-
-      saveCategory(token, categoryName.toLocaleUpperCase(), dispatch);
+      // saveCategory(token, categoryName.toLocaleUpperCase(), dispatch);
+      try {
+        const data = {
+          name: categoryName.toLocaleUpperCase(),
+        };
+        await dispatch(addNewCategory(data)).unwrap();
+        navigate("/admin/categories");
+      } catch (err) {
+        console.error("Failed to save the category", err);
+        dispatch(logOut());
+      }
     }
   };
-
   return (
     <div
       className={`modal ${

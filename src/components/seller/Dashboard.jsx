@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Footer2 from "../common/Footer2";
-import Header from "../common/Header";
 import AddProduct from "./dashboardCompo/AddProduct";
 import NewOrders from "./dashboardCompo/NewOrders";
 import ViewAllOrders from "./dashboardCompo/ViewAllOrders";
@@ -11,7 +10,6 @@ import ManageProducts from "./dashboardCompo/ManageProducts";
 import SellerRegistration from "./SellerRegistration";
 import { useDispatch, useSelector } from "react-redux";
 import SellerNav from "./SellerNav";
-import { getAllCategoriesFromBackend } from "../../apiCalls/admin/getAllCategoriesFromBackend";
 
 const buttons = [
   {

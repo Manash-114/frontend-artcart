@@ -10,12 +10,11 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import { signout } from "../../reduxToolkit/features/authSlice";
+import { selectCurrentUser } from "../../reduxToolkit/features/auth/authSlice";
 
 const Header = () => {
   let totalQuantity = useSelector((state) => state.cart.cartTotalQuantity);
-
-  const { currentUser } = useSelector((store) => store.auth);
-
+  const user = useSelector(selectCurrentUser);
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -74,13 +73,13 @@ const Header = () => {
             <li>
               <StyledLink to="/products">Products</StyledLink>
             </li>
-            {Object.keys(currentUser).length === 0 && (
+            {user === null && (
               <li>
-                <StyledLink to="/seller/register">Become a Seller</StyledLink>
+                <StyledLink to="/seller/signup">Become a Seller</StyledLink>
               </li>
             )}
 
-            {Object.keys(currentUser).length !== 0 ? (
+            {user !== null ? (
               <div className="avatar">
                 <div
                   className="action"
@@ -178,7 +177,7 @@ const StyledLink = styled(Link)`
 `;
 const Wrapper = styled.section`
   height: 4.2rem;
-  background: linear-gradient(30deg, #a093d6a9,#5852a9a9, #113267bb);
+  background: linear-gradient(30deg, #a093d6a9, #5852a9a9, #113267bb);
   top: 0;
   bottom: 0;
   left: 0;

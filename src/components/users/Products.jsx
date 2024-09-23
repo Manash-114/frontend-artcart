@@ -28,16 +28,12 @@ const Products = () => {
   const itemsPerPage = 9;
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const categories = useSelector((state) => state.auth.productCategory);
+  const categories = useSelector((state) => state.product.productCategory);
   const product = useSelector((state) => state.product);
-
-  const { auth } = useSelector((store) => store);
-
+  const auth = useSelector((store) => store.auth);
   const { products, filterProducts } = product;
-
   const totalProducts =
     filterProducts.length > 0 ? filterProducts.length : products.length;
-
   //For pagination
   useEffect(() => {
     const totalFilteredProducts =
@@ -101,7 +97,7 @@ const Products = () => {
     }
     setSelectedCategory(newselectedCategory);
   };
-  
+
   // All Filters working simultaneously
   const applyFilters = (searchTerm, priceFilter, sortOption) => {
     dispatch(
@@ -272,7 +268,6 @@ const StyledPagination = styled.div`
   justify-content: center;
   align-items: center;
   font-weight: 500;
-  
 `;
 const List = styled.div`
   width: auto;
@@ -311,14 +306,19 @@ const FilterTop = styled.div`
   justify-content: center;
   align-items: center;
 
-  .title{
+  .title {
     font-weight: 500;
     color: #020d17;
   }
   .filter-content {
     height: 60px;
     width: 100%;
-    background-image: linear-gradient(90deg, rgb(255, 254, 254), rgba(224, 194, 149, 0.84), rgba(125, 158, 209, 0.756));
+    background-image: linear-gradient(
+      90deg,
+      rgb(255, 254, 254),
+      rgba(224, 194, 149, 0.84),
+      rgba(125, 158, 209, 0.756)
+    );
     display: flex;
     justify-content: space-between;
     padding: 0 15%;
@@ -357,7 +357,6 @@ const FilterTop = styled.div`
     width: 40%;
     padding-left: 10px;
     color: #070000;
-    
   }
 `;
 const SubContainer = styled.div`
@@ -366,7 +365,12 @@ const SubContainer = styled.div`
   gap: 50px;
 `;
 const LeftFilter = styled.div`
-  background-image: linear-gradient(180deg, rgba(228, 219, 219, 0.046),rgba(207, 198, 113, 0.575), rgba(141, 171, 215, 0.553));
+  background-image: linear-gradient(
+    180deg,
+    rgba(228, 219, 219, 0.046),
+    rgba(207, 198, 113, 0.575),
+    rgba(141, 171, 215, 0.553)
+  );
   display: flex;
   flex-direction: column;
   padding: 10px;

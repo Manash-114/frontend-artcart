@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getAllCategoriesFromBackend } from "../../apiCalls/admin/getAllCategoriesFromBackend";
 import { useDispatch } from "react-redux";
 
 const AdminBody = () => {
@@ -18,11 +17,9 @@ const AdminBody = () => {
   const handleClickCourier = () => {
     console.log("clicked courier");
   };
-  useEffect(() => {
-    getAllCategoriesFromBackend(dispatch);
-  }, []);
+
   return (
-    <div className="border-2 border-green-600 flex justify-center items-center mt-5 h-full">
+    <div className="border-2 flex justify-center items-center mt-5 h-full">
       <div className="border-4 bg-gray-500 p-3 w-[30%] h-52 flex flex-col justify-center items-center">
         <h2 className="font-semibold text-3xl">Manage Categories</h2>
         <img

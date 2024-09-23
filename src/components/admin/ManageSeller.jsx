@@ -1,33 +1,14 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "./DataTable";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllUnapprovedSeller } from "../../apiCalls/admin/getAllUnapprovedSeller";
-import { approvedSeller } from "../../apiCalls/admin/approvedSeller";
 import { useNavigate } from "react-router-dom";
-// import { getAllUnapprovedSeller } from "../../api/getAllUnapprovedSeller";
 
 const ManageSeller = () => {
   const token = useSelector((store) => store.auth.token);
 
   const unapprovedSellerList = useSelector(
-    (store) => store.admin.sellerRequest
+    (store) => store.admin.newSellerRequest
   );
-  const data = [
-    {
-      id: 1,
-      name: "John Doe",
-      aadhaarNumber: "1234 5678 9012",
-      aadharImage: "path_to_image_1.jpg",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      aadhaarNumber: "9876 5432 1098",
-      aadharImage: "path_to_image_2.jpg",
-    },
-    // Add more data as needed
-  ];
-
   const onViewAadharImage = (imagePath) => {
     // Logic to open the image in a modal or new window
     window.open(imagePath);
@@ -39,19 +20,15 @@ const ManageSeller = () => {
 
   const onApprove = (id) => {
     // Logic to handle approval
-    approvedSeller(token, id, 1, navigate, dispatch);
+    // approvedSeller(token, id, 1, navigate, dispatch);
   };
 
   const onReject = (id) => {
     // Logic to handle rejection
-    console.log("Rejected seller with ID:", id);
-    approvedSeller(token, id, 0);
+    // console.log("Rejected seller with ID:", id);
+    // approvedSeller(token, id, 0);
   };
 
-  // const token = localStorage.getItem("token");
-  useEffect(() => {
-    getAllUnapprovedSeller(token, dispatch);
-  }, []);
   return (
     <div className="flex p-4">
       {/* left side */}

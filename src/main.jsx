@@ -3,8 +3,16 @@ import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
 import { Provider } from "react-redux";
-import store from "./reduxToolkit/app/store.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Test from "./components/Test.jsx";
+import { store } from "./app/store.js";
+import {
+  fetchCategories,
+  fetchProducts,
+} from "./reduxToolkit/features/productList/ProductSlice.jsx";
+
+store.dispatch(fetchProducts());
+store.dispatch(fetchCategories());
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -13,7 +21,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Routes>
           <Route path="/*" element={<App />} />
         </Routes>
-        <App />
       </Provider>
     </BrowserRouter>
   </React.StrictMode>

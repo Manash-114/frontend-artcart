@@ -1,19 +1,21 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { NavLink, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import TextError from "./TextError";
 import axios from "axios";
-import { BASE_URL } from "./common/config";
 import { BASE_URL_LOCAL } from "../apiCalls/common-db";
 import { useDispatch } from "react-redux";
-import { currentUser, signIn } from "../reduxToolkit/features/authSlice";
-import getCurrentUser from "../apiCalls/getCurrentUser";
+// import { currentUser, signIn } from "../reduxToolkit/features/authSlice";
+// import getCurrentUser from "../apiCalls/getCurrentUser";
 import CircularProgress from "@mui/material/CircularProgress";
 import toast, { Toaster } from "react-hot-toast";
 import Header from "./common/Header";
 
+import { Link, useNavigate, useLocation, NavLink } from "react-router-dom";
+import login from "../apiCalls/test/login";
+import { useLoginMutation } from "../reduxToolkit/features/auth/authApiSlice";
+import { setCredentials } from "../reduxToolkit/features/auth/authSlice";
 const initialValues = {
   email: "",
   password: "",
@@ -33,9 +35,13 @@ const Login = () => {
   const d = url.split("/");
   const s = d[3];
 
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathName || "/";
+
+  const [login, { isLoading }] = useLoginMutation();
   const onSubmit = async (values) => {
     setLoading(true); // Set loading to true during form submission
-
     try {
       const res = await axios.post(`${BASE_URL_LOCAL}/auth/signin`, values);
       const authData = {
@@ -47,15 +53,18 @@ const Login = () => {
       dispatch(signIn(authData));
       // getCurrentUser(res.data.token, navigate, dispatch);
       if (res.data.auth && res.data.role === "ROLE_CUSTOMER") {
-        navigate("/products");
+        // navigate("/products");
+        navigate(from, { replace: true });
       } else if (res.data.auth && res.data.role === "ROLE_SELLER") {
         // localStorage.setItem("jwttoken", res.data.token);
         // dispatch(signIn(res.data.token));
         navigate("/seller");
+        // navigate(from, { replace: true });
       } else if (res.data.auth && res.data.role === "ROLE_ADMIN") {
         // localStorage.setItem("jwttoken", res.data.token);
         // dispatch(signIn(res.data.token));
         navigate("/admin/dashboard");
+        // navigate(from, { replace: true });
       } else {
         toast.error(res.data.message);
       }
@@ -67,7 +76,29 @@ const Login = () => {
     }
   };
 
-  const navigate = useNavigate();
+  const handleSubmit = async (values) => {
+    try {
+      const userData = await login(values).unwrap();
+      if (userData?.message) {
+        toast.error(userData.message);
+      } else {
+        const data = {
+          accessToken: userData?.accessToken,
+          user: {
+            email: values.email,
+          },
+          roles: userData?.roles,
+        };
+        dispatch(setCredentials(data));
+        const role = userData?.roles;
+        if (role === "ROLE_SELLER") navigate("/seller");
+        else if (role === "ROLE_ADMIN") navigate("/admin");
+        else navigate("/products");
+      }
+    } catch (er) {
+      console.log("error");
+    }
+  };
 
   return (
     <Wrapper>
@@ -87,21 +118,21 @@ const Login = () => {
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={onSubmit}
+            onSubmit={handleSubmit}
           >
             <Form>
               <h2 className="title">Log In</h2>
               <p>
                 Become an ArtWork.{" "}
                 <NavLink
-                  to={s === "seller" ? "/seller/register" : "/register"}
+                  to={s === "seller" ? "/seller/signup" : "/signup"}
                   className="log-in"
                 >
                   Join
                 </NavLink>
               </p>
               <div className="form-control">
-                <label htmlFor="email">Email</label>
+                <label htmlFor="email">Email-</label>
                 <Field type="email" id="email" name="email" />
                 <ErrorMessage name="email" component={TextError} />
               </div>
@@ -113,7 +144,7 @@ const Login = () => {
               </div>
 
               <button type="submit">
-                {loading ? <CircularProgress size={20} /> : "Login"}
+                {isLoading ? <CircularProgress size={20} /> : "Login"}
               </button>
             </Form>
           </Formik>
