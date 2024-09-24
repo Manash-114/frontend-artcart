@@ -2,8 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { signout } from "../../reduxToolkit/features/authSlice";
-import { Logout } from "@mui/icons-material";
+import { logOut } from "../../reduxToolkit/features/auth/authSlice";
 
 const AdminNav = () => {
   const dispatch = useDispatch();
@@ -25,7 +24,7 @@ const AdminNav = () => {
             <li>
               <StyledLink
                 onClick={() => {
-                  dispatch(Logout());
+                  dispatch(logOut());
                 }}
                 to={"/login"}
               >

@@ -45,12 +45,9 @@ export const addNewCategory = createAsyncThunk(
       dispatch(setCredentials(updatAuth));
     };
 
-    const handlelogOut = () => {
-      dispatch(logOut());
-    };
     // Pass authState and refreshToken to getAxiosPrivate
     const axiosPrivate = getAxiosPrivate(authState, () =>
-      getRefreshToken(authState, updateCredentials, handlelogOut)
+      getRefreshToken(authState, updateCredentials)
     );
 
     try {
@@ -96,12 +93,10 @@ export const deleteCategory = createAsyncThunk(
       };
       dispatch(setCredentials(updatAuth));
     };
-    const handlelogOut = () => {
-      dispatch(logOut());
-    };
+
     // Pass authState and refreshToken to getAxiosPrivate
     const axiosPrivate = getAxiosPrivate(authState, () =>
-      getRefreshToken(authState, updateCredentials, handlelogOut)
+      getRefreshToken(authState, updateCredentials)
     );
 
     try {
@@ -193,10 +188,6 @@ const ProductSlice = createSlice({
       .addCase(addNewCategory.fulfilled, (state, action) => {
         state.loading = false;
         state.status = "succeeded";
-        // Add the new category to the existing product categories
-
-        console.log(`payload return from axios to thunk`);
-        console.log(action.payload);
         state.productCategory.push(action.payload.data);
         state.error = "";
       })
@@ -206,12 +197,7 @@ const ProductSlice = createSlice({
         state.error = action.payload || "Failed to add new category";
       })
       .addCase(deleteCategory.fulfilled, (state, action) => {
-        state.loading = false;
         state.status = "succeeded";
-        // Add the new category to the existing product categories
-        console.log(`payload return from axios to thunk`);
-        console.log(action.payload);
-
         const cat = state.productCategory.filter(
           (cat) => cat.id !== action.payload
         );

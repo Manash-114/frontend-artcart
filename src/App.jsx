@@ -21,8 +21,9 @@ import SellerRegistration from "./components/seller/SellerRegistration.jsx";
 import AdminBody from "./components/admin/AdminBody.jsx";
 import ManageSeller from "./components/admin/ManageSeller.jsx";
 import ProductCategories from "./components/admin/ProductCategories.jsx";
-import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
 import SellerDashboard from "./components/seller/SellerDashboard.jsx";
+import AdminPage from "./pages/admin/AdminPage.jsx";
+import AdminDashBoard from "./components/admin/AdminDashBoard.jsx";
 
 const ROLES = {
   Customer: "ROLE_CUSTOMER",
@@ -62,8 +63,8 @@ const App = () => {
           <Route path="completeprofile" element={<SellerRegistration />} />
         </Route>
         <Route element={<RequireAuth allowedRoles={ROLES.Admin} />}>
-          <Route path="admin" element={<AdminDashboard />}>
-            <Route path="" element={<AdminBody />} />
+          <Route path="admin" element={<AdminPage />}>
+            <Route path="" element={<AdminDashBoard />} />
             <Route path="manageseller" element={<ManageSeller />} />
             <Route path="categories" element={<ProductCategories />} />
           </Route>

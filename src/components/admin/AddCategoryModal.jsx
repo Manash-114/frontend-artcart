@@ -7,43 +7,57 @@ import {
 import { addNewCategory } from "../../reduxToolkit/features/productList/ProductSlice";
 import { useNavigate } from "react-router-dom";
 
-const AddCategoryModal = ({ isOpen, onClose, onSubmit }) => {
+const AddCategoryModal = ({ isOpen, onClose, onSubmit, toast }) => {
   const [categoryName, setCategoryName] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // State to track loading spinner
   const token = useSelector(selectCurrentToken);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(categoryName);
     if (categoryName.length < 2) {
-      alert("enter valid name");
+      toast.success("Must be 3 character");
       setCategoryName("");
-    } else {
-      // saveCategory(token, categoryName.toLocaleUpperCase(), dispatch);
-      try {
-        const data = {
-          name: categoryName.toLocaleUpperCase(),
-        };
-        await dispatch(addNewCategory(data)).unwrap();
-        navigate("/admin/categories");
-      } catch (err) {
-        console.error("Failed to save the category", err);
-        dispatch(logOut());
-      }
+      return;
     }
+    setIsLoading(true); // Show spinner
+    onSubmit(categoryName);
+    try {
+      const data = {
+        name: categoryName.toLocaleUpperCase(),
+      };
+      const res = await dispatch(addNewCategory(data)).unwrap();
+      toast.success("Category Add successfully");
+
+      navigate("/admin/categories");
+    } catch (err) {
+      if (err === "Invalid refresh token") {
+        dispatch(logOut());
+        navigate("/");
+      }
+      console.error("Failed to save the category", err);
+    } finally {
+      setIsLoading(false); // Hide spinner after submission completes
+    }
+    setCategoryName(""); // Reset category name after submission
   };
+
   return (
     <div
       className={`modal ${
         isOpen ? "" : "hidden"
-      } fixed inset-0 w-full h-full bg-gray-800 bg-opacity-50 z-50 overflow-auto flex justify-center items-center`}
+      } fixed inset-0 w-full h-full bg-gray-800 bg-opacity-75 z-50 overflow-auto flex justify-center items-center`}
     >
-      <div className="bg-white w-1/2 p-8 rounded-lg">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">Add New Category</h2>
+      <div className="bg-white w-full max-w-lg p-6 rounded-lg shadow-lg relative">
+        {/* Modal Header */}
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-semibold text-gray-800">
+            Add New Category
+          </h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-gray-400 hover:text-gray-600 transition duration-150"
           >
             <svg
               className="w-6 h-6"
@@ -61,8 +75,10 @@ const AddCategoryModal = ({ isOpen, onClose, onSubmit }) => {
             </svg>
           </button>
         </div>
+
+        {/* Form */}
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
+          <div className="mb-5">
             <label
               htmlFor="categoryName"
               className="block text-sm font-medium text-gray-700"
@@ -75,15 +91,16 @@ const AddCategoryModal = ({ isOpen, onClose, onSubmit }) => {
               name="categoryName"
               value={categoryName}
               onChange={(e) => setCategoryName(e.target.value)}
-              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+              className="mt-2 p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter category name"
             />
           </div>
           <div className="text-right">
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 flex justify-center items-center"
             >
-              Save
+              Save Category
             </button>
           </div>
         </form>

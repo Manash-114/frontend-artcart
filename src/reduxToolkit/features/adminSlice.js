@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import getAxiosPrivate from "../../apiCalls/getAxiosPrivate";
 import getRefreshToken from "../../apiCalls/getRefreshToken";
+import { logOut, setCredentials } from "./auth/authSlice";
 
 // Async Thunks for API calls
 
@@ -18,13 +19,9 @@ export const fetchNewSeller = createAsyncThunk(
       };
       dispatch(setCredentials(updatAuth));
     };
-
-    const handlelogOut = () => {
-      dispatch(logOut());
-    };
     // Pass authState and refreshToken to getAxiosPrivate
     const axiosPrivate = getAxiosPrivate(authState, () =>
-      getRefreshToken(authState, updateCredentials, handlelogOut)
+      getRefreshToken(authState, updateCredentials)
     );
 
     try {
@@ -59,20 +56,33 @@ export const fetchAllSeller = createAsyncThunk(
 // Approve a seller
 export const approveSeller = createAsyncThunk(
   "admin/approveSeller",
-  async (sellerId, { rejectWithValue }) => {
+  async ({ id, approveStatus }, { getState, dispatch, rejectWithValue }) => {
+    const store = getState();
+    const authState = store.auth; // Get current auth state
+    const updateCredentials = (newAuthData) => {
+      const updatAuth = {
+        user: newAuthData.user,
+        accessToken: newAuthData.token,
+        roles: newAuthData.roles,
+      };
+      dispatch(setCredentials(updatAuth));
+    };
+    // Pass authState and refreshToken to getAxiosPrivate
+    const axiosPrivate = getAxiosPrivate(authState, () =>
+      getRefreshToken(authState, updateCredentials)
+    );
+
     try {
-      const response = await fetch(`/api/admin/approveSeller/${sellerId}`, {
-        method: "POST", // Assuming a POST request to approve the seller
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (!response.ok) {
-        throw new Error("Failed to approve the seller.");
-      }
-      return sellerId;
+      // Get the Axios instance with interceptors
+      const response = await axiosPrivate.put(
+        `/api/admin/approve-seller/${id}/${approveStatus}`
+      );
+      return {
+        response: 200,
+        id: id,
+      };
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response?.data || "Error approve seller");
     }
   }
 );
@@ -98,7 +108,7 @@ const adminSlice = createSlice({
         state.loading = false;
         console.log("fetch new seller");
         console.log(action.payload);
-        // state.newSellerRequest = action.payload;
+        state.newSellerRequest = action.payload;
       })
       .addCase(fetchNewSeller.rejected, (state, action) => {
         state.loading = false;
@@ -129,7 +139,7 @@ const adminSlice = createSlice({
       .addCase(approveSeller.fulfilled, (state, action) => {
         state.loading = false;
         state.newSellerRequest = state.newSellerRequest.filter(
-          (seller) => seller.id !== action.payload
+          (seller) => seller.id !== action.payload.id
         );
       })
       .addCase(approveSeller.rejected, (state, action) => {

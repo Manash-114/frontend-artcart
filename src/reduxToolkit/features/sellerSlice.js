@@ -19,12 +19,10 @@ export const fetchSellerDetails = createAsyncThunk(
       };
       dispatch(setCredentials(updatAuth));
     };
-    const handlelogOut = () => {
-      dispatch(logOut());
-    };
+
     // Pass authState and refreshToken to getAxiosPrivate
     const axiosPrivate = getAxiosPrivate(authState, () =>
-      getRefreshToken(authState, updateCredentials, handlelogOut)
+      getRefreshToken(authState, updateCredentials)
     );
 
     try {
@@ -51,12 +49,9 @@ export const saveSellerDetails = createAsyncThunk(
       dispatch(setCredentials(updatAuth));
     };
 
-    const handlelogOut = () => {
-      dispatch(logOut());
-    };
     // Pass authState and refreshToken to getAxiosPrivate
     const axiosPrivateForm = getAxiosPrivateWithFormData(authState, () =>
-      getRefreshToken(authState, updateCredentials, handlelogOut)
+      getRefreshToken(authState, updateCredentials)
     );
 
     try {
