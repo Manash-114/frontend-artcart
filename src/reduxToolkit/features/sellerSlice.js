@@ -80,14 +80,61 @@ export const fetchAllOrders = createAsyncThunk(
   }
 );
 
-export const fetchProducts = createAsyncThunk(
-  "seller/fetchProducts",
-  async () => {
-    const response = await axios.get("/api/seller/products");
-    return response.data;
+export const fetchSellerProducts = createAsyncThunk(
+  "seller/fetchSellerProducts",
+  async (_, { getState, dispatch, rejectWithValue }) => {
+    const store = getState();
+    const authState = store.auth; // Get current auth state
+    const updateCredentials = (newAuthData) => {
+      const updatAuth = {
+        user: newAuthData.user,
+        accessToken: newAuthData.token,
+        roles: newAuthData.roles,
+      };
+      dispatch(setCredentials(updatAuth));
+    };
+    // Pass authState and refreshToken to getAxiosPrivate
+    const axiosPrivate = getAxiosPrivate(authState, () =>
+      getRefreshToken(authState, updateCredentials)
+    );
+
+    try {
+      // Get the Axios instance with interceptors
+      const response = await axiosPrivate.get("/api/seller/all-products");
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Error saving seller");
+    }
   }
 );
 
+export const addProduct = createAsyncThunk(
+  "seller/addProduct",
+  async ({ data }, { getState, dispatch, rejectWithValue }) => {
+    const store = getState();
+    const authState = store.auth; // Get current auth state
+    const updateCredentials = (newAuthData) => {
+      const updatAuth = {
+        user: newAuthData.user,
+        accessToken: newAuthData.token,
+        roles: newAuthData.roles,
+      };
+      dispatch(setCredentials(updatAuth));
+    };
+    // Pass authState and refreshToken to getAxiosPrivate
+    const axiosPrivate = getAxiosPrivate(authState, () =>
+      getRefreshToken(authState, updateCredentials)
+    );
+
+    try {
+      // Get the Axios instance with interceptors
+      const response = await axiosPrivate.post("/api/seller/add-product", data);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Error saving seller");
+    }
+  }
+);
 export const updateProduct = createAsyncThunk(
   "seller/updateProduct",
   async (productData) => {
@@ -195,15 +242,15 @@ const sellerSlice = createSlice({
       })
 
       // Fetch products
-      .addCase(fetchProducts.pending, (state) => {
+      .addCase(fetchSellerProducts.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchProducts.fulfilled, (state, action) => {
+      .addCase(fetchSellerProducts.fulfilled, (state, action) => {
         state.allProducts = action.payload;
         state.loading = false;
       })
-      .addCase(fetchProducts.rejected, (state, action) => {
+      .addCase(fetchSellerProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })

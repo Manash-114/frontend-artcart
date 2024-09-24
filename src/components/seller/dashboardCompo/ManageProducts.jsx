@@ -1,29 +1,15 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios"; // Import Axios
-import styled from "styled-components";
+import React, { useState } from "react";
 import Popover from "@mui/material/Popover";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { TiTick } from "react-icons/ti";
-import { RxCross1 } from "react-icons/rx";
 import DataTable from "react-data-table-component";
-// import { updateAllProduct } from "../../../reduxToolkit/features/sellerSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { BASE_URL_LOCAL } from "../../../apiCalls/common-db";
-import { getAllProducts } from "../../../apiCalls/seller/getAllProducts";
-import { updateProduct } from "../../../apiCalls/seller/updateProduct";
+import { useSelector } from "react-redux";
 import Spinner from "../../common/Spinner";
-
 import { uploadImageToCloudinaryForUpdate } from "../../../apiCalls/uploadImageToCloudinaryForUpdate";
 import { useNavigate } from "react-router-dom";
 
 const ManageProducts = () => {
-  const { token } = useSelector((store) => store.auth);
-  const dispatch = useDispatch();
-  const data = useSelector((store) => store.seller.allProduct);
-  useEffect(() => {
-    getAllProducts(token, dispatch);
-  }, []);
+  const data = useSelector((store) => store.seller.allProducts);
 
   const columns = [
     {
@@ -33,12 +19,12 @@ const ManageProducts = () => {
     },
     {
       name: "Price",
-      cell: (row) => row.price,
+      cell: (row) => `₹ ${row.price}`,
       sortable: true,
     },
     {
       name: "Stock",
-      cell: (row) => (row.stock === true ? "inStock" : "Out of Stock"),
+      cell: (row) => (row.stock === true ? "In Stock" : "Out of Stock"),
       sortable: true,
     },
     {
@@ -46,39 +32,12 @@ const ManageProducts = () => {
       cell: (row) => row.category.name,
       sortable: true,
     },
-
     {
       name: "Action",
       cell: (row) => {
         const [anchorEl1, setAnchorEl1] = useState(null);
-        const [pID, SetPID] = useState("");
         const [showImageTag, SetShowImageTag] = useState(false);
-
-        const handleClick1 = (event) => {
-          setAnchorEl1(event.currentTarget);
-          SetPID(row.id);
-          console.log(row.id);
-        };
-        const handleClose1 = () => {
-          setAnchorEl1(null);
-          SetShowImageTag(false);
-          setIsLoading(false);
-        };
-
-        const open1 = Boolean(anchorEl1);
-
-        const id1 = open1 ? "simple-popover" : undefined;
-
-        // const [selectedValue, setSelectedValue] = useState("");
-
-        // const handleChange = (event) => {
-        //   setSelectedValue(event.target.value);
-        // };
-
-        const [showProductName, setShowProductName] = useState(false);
         const [productImages, setProductImages] = useState([]);
-        const token = useSelector((store) => store.auth.token);
-
         const [isLoading, setIsLoading] = useState(false);
         const [productData, setProductData] = useState({
           name: row.name,
@@ -87,16 +46,24 @@ const ManageProducts = () => {
           stock: row.stock,
         });
 
-        const navigate = useNavigate();
+        const handleClick1 = (event) => {
+          setAnchorEl1(event.currentTarget);
+        };
+
+        const handleClose1 = () => {
+          setAnchorEl1(null);
+          SetShowImageTag(false);
+          setIsLoading(false);
+        };
+
+        const open1 = Boolean(anchorEl1);
+        const id1 = open1 ? "simple-popover" : undefined;
 
         const handleFormSubmit = (e) => {
           e.preventDefault();
           setIsLoading(true);
-          console.log("form submit " + JSON.stringify(productData));
-          // console.log(productImages);
 
-          //if check for image update
-          if (showImageTag)
+          if (showImageTag) {
             uploadImageToCloudinaryForUpdate(
               productImages,
               productData,
@@ -104,35 +71,27 @@ const ManageProducts = () => {
               setIsLoading,
               pID
             );
-          else {
-            const productImagesUrl = [];
-            row.productImages.map((productImage) =>
-              productImagesUrl.push(productImage.name)
-            );
+          } else {
+            const productImagesUrl = row.productImages.map((img) => img.name);
             productData["productImages"] = productImagesUrl;
-            const updatedProductData = {
-              ...productData,
-              productImages: productImagesUrl,
-            };
-            setProductData(updatedProductData);
-            const jsonData = JSON.stringify(updatedProductData);
-            console.log(jsonData);
-            updateProduct(jsonData, token, setIsLoading, pID);
+            updateProduct(
+              JSON.stringify(productData),
+              token,
+              setIsLoading,
+              row.id
+            );
           }
-
-          // window.location.reload();
-
-          // updateProduct = async (data, token, setIsLoading,pID) => {
         };
 
         return (
-          <div className="m2-2 ">
+          <div>
             <Button
               aria-describedby={id1}
               variant="contained"
+              className="bg-indigo-600 text-white hover:bg-indigo-500 transition-colors"
               onClick={handleClick1}
             >
-              Edit Product Details
+              Edit Product
             </Button>
             <Popover
               id={id1}
@@ -147,181 +106,166 @@ const ManageProducts = () => {
                 vertical: "center",
                 horizontal: "center",
               }}
+              className="w-full"
             >
               <Typography sx={{ p: 2 }}>
-                <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-                  <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-                    <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                      Update Product Details
-                    </h2>
-                  </div>
+                <div className="p-4 bg-white rounded-lg shadow-lg max-w-lg w-full">
+                  <h2 className="text-xl font-bold text-gray-900 mb-6">
+                    Update Product
+                  </h2>
+                  <form onSubmit={handleFormSubmit} className="space-y-4">
+                    <div className="flex flex-col space-y-1">
+                      <label
+                        htmlFor="pName"
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        Product Name
+                      </label>
+                      <input
+                        id="pName"
+                        name="pName"
+                        type="text"
+                        required
+                        value={productData.name}
+                        onChange={(e) =>
+                          setProductData({
+                            ...productData,
+                            name: e.target.value,
+                          })
+                        }
+                        className="p-3 block w-full border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                      />
+                    </div>
 
-                  <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form
-                      class="space-y-6"
-                      action="#"
-                      method="POST"
-                      onSubmit={handleFormSubmit}
-                    >
-                      <div>
-                        <label
-                          for="pName"
-                          class="block text-sm font-medium leading-6 text-gray-900"
-                        >
-                          Product Name
-                        </label>
-                        <div class="mt-2">
-                          <input
-                            id="pName"
-                            name="pName"
-                            type="text"
-                            autocomplete="pName"
-                            required
-                            value={productData.name}
-                            onChange={(e) => {
-                              setProductData({
-                                ...productData,
-                                ["name"]: e.target.value,
-                              });
-                            }}
-                            class="p-4 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <label
-                          for="pPrice"
-                          class="block text-sm font-medium leading-6 text-gray-900"
-                        >
-                          Product Price
-                        </label>
-                        <div class="mt-2">
-                          <input
-                            id="pPrice"
-                            name="pPrice"
-                            type="number"
-                            autocomplete="pPice"
-                            required
-                            value={productData.price}
-                            onChange={(e) => {
-                              setProductData({
-                                ...productData,
-                                ["price"]: e.target.value,
-                              });
-                            }}
-                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                          />
-                        </div>
-                      </div>
-                      <div>
+                    <div className="flex flex-col space-y-1">
+                      <label
+                        htmlFor="pPrice"
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        Product Price
+                      </label>
+                      <input
+                        id="pPrice"
+                        name="pPrice"
+                        type="number"
+                        required
+                        value={productData.price}
+                        onChange={(e) =>
+                          setProductData({
+                            ...productData,
+                            price: e.target.value,
+                          })
+                        }
+                        className="p-3 block w-full border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                      />
+                    </div>
+
+                    <div className="flex items-center space-x-6">
+                      <div className="flex items-center">
                         <input
                           type="radio"
                           id="inStock"
                           name="stockStatus"
-                          className=""
                           value={true}
-                          onChange={(e) => {
-                            setProductData({
-                              ...productData,
-                              ["stock"]: true,
-                            });
-                            console.log(e.target.value);
-                          }}
+                          checked={productData.stock === true}
+                          onChange={() =>
+                            setProductData({ ...productData, stock: true })
+                          }
+                          className="form-radio"
                         />
-                        <label for="inStock" className="ml-2">
+                        <label
+                          htmlFor="inStock"
+                          className="ml-2 text-sm font-medium text-gray-700"
+                        >
                           In Stock
                         </label>
+                      </div>
+
+                      <div className="flex items-center">
                         <input
                           type="radio"
                           id="outOfStock"
                           name="stockStatus"
-                          className="ml-5"
-                          onChange={(e) => {
-                            setProductData({
-                              ...productData,
-                              ["stock"]: false,
-                            });
-                            console.log(e.target.value);
-                          }}
+                          value={false}
+                          checked={productData.stock === false}
+                          onChange={() =>
+                            setProductData({ ...productData, stock: false })
+                          }
+                          className="form-radio"
                         />
-                        <label for="outOfStock" className="ml-2">
+                        <label
+                          htmlFor="outOfStock"
+                          className="ml-2 text-sm font-medium text-gray-700"
+                        >
                           Out of Stock
                         </label>
                       </div>
+                    </div>
 
-                      <div>
-                        <div class="flex items-center justify-between">
-                          <label
-                            for="pDes"
-                            class="block text-sm font-medium leading-6 text-gray-900"
-                          >
-                            Product Description
-                          </label>
-                        </div>
-                        <div class="mt-2">
-                          <textarea
-                            id="password"
-                            name="password"
-                            type="text"
-                            autocomplete="current-password"
-                            required
-                            value={productData.description}
-                            onChange={(e) => {
-                              setProductData({
-                                ...productData,
-                                ["description"]: e.target.value,
-                              });
-                            }}
-                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                          />
-                        </div>
-                      </div>
+                    <div className="flex flex-col space-y-1">
+                      <label
+                        htmlFor="pDes"
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        Product Description
+                      </label>
+                      <textarea
+                        id="pDes"
+                        name="pDes"
+                        required
+                        value={productData.description}
+                        onChange={(e) =>
+                          setProductData({
+                            ...productData,
+                            description: e.target.value,
+                          })
+                        }
+                        className="p-3 block w-full border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                      />
+                    </div>
 
-                      <div>
-                        <label htmlFor="showImage">
-                          Want to Change Product Image ?
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="showImage"
+                        checked={showImageTag}
+                        onChange={() => SetShowImageTag(!showImageTag)}
+                        className="form-checkbox"
+                      />
+                      <label htmlFor="showImage" className="ml-2 text-sm">
+                        Change Product Image?
+                      </label>
+                    </div>
+
+                    {showImageTag && (
+                      <div className="flex flex-col space-y-1">
+                        <label
+                          htmlFor="pImage"
+                          className="text-sm font-medium text-gray-700"
+                        >
+                          Upload New Product Images
                         </label>
                         <input
-                          type="checkbox"
-                          className="ml-4"
-                          onChange={() => SetShowImageTag(!showImageTag)}
+                          type="file"
+                          id="pImage"
+                          name="pImage"
+                          accept=".jpg, .jpeg, .png, .webp"
+                          multiple
+                          className="block w-full border border-gray-300 rounded-md"
+                          onChange={(e) => setProductImages(e.target.files)}
                         />
                       </div>
+                    )}
 
-                      {showImageTag && (
-                        <div className="p-4 block w-[270px] rounded-md border-0  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                          <label htmlFor="ProductImage" className="">
-                            Product Images *Select multiple
-                          </label>
-                          <input
-                            type="file"
-                            id="pImage"
-                            name="pImage"
-                            accept=" .jpg, .jpeg, .png ,.webp"
-                            multiple
-                            className="mt-3"
-                            onChange={(e) => {
-                              setProductImages(e.target.files);
-                            }}
-                          />
-                        </div>
-                      )}
+                    <button
+                      type="submit"
+                      className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-500 transition-colors"
+                    >
+                      Update Product
+                    </button>
 
-                      <div>
-                        <button
-                          type="submit"
-                          class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                        >
-                          Update
-                        </button>
-                      </div>
-                      {isLoading && (
-                        <div className="mt-4">
-                          <Spinner />
-                        </div>
-                      )}
-                    </form>
-                  </div>
+                    {isLoading && <Spinner />}
+                  </form>
                 </div>
               </Typography>
             </Popover>
@@ -331,7 +275,30 @@ const ManageProducts = () => {
     },
   ];
 
-  return <DataTable columns={columns} data={data} pagination />;
+  return (
+    <div className="container mx-auto p-6 bg-white rounded-lg shadow-lg">
+      <h1 className="text-2xl font-bold text-gray-900 mb-4">Manage Products</h1>
+      <DataTable
+        columns={columns}
+        data={data}
+        pagination
+        customStyles={{
+          rows: {
+            style: {
+              minHeight: "64px",
+              fontSize: "16px",
+            },
+          },
+          headCells: {
+            style: {
+              fontWeight: "bold",
+              fontSize: "18px",
+            },
+          },
+        }}
+      />
+    </div>
+  );
 };
 
 export default ManageProducts;

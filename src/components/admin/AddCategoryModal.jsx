@@ -16,7 +16,7 @@ const AddCategoryModal = ({ isOpen, onClose, onSubmit, toast }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (categoryName.length < 2) {
+    if (categoryName.length < 3) {
       toast.success("Must be 3 character");
       setCategoryName("");
       return;
@@ -34,9 +34,7 @@ const AddCategoryModal = ({ isOpen, onClose, onSubmit, toast }) => {
     } catch (err) {
       if (err === "Invalid refresh token") {
         dispatch(logOut());
-        navigate("/");
       }
-      console.error("Failed to save the category", err);
     } finally {
       setIsLoading(false); // Hide spinner after submission completes
     }

@@ -11,6 +11,7 @@ import { BASE_URL_LOCAL } from "../../apiCalls/common-db";
 import { currentUser } from "../../reduxToolkit/features/authSlice";
 import Spinner from "../common/Spinner";
 import { saveSellerDetails } from "../../reduxToolkit/features/sellerSlice";
+import toast, { Toaster } from "react-hot-toast";
 
 const initialValues = {
   sellerName: "",
@@ -52,11 +53,18 @@ const SellerRegistration = () => {
     data1.append("aadhaarImage", aadhaarImage);
     data1.append("profileImage", profileImage);
     data1.append("data", ob);
-    dispatch(saveSellerDetails({ data: data1 }));
+
+    try {
+      const res = await dispatch(saveSellerDetails({ data: data1 })).unwrap();
+    } catch (error) {
+      console.log("erorr at the time of registration.");
+      toast.error("Internal Server error.Please try again after some time.");
+    }
   };
 
   return (
     <Wrapper>
+      <Toaster position="top-center" reverseOrder={false} />
       <div className="container">
         <div className="imageSection">
           <div className="content">

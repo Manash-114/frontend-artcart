@@ -38,7 +38,6 @@ const ManageSeller = () => {
       setLoadingId(null);
       if (error === "Invalid refresh token") {
         dispatch(logOut());
-        navigate("/");
       }
       toast.error("An error occurred. Please try again.");
     }
