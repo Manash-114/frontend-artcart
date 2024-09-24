@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { signout } from "../../reduxToolkit/features/authSlice";
+import { logOut } from "../../reduxToolkit/features/auth/authSlice";
 
 const SellerNav = () => {
   const dispatch = useDispatch();
@@ -24,7 +25,7 @@ const SellerNav = () => {
             <li>
               <StyledLink
                 onClick={() => {
-                  dispatch(signout());
+                  dispatch(logOut());
                 }}
                 to={"/seller/login"}
               >

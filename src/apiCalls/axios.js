@@ -11,3 +11,11 @@ export const axiosPrivate = axios.create({
   },
   withCredentials: true,
 });
+
+export const axiosPrivateWithFormData = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    "Content-Type": "multipart/form-data", // Important for FormData
+  },
+  withCredentials: true,
+});

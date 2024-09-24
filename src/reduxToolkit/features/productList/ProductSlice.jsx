@@ -44,9 +44,13 @@ export const addNewCategory = createAsyncThunk(
       };
       dispatch(setCredentials(updatAuth));
     };
+
+    const handlelogOut = () => {
+      dispatch(logOut());
+    };
     // Pass authState and refreshToken to getAxiosPrivate
     const axiosPrivate = getAxiosPrivate(authState, () =>
-      getRefreshToken(authState, updateCredentials)
+      getRefreshToken(authState, updateCredentials, handlelogOut)
     );
 
     try {
@@ -92,9 +96,12 @@ export const deleteCategory = createAsyncThunk(
       };
       dispatch(setCredentials(updatAuth));
     };
+    const handlelogOut = () => {
+      dispatch(logOut());
+    };
     // Pass authState and refreshToken to getAxiosPrivate
     const axiosPrivate = getAxiosPrivate(authState, () =>
-      getRefreshToken(authState, updateCredentials)
+      getRefreshToken(authState, updateCredentials, handlelogOut)
     );
 
     try {

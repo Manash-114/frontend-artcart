@@ -10,8 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { BASE_URL_LOCAL } from "../../apiCalls/common-db";
 import { currentUser } from "../../reduxToolkit/features/authSlice";
 import Spinner from "../common/Spinner";
-
-// import {BASE_URI} from '../common/config'
+import { saveSellerDetails } from "../../reduxToolkit/features/sellerSlice";
 
 const initialValues = {
   sellerName: "",
@@ -29,49 +28,31 @@ const validationSchema = Yup.object({
 const SellerRegistration = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [aadhaarImage, setAdhaarImage] = useState(null);
-
   const handleProfileImageChange = (e) => {
     const file = e.target.files[0];
     setProfileImage(file);
   };
-
   const dispatch = useDispatch();
 
-  const { token } = useSelector((store) => store.auth);
-  const [isLoading, setIsLoading] = useState(false);
+  const { loading } = useSelector((store) => store.seller);
 
+  console.log(`seller loading state = ${loading}`);
   const handleAadhaarImageChange = (e) => {
     console.log("aadhaar image");
     const file = e.target.files[0];
     setAdhaarImage(file);
   };
-
   const onSubmitHandle = async (values) => {
-    setIsLoading(true);
-    console.log("submit");
     const ob = `{
         "name" : "${values.sellerName}",
         "aadhaarNo" : "${values.aadhaarNo}",
         "phoneNumber" :"${values.sellerPhone}"
       }`;
-
-    console.log(ob);
     const data1 = new FormData();
     data1.append("aadhaarImage", aadhaarImage);
     data1.append("profileImage", profileImage);
     data1.append("data", ob);
-    console.log(token);
-    const res = await fetch(`${BASE_URL_LOCAL}/api/seller/save`, {
-      method: "POST",
-      body: data1,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const resData = await res.json();
-    console.log(resData);
-    setIsLoading(false);
-    dispatch(currentUser(resData));
+    dispatch(saveSellerDetails({ data: data1 }));
   };
 
   return (
@@ -140,20 +121,6 @@ const SellerRegistration = () => {
                 />
                 <ErrorMessage name="ID Proof" component={TextError} />
               </div>
-              {/* 
-          <div className="form-control">
-            <label htmlFor="aadhaarImage">Aadhaar Image Proof*</label>
-            <Field
-              type='file'
-              id="aadhaarImage"
-              name='aadhaarImage'
-              accept=".jpg, .jpeg, .png" 
-              onChange={handleAadhaarImageChange}
-              required
-              
-            />
-            <ErrorMessage name='ID Proof' component={TextError} />
-          </div> */}
 
               <div className="form-control">
                 <label htmlFor="aadhaarNo">Aadhaar Number</label>
@@ -170,7 +137,7 @@ const SellerRegistration = () => {
               <button type="submit">Submit</button>
             </Form>
           </Formik>
-          {isLoading && (
+          {loading && (
             <div className="mt-4">
               <Spinner />
             </div>

@@ -1,7 +1,7 @@
-import {
-  updateAllProduct,
-  updateNewOrders,
-} from "../../reduxToolkit/features/sellerSlice";
+// import {
+//   updateAllProduct,
+//   updateNewOrders,
+// } from "../../reduxToolkit/features/sellerSlice";
 import { BASE_URL_LOCAL } from "../common-db";
 
 export const getAllProducts = async (token, dispatch) => {

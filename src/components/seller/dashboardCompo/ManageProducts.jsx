@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import { TiTick } from "react-icons/ti";
 import { RxCross1 } from "react-icons/rx";
 import DataTable from "react-data-table-component";
-import { updateAllProduct } from "../../../reduxToolkit/features/sellerSlice";
+// import { updateAllProduct } from "../../../reduxToolkit/features/sellerSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { BASE_URL_LOCAL } from "../../../apiCalls/common-db";
 import { getAllProducts } from "../../../apiCalls/seller/getAllProducts";

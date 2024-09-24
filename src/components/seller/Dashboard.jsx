@@ -10,6 +10,7 @@ import ManageProducts from "./dashboardCompo/ManageProducts";
 import SellerRegistration from "./SellerRegistration";
 import { useDispatch, useSelector } from "react-redux";
 import SellerNav from "./SellerNav";
+import { fetchSellerDetails } from "../../reduxToolkit/features/sellerSlice";
 
 const buttons = [
   {
@@ -42,39 +43,25 @@ const buttons = [
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const auth = useSelector((store) => store.auth);
   const [btID, SetbtID] = useState();
-
   const handleClick = (e) => {
     SetbtID(e.target.id);
   };
   const [showMessage, setShowMessage] = useState(false);
-
-  const { currentUser } = useSelector((store) => store.auth);
+  const { seller } = useSelector((store) => store.seller);
   const dispatch = useDispatch();
-  console.log(`auth current user  = ${currentUser.name}`);
-  useEffect(() => {
-    if (currentUser.name === null) {
-      // console.log("use effect");
-      // SetbtID("complete-profile");
-    } else if (currentUser.approved == false) {
-      setShowMessage(true);
-    } else {
-      setShowMessage(false);
-    }
-  }, [currentUser]);
 
   useEffect(() => {
-    getAllCategoriesFromBackend(dispatch);
+    dispatch(fetchSellerDetails());
   }, []);
 
   return (
     // <Wrapper>
     <>
       <SellerNav />
-      {currentUser.name === null ? (
+      {seller?.name === null ? (
         <SellerRegistration />
-      ) : showMessage ? (
+      ) : seller?.approved === false ? (
         <div
           className="bg-gray-100 border border-gray-400 text-gray-700 px-4 py-3 rounded relative"
           role="alert"
@@ -87,7 +74,7 @@ const Dashboard = () => {
         <div className="p-32 pt-8">
           <div className="con1">
             <div className="">
-              {currentUser.approved == false
+              {seller?.approved == false
                 ? ""
                 : buttons.map((button, index) => {
                     if (index != 0)

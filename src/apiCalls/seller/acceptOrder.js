@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { acceptOrderAndUpdate } from "../../reduxToolkit/features/sellerSlice";
+// import { acceptOrderAndUpdate } from "../../reduxToolkit/features/sellerSlice";
 import { BASE_URL_LOCAL } from "../common-db";
 
 export const acceptOrder = async (data, token, dispatch) => {

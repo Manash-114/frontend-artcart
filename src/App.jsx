@@ -22,6 +22,7 @@ import AdminBody from "./components/admin/AdminBody.jsx";
 import ManageSeller from "./components/admin/ManageSeller.jsx";
 import ProductCategories from "./components/admin/ProductCategories.jsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
+import SellerDashboard from "./components/seller/SellerDashboard.jsx";
 
 const ROLES = {
   Customer: "ROLE_CUSTOMER",
@@ -57,7 +58,7 @@ const App = () => {
           <Route path="orders/details" element={<OrderDetails />} />
         </Route>
         <Route element={<RequireAuth allowedRoles={ROLES.Seller} />}>
-          <Route path="seller" element={<Dashboard />} />
+          <Route path="seller" element={<SellerDashboard />} />
           <Route path="completeprofile" element={<SellerRegistration />} />
         </Route>
         <Route element={<RequireAuth allowedRoles={ROLES.Admin} />}>

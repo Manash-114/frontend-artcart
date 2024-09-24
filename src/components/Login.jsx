@@ -96,6 +96,7 @@ const Login = () => {
         else navigate("/products");
       }
     } catch (er) {
+      toast.error("Internal Server error");
       console.log("error");
     }
   };
