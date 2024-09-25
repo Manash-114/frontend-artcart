@@ -13,9 +13,16 @@ import Header from "./common/Header";
 import { Link, useNavigate, useLocation, NavLink } from "react-router-dom";
 import { useLoginMutation } from "../reduxToolkit/features/auth/authApiSlice";
 import { setCredentials } from "../reduxToolkit/features/auth/authSlice";
+import { fetchCustomerDetails } from "../reduxToolkit/features/customerSlice";
 const initialValues = {
   email: "",
   password: "",
+};
+
+const handleAddAddress = (values) => {
+  // addAddress(values, token, dispatch);
+  console.log(`form data ${JSON.stringify(values)}`);
+  dispatch(addCustomerAddress({ data: values }));
 };
 
 const validationSchema = Yup.object({
@@ -90,7 +97,12 @@ const Login = () => {
         const role = userData?.roles;
         if (role === "ROLE_SELLER") navigate("/seller");
         else if (role === "ROLE_ADMIN") navigate("/admin");
-        else navigate("/products");
+        else {
+          navigate(from, { replace: true });
+          const res = await dispatch(fetchCustomerDetails()).unwrap();
+          console.log(`customer data `);
+          console.log(JSON.stringify(res));
+        }
       }
     } catch (er) {
       toast.error("Internal Server error");

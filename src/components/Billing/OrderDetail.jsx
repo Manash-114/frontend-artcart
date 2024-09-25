@@ -1,9 +1,7 @@
 import React from "react";
-import styled from "styled-components";
 import ShoppingCartCheckoutOutlinedIcon from "@mui/icons-material/ShoppingCartCheckoutOutlined";
 import CurrencyRupeeOutlinedIcon from "@mui/icons-material/CurrencyRupeeOutlined";
 import { CurrencyRupee } from "@mui/icons-material";
-import { Button } from "@mui/material";
 import { useSelector } from "react-redux";
 
 const OrderDetail = () => {
@@ -12,207 +10,74 @@ const OrderDetail = () => {
   const cartAmount = useSelector((state) => state.cart.cartTotalAmount);
 
   return (
-    <Wrapper>
-      <Container>
-        <div className="items">
+    <div className="p-4">
+      <div className="flex gap-6 justify-center items-start">
+        {/* Product Details Section */}
+        <div className="flex-1 space-y-4">
           {cartItems.map((item) => (
-            <div className="product-detail" key={item.id}>
-              <div className="item-image">
-                <img src={item.productImages[0].name} alt={item.id} />
+            <div
+              className="flex border border-gray-300 rounded-lg shadow-md p-4 w-full max-w-lg"
+              key={item.id}
+            >
+              <div className="w-32 h-32 p-2">
+                <img
+                  src={item.productImages[0].name}
+                  alt={item.id}
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <div className="description">
-                <p className="title">{item.name} </p>
-                {/* <span id="category">
-                  Category: <span id="catDetail">{item.category.name}</span>
-                </span>
-                <br />
-                <span id="seller">
-                  Seller: <span id="sellername">{item.name}</span>
-                </span>
-                <br /> */}
-                <p className="itemPrice">
-                  <CurrencyRupee
-                    style={{
-                      height: "1.2rem",
-                    }}
-                  />
-                  <span id="product-price">{item.price}</span>
+              <div className="ml-4 flex-1">
+                <p className="font-semibold text-md">{item.name}</p>
+                <p className="mt-4 text-green-600 flex items-center">
+                  <CurrencyRupee className="h-5 w-5" />
+                  <span className="ml-1 text-lg">{item.price}</span>
                 </p>
               </div>
             </div>
           ))}
         </div>
 
-        <div className="price-detail">
-          <h2>Order Summary</h2>
-          <div className="mini-container">
-            <div className="desc1">
+        {/* Order Summary Section */}
+        <div className="w-full max-w-sm border border-gray-300 rounded-lg shadow-md p-6">
+          <h2 className="text-center text-lg font-semibold uppercase text-gray-700 border-b border-gray-200 pb-4">
+            Order Summary
+          </h2>
+          <div className="space-y-4 mt-4">
+            <div className="flex items-center justify-between">
               <ShoppingCartCheckoutOutlinedIcon />
-              <span id="cartid">
-                <span className="count">( {cartQuantity} ) </span> items in cart
+              <span className="ml-2">
+                <span className="text-green-600 font-medium">
+                  ( {cartQuantity} )
+                </span>{" "}
+                items in cart
               </span>
             </div>
-            <div className="item first">
-              <div className="desc order">Order Subtotal</div>
-              <div className="no">
-                <CurrencyRupeeOutlinedIcon
-                  style={{
-                    height: "1.2rem",
-                  }}
-                />
-                {cartAmount}
+            <div className="flex justify-between items-center mt-2">
+              <div className="font-medium">Order Subtotal</div>
+              <div className="flex items-center">
+                <CurrencyRupeeOutlinedIcon className="h-5 w-5" />
+                <span className="ml-1 text-xl">{cartAmount}</span>
               </div>
             </div>
-            <div className="item">
-              <div className="desc charge">Delivery Charges</div>
-              <div
-                className="no"
-                style={{ textDecoration: "line-through", color: "red" }}
-              >
-                <CurrencyRupee
-                  style={{
-                    height: "1.2rem",
-                    color: "red",
-                  }}
-                />
-                <span id="number">10</span>
+            <div className="flex justify-between items-center text-red-500 line-through">
+              <div className="font-medium">Delivery Charges</div>
+              <div className="flex items-center">
+                <CurrencyRupee className="h-5 w-5" />
+                <span className="ml-1">10</span>
               </div>
             </div>
-            <div className="item total">
-              <strong
-                style={{
-                  display: "flex",
-                  justifyContent: "space-around",
-                }}
-              >
-                <div>Total Payable</div>
-                <div className="no">
-                  <CurrencyRupeeOutlinedIcon
-                    style={{
-                      height: "1.2rem",
-                    }}
-                  />
-                  {cartAmount}
-                </div>
-              </strong>
+            <div className="flex justify-between items-center font-bold border-t border-gray-300 pt-4">
+              <div>Total Payable</div>
+              <div className="flex items-center">
+                <CurrencyRupeeOutlinedIcon className="h-5 w-5" />
+                <span className="ml-1 text-xl">{cartAmount}</span>
+              </div>
             </div>
           </div>
         </div>
-      </Container>
-    </Wrapper>
+      </div>
+    </div>
   );
 };
 
 export default OrderDetail;
-const Wrapper = styled.div`
-  padding: 1rem;
-`;
-const Container = styled.div`
-  display: flex;
-  gap: 4rem;
-  justify-content: center;
-  align-items: center;
-  .items {
-  }
-  .product-detail {
-    margin-top: 1rem;
-    border: 1px solid #a38787;
-    border-radius: 5px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.26); 
-    flex: 1;
-    display: flex;
-
-    /* justify-content: space-evenly;
-        align-items: flex-start; */
-
-    .item-image {
-      /* border: 1px solid black; */
-      height: 160px;
-      width: 190px;
-      padding: 10px;
-
-      img {
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
-      }
-    }
-    .description {
-      /* border: 1px solid black; */
-      padding-left: 1rem;
-      width: 65%;
-
-      .title {
-        padding-top: 1rem;
-        font-weight: 550;
-        font-size: 1rem;
-      }
-      .itemPrice {
-        color: #24a00b;
-        margin-top: 1rem;
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-      }
-    }
-  }
-
-  #number {
-    color: red;
-    font-size: 1.2rem;
-  }
-  .count {
-    font-size: 1.2rem;
-    color: green;
-    font-weight: 500;
-  }
-
-  /* border: 1px solid black; */
-  .address {
-    flex: 1;
-    border: 1px solid black;
-  }
-  .price-detail {
-    flex: 0.5;
-    border: 1px solid #ac8383;
-    width: 200px;
-    height: 350px;
-    border-radius: 15px;
-
-    h2 {
-      text-align: center;
-      border-bottom: 1px dotted grey;
-      padding: 1rem;
-      font-weight: 550;
-      text-transform: uppercase;
-      color: #52240f;
-    }
-  }
-  .mini-container {
-    padding: 0 2rem;
-    align-items: center;
-  }
-  .item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 4rem;
-  }
-  .first {
-    margin-top: 1rem;
-  }
-  .desc1 {
-    padding-top: 1rem;
-    display: flex;
-    align-items: center;
-  }
-  .no {
-    margin-left: 1rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .total {
-    border-top: 1px dotted black;
-  }
-`;

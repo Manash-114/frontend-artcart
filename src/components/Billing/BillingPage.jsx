@@ -1,51 +1,40 @@
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Button, Tab } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
 import DescriptionIcon from "@mui/icons-material/Description";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PaymentIcon from "@mui/icons-material/Payment";
 import BillAddress from "./BillAddress";
 import OrderDetail from "./OrderDetail";
-import PaymentDetail from "./PaymentDetail";
+import PaymentDetails from "./PaymentDetails";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProductInCart } from "../../reduxToolkit/features/productList/BillingAddressSlice";
-import PaymentDetails from "./PaymentDetails";
-import { useNavigate } from "react-router-dom";
 import Header from "../common/Header";
 import Footer2 from "../common/Footer2";
+
 const BillingPage = () => {
   const [value, setValue] = useState("1");
-  const [deliverClicked, setDeliverClicked] = useState(false);
-  const [visited1, setVisited1] = useState(true); // Tab 1 is visited by default
+  const [visited1, setVisited1] = useState(true);
   const [visited2, setVisited2] = useState(false);
   const [visited3, setVisited3] = useState(false);
-  const [nextButtonDisabled, setNextButtonDisabled] = useState(true);
   const { token } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
   const handleDeliverClick = () => {
     setValue("2");
-    setVisited2(true); // Mark Tab 2 as visited when it's selected
+    setVisited2(true);
   };
-  const individualCartItem = useSelector((state) => state.cart.cartItems);
-
-  const productsInCart = individualCartItem.map((item) => ({
-    productId: item.id,
-    cartQuantity: item.cartQuantity,
-  }));
-  // console.log(productsInCart)
+  const productsInCart = useSelector((state) =>
+    state.cart.cartItems.map((item) => ({
+      productId: item.id,
+      cartQuantity: item.cartQuantity,
+    }))
+  );
 
   const handleDeliverClick2 = () => {
-    // setValue("3");
-    // setVisited3(true); // Mark Tab 3 as visited when it's selected
-    // setDeliverClicked(true);
-    console.log("delivery");
-    productsInCart.map((p) =>
+    productsInCart.forEach((p) =>
       dispatch(
         updateProductInCart({
           productId: p.productId,
@@ -54,131 +43,64 @@ const BillingPage = () => {
       )
     );
     setValue("3");
-    setVisited3(true); // Mark Tab 3 as visited when it's selected
+    setVisited3(true);
 
-    //if payment mode is cod direct hit order api
-    //if payment mode online then first hit backend to create a payement with razorpay
-    const paymentData = {
-      amount: 123,
-    };
-
+    const paymentData = { amount: 123 };
     generatePaymentWithRazopay(paymentData, token, dispatch);
   };
 
   return (
-    <Wrapper>
-      <div>
-        <Header />
-      </div>
+    <div className="min-h-screen bg-gray-100">
+      <Header />
       <TabContext value={value}>
-        <Container>
-          <TabList onChange={handleChange} aria-label="head">
+        <div className="border-b border-gray-300 bg-gradient-to-r from-blue-50 via-yellow-50 to-indigo-50 p-6 rounded-md w-2/3 mx-auto">
+          <TabList onChange={handleChange} aria-label="billing steps">
             <Tab
-              className="item-head"
+              className="mx-4 capitalize"
               icon={<LocationOnIcon />}
               label="Billing Address"
               value="1"
-              disabled={!visited1} // Disable tab 1 if not visited
+              disabled={!visited1}
             />
             <Tab
-              className="item-head"
+              className="mx-4 capitalize"
               icon={<DescriptionIcon />}
               label="Order Details"
               value="2"
-              disabled={!visited2} // Disable tab 2 if not visited
+              disabled={!visited2}
             />
             <Tab
-              className="item-head"
+              className="mx-4 capitalize"
               icon={<PaymentIcon />}
               label="Payment"
               value="3"
-              disabled={!visited3} // Disable tab 3 if not visited
+              disabled={!visited3}
             />
           </TabList>
-        </Container>
-        <SubContainer>
+        </div>
+
+        <div className="p-8">
           <TabPanel value="1">
             <BillAddress handleDeliverClick={handleDeliverClick} />
           </TabPanel>
-
           <TabPanel value="2">
             <OrderDetail />
             <Button
               variant="contained"
               onClick={handleDeliverClick2}
-              style={{
-                width: "14rem",
-                height: "2.6rem",
-                marginTop: "1rem",
-                marginLeft: "10rem",
-                backgroundColor: "orange",
-              }}
+              className="bg-orange-500 hover:bg-orange-600 w-56 h-10 mt-4 ml-40 text-white"
             >
               Confirm order
             </Button>
-            {/* <PaymentButton /> */}
           </TabPanel>
-          {/* <TabPanel value="3">
-            <PaymentDetail />
-          </TabPanel> */}
           <TabPanel value="3">
             <PaymentDetails />
           </TabPanel>
-        </SubContainer>
+        </div>
       </TabContext>
-      <div>
-        <Footer2 />
-      </div>
-    </Wrapper>
+      <Footer2 />
+    </div>
   );
 };
 
 export default BillingPage;
-
-const Wrapper = styled.section`
-  .header {
-    background: linear-gradient(to right, #007bff, #00bfff);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 1rem;
-    height: 50px;
-  }
-  .header > img {
-    height: 40px;
-    width: 40px;
-    border-radius: 2rem;
-  }
-  .art {
-    margin-left: 0.5rem;
-    color: white;
-    font-size: 1.2rem;
-    font-weight: 550;
-  }
-`;
-const Container = styled.div`
-  border-bottom: 1px solid dimgray;
-  border: 1px solid #bd9393;
-  margin: 2% 12%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 52%;
-  background-image: linear-gradient(
-    30deg,
-    rgba(228, 219, 219, 0.046),
-    rgba(244, 238, 195, 0.575),
-    rgba(169, 206, 225, 0.37)
-  );
-  margin-left: 24%;
-  border-radius: 12px;
-
-  .item-head {
-    text-transform: capitalize;
-    margin-left: 2rem;
-  }
-`;
-const SubContainer = styled.div`
-  /* border: 1px solid black; */
-  margin: 1.2rem 12%;
-`;

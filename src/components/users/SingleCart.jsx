@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import toast, { Toaster } from "react-hot-toast";
@@ -22,183 +21,78 @@ const SingleCart = ({ item }) => {
   }, [item.cartQuantity]);
 
   const handleDecrease = () => {
-    // console.log("Decrease button clicked for item ID:", item.id);
     dispatch(decreaseQuantity(item.id));
   };
   const handleIncrease = () => {
-    console.log("btn increase");
-    // console.log("Increase button clicked for item ID:", item.id);
-    // if (quantity < item.stock) dispatch(increaseQuantity(item.id));
     dispatch(increaseQuantity(item.id));
   };
-  //Delte cart
+
   const handleDelete = () => {
     toast.error("Product Removed!");
     dispatch(removeFromCart(item.id));
   };
 
   return (
-    <Wrapper>
-      <Container>
-        <div className="grid-six">
-          <div className="item image">
-            <img src={item.productImages[0].name} alt={item.name} />
-          </div>
-          <div className="item description">
-            <p className="title">{item.name}</p>
-            <span id="category">
-              Category: <span id="catDetail">{item.category.name}</span>
-            </span>
-            <br />
-            <span id="stock">In Stock: {item.stock}</span>
-          </div>
-          <div className="item each">
-            <h4>Each</h4>
-            <div className="amount">
-              {" "}
-              <CurrencyRupeeIcon style={{
-                          color: 'black',
-                          height: "1.2rem"
-                        }} />
-              <span className="price">{item.price}</span>
-            </div>
-          </div>
-          <div className="item quantity">
-            <h4>Quantity</h4>
-            <div className="quantity-holder">
-              <RemoveIcon className="btn decrease" onClick={handleDecrease} />
-              <input
-                className="quantity"
-                type="text"
-                value={quantity}
-                readOnly
-              />
-              <AddIcon
-                className={`btn increase ${
-                  quantity === item.stock ? "disabled" : ""
-                }`}
-                onClick={handleIncrease}
-              />
-            </div>
-          </div>
-          <div className="item total">
-            <h4>Total</h4>
-            <div className="currency">
-            <CurrencyRupeeIcon style={{
-                          color: 'black',
-                          height: "1.2rem"
-                        }} />
-              <p className="price">{item.price * item.cartQuantity}</p>
-            </div>
-          </div>
-          <div className="item del">
-            <Toaster position="top-center" reverseOrder={true} />
-            <DeleteForeverIcon
-              style={{
-                width: "3rem",
-                height: "4rem",
-                color: "red",
-                cursor: "pointer",
-              }}
-              onClick={handleDelete}
-            />
-          </div>
+    <div className="grid grid-cols-6 gap-4 p-4 border rounded-lg shadow-lg">
+      <div className="col-span-1 flex justify-center items-center">
+        <img
+          src={item.productImages[0].name}
+          alt={item.name}
+          className="h-24 w-24 object-cover rounded-lg"
+        />
+      </div>
+      <div className="col-span-1 flex flex-col justify-center">
+        <p className="font-semibold text-lg">{item.name}</p>
+        <span className="text-gray-600">
+          Category: <span className="font-medium">{item.category.name}</span>
+        </span>
+        <span className="text-green-600 font-medium">
+          In Stock: {item.stock}
+        </span>
+      </div>
+      <div className="col-span-1 flex flex-col justify-center text-center">
+        <h4 className="font-medium">Each</h4>
+        <div className="flex justify-center items-center">
+          <CurrencyRupeeIcon className="text-black h-5" />
+          <span className="font-semibold">{item.price}</span>
         </div>
-      </Container>
-    </Wrapper>
+      </div>
+      <div className="col-span-1 flex flex-col justify-center text-center">
+        <h4 className="font-medium">Quantity</h4>
+        <div className="flex justify-center items-center border rounded-lg">
+          <RemoveIcon className="cursor-pointer" onClick={handleDecrease} />
+          <input
+            className="text-center w-12 font-medium bg-transparent border-none"
+            type="text"
+            value={quantity}
+            readOnly
+          />
+          <AddIcon
+            className={`cursor-pointer ${
+              quantity === item.stock ? "text-gray-400" : ""
+            }`}
+            onClick={handleIncrease}
+          />
+        </div>
+      </div>
+      <div className="col-span-1 flex flex-col justify-center text-center">
+        <h4 className="font-medium">Total</h4>
+        <div className="flex justify-center items-center">
+          <CurrencyRupeeIcon className="text-black h-5" />
+          <span className="font-semibold">
+            {item.price * item.cartQuantity}
+          </span>
+        </div>
+      </div>
+      <div className="col-span-1 flex justify-center items-center">
+        <Toaster position="top-center" reverseOrder={true} />
+        <DeleteForeverIcon
+          className="text-red-500 h-8 w-8 cursor-pointer"
+          onClick={handleDelete}
+        />
+      </div>
+    </div>
   );
 };
 
 export default SingleCart;
-
-const Wrapper = styled.section`
-  margin-top: 1.2rem;
-  /* background-color: aqua; */
-  /* border: 1px solid black; */
-`;
-const Container = styled.div`
-  height: 10rem;
-  position: relative;
-  padding: 15px 0;
-
-  .grid-six {
-    display: grid;
-    grid-template-columns: 1.5fr 1.5fr repeat(3, 1fr) 0.5fr;
-    height: 100%;
-    border: 1px solid #6e6262;
-    border-radius: 10px;
-  }
-  .item {
-    overflow: hidden;
-    height: 90%;
-    padding: 10px;
-  }
-  .image {
-  }
-  .image > img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-  }
-  .description {
-    padding-left: 5px;
-    #category {
-      font-size: 0.9rem;
-    }
-    #catDetail {
-      font-size: 0.9rem;
-      font-weight: 500;
-    }
-    #stock {
-      color: #028c02;
-    }
-  }
-  .title {
-    font-weight: 550;
-  }
-  .del {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-right: 20px;
-  }
-  h4 {
-    font-weight: 500;
-    text-align: center;
-    font-size: 15px;
-    margin-bottom: 10px;
-  }
-  .amount {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .price {
-    font-weight: 450;
-    font-size: 14px;
-  }
-  .quantity-holder {
-    display: flex;
-    justify-content: center;
-    border: 1px solid #796f6f;
-    margin: 0 10px;
-  }
-  .quantity {
-    text-align: center;
-    font-weight: 550;
-
-    input {
-      width: 30%;
-      border: none;
-    }
-  }
-  .btn {
-    cursor: pointer;
-  }
-  .currency {
-    height: 1.4rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-`;

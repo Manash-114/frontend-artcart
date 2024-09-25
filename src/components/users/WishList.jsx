@@ -1,18 +1,16 @@
-import { Button, Rating } from "@mui/material";
+import { Button } from "@mui/material";
 import React, { useState } from "react";
-import styled from "styled-components";
 import CancelIcon from "@mui/icons-material/Cancel";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"; // New icon import for "Continue Shopping"
 import toast, { Toaster } from "react-hot-toast";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromWishList } from "../../reduxToolkit/features/productList/WishListSlice";
-import animationData from "./Animation - 1713385936637.json";
 import { addToCart } from "../../reduxToolkit/features/productList/CartSlice";
 
 const WishList = () => {
   const [itemToDelete, setItemToDelete] = useState(null);
-  // const [value, setValue] = useState(2);
   const [modalOpen, setModalOpen] = useState(false);
   const wishlistItems = useSelector((state) => state.wishlist.items);
   const dispatch = useDispatch();
@@ -20,373 +18,136 @@ const WishList = () => {
   const CustomModal = ({ isOpen, onCancel, onConfirm }) => {
     if (!isOpen) return null;
     return (
-      <ModalOverlay>
-        <ModalContent>
-          <p>Are you sure you want to delete?</p>
-          <ModalButtons>
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white w-1/3 p-6 rounded-lg shadow-lg text-center">
+          <p className="text-lg font-medium">
+            Are you sure you want to delete?
+          </p>
+          <div className="flex justify-center mt-4 space-x-4">
             <Button
-              className="yes"
-              variant="outlined"
-              style={{
-                backgroundColor: "green",
-                color: "white",
-              }}
+              variant="contained"
+              className="bg-green-600 text-white"
               onClick={onConfirm}
             >
-              yes
+              Yes
             </Button>
-
             <Button
-              variant="outlined"
-              style={{
-                backgroundColor: "red",
-                color: "white",
-              }}
+              variant="contained"
+              className="bg-red-600 text-white"
               onClick={onCancel}
             >
               No
             </Button>
-          </ModalButtons>
-        </ModalContent>
-      </ModalOverlay>
+          </div>
+        </div>
+      </div>
     );
   };
+
   const handleDelete = () => {
-    console.log("Deleting item with ID:", itemToDelete);
     dispatch(removeFromWishList(itemToDelete));
     setModalOpen(false);
-    toast.success("Selected Item removed.");
+    toast.success("Selected item removed.");
   };
 
   const handleCancel = () => {
     setModalOpen(false);
   };
 
-  const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    // animationData: animationData, // Lottie JSON object
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-  };
-  // const handleAddToCart = (product) => {
-  //     const selectedProduct = useSelector(state => state.product.products.find(item => item.id === product.id))
-  //     dispatch(addToCart(selectedProduct));
-  // }
   const addToBag = (product, e) => {
     e.preventDefault();
     e.stopPropagation();
-    // const productId = product.id;
     dispatch(addToCart(product));
-    toast.success("Item added to cart Successfully");
+    toast.success("Item added to cart successfully.");
   };
-  const handleClick = () => {
-    window.scrollTo({ top: 10, behavior: "smooth" });
-  };
-  const handlePreventClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-  return (
-    <Wrapper>
-      <UpperSection>
-        <div className="wishlist">
-          <h1>My WishList</h1>
-          <p>{wishlistItems.length} items</p>
-        </div>
-        <StyledLink>
-          <div className="continue">
-            <NavLink
-              to="/products"
-              style={{
-                textDecoration: "none",
-                color: "black",
-              }}
-            >
-              <span id="continuelink">
-                <ArrowBackIosIcon /> continue Shopping
-              </span>
-            </NavLink>
-          </div>
-        </StyledLink>
-      </UpperSection>
 
-      {/* Item Section */}
-      <DownSection>
-        <div className="container">
-          <div className="grid">
-            <Toaster position="top-center" reverseOrder={false} />
-            {/* dynamic items */}
-            {wishlistItems.length === 0 ? (
-              <>
-                <div className="nameless"></div>
-                <div className="empty">
-                  <span id="tag">Your wishList is empty!</span>
-                  {/* <Lottie options={defaultOptions} height={400} width={400} /> */}
-                </div>
-              </>
-            ) : (
-              wishlistItems.map((item) => (
+  return (
+    <section className="relative min-h-screen bg-gray-50">
+      {/* Centering the WishList Header */}
+      <div className="flex justify-center items-center p-4 bg-white border-b border-gray-300 shadow-sm relative">
+        <div className="text-center">
+          <h1 className="text-3xl font-semibold text-gray-800">My WishList</h1>
+          <p className="text-sm text-gray-500">{wishlistItems.length} items</p>
+        </div>
+        <NavLink
+          to="/products"
+          className="absolute right-4 flex items-center text-gray-700 hover:text-gray-900"
+        >
+          <ShoppingCartIcon className="mr-1" />{" "}
+          {/* New Icon for Continue Shopping */}
+          <span>Continue Shopping</span>
+        </NavLink>
+      </div>
+
+      <div className="p-6">
+        <Toaster position="top-center" reverseOrder={false} />
+        {wishlistItems.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-64">
+            <span className="text-lg font-medium text-gray-700">
+              Your wishlist is empty!
+            </span>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            {wishlistItems.map((item) => (
+              <div key={item.product.id} className="relative group">
                 <NavLink
-                  key={item.product.id}
                   to={`/product/${item.product.id}`}
-                  className="W-link"
-                  onClick={handleClick}
+                  className="no-underline text-black"
                 >
-                  <div key={item.product.id} className="item">
-                    <div
-                      className="remove"
-                      onClick={(e) => handlePreventClick(e)}
-                    >
-                      <CancelIcon
-                        onClick={() => {
-                          setItemToDelete(item.product.id);
-                          setModalOpen(true);
-                        }}
-                      />
-                      <CustomModal
-                        isOpen={modalOpen}
-                        // itemId={item.product.id}
-                        onCancel={handleCancel}
-                        onConfirm={handleDelete}
-                      />
-                    </div>
-                    <div className="image">
-                      <img
-                        src={item.product.productImages[0].name}
-                        alt={item.product.name}
-                      />
-                    </div>
-                    <div className="content">
-                      <div className="miniContainer">
-                        <div className="dp">
-                          {/* <img src="/images/profile.png" alt="profile" /> */}
-                        </div>
-                        <div className="subContent">
-                          <div className="title">{item.product.name}</div>
-                          <div className="price">
-                            {"\u20B9 "}
-                            {item.product.price}
-                          </div>
-                        </div>
-                      </div>
-                      <span id="author">{item.product.category.name}</span>
-                      {/* <div className="rate">
-                        <Rating
-                          className="star"
-                          size="small"
-                          name="simple-controlled"
-                          value={item.product?.reviews}
-                          readOnly
+                  <div className="border rounded-lg overflow-hidden shadow-md group-hover:shadow-lg transition-shadow duration-300 ease-in-out relative bg-white">
+                    <div className="relative">
+                      {/* Adjusting the image size */}
+                      <div className="w-full h-56 bg-gray-200 flex items-center justify-center">
+                        <img
+                          src={item.product.productImages[0].name}
+                          alt={item.product.name}
+                          className="w-full h-full object-cover"
                         />
-                        ({item.product?.reviews})
-                      </div> */}
-                      <Button
-                        variant="contained"
-                        style={{
-                          marginLeft: "1rem",
-                          width: "90%",
-                          height: "3rem",
-                          marginTop: "1.5rem",
-                          backgroundColor: "black",
-                        }}
-                        onClick={(e) => addToBag(item.product, e)}
-                      >
-                        Move to bag
-                      </Button>
+                      </div>
+                      <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-center items-center">
+                        <Button
+                          variant="contained"
+                          className="bg-white text-black font-semibold hover:bg-gray-200"
+                          onClick={(e) => addToBag(item.product, e)}
+                        >
+                          Move to Bag
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="p-3 flex flex-col items-center text-center">
+                      <h2 className="text-lg font-medium text-gray-800">
+                        {item.product.name}
+                      </h2>
+                      <p className="text-green-600 font-bold text-md">
+                        ₹ {item.product.price}
+                      </p>
+                      <p className="text-sm text-gray-500 mt-1">
+                        {item.product.category.name}
+                      </p>
                     </div>
                   </div>
                 </NavLink>
-              ))
-            )}
+                {/* Fixing the close button position */}
+                <CancelIcon
+                  className="absolute top-2 right-2 text-red-600 cursor-pointer z-10 bg-white rounded-full p-1"
+                  onClick={() => {
+                    setItemToDelete(item.product.id);
+                    setModalOpen(true);
+                  }}
+                />
+                <CustomModal
+                  isOpen={modalOpen}
+                  onCancel={handleCancel}
+                  onConfirm={handleDelete}
+                />
+              </div>
+            ))}
           </div>
-        </div>
-      </DownSection>
-    </Wrapper>
+        )}
+      </div>
+    </section>
   );
 };
 
 export default WishList;
-
-const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const ModalContent = styled.div`
-  background-color: white;
-  width: 40%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-
-  .yes {
-    margin-right: 1rem;
-  }
-`;
-
-const ModalButtons = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-`;
-
-const Wrapper = styled.section`
-  position: relative;
-`;
-const UpperSection = styled.div`
-  height: 150px;
-  border: 1px solid black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  .wishlist {
-    /* border: 1px solid black; */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-  }
-  .continue {
-    position: absolute;
-    top: 2rem;
-    left: 4rem;
-  }
-  #continuelink {
-    display: flex;
-    justify-content: center;
-  }
-`;
-const StyledLink = styled.div``;
-const DownSection = styled.div`
-  border: 1px solid black;
-  padding: 1rem;
-  min-height: 180px;
-
-  .empty {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-
-    #tag {
-      font-weight: 500;
-      padding-right: 3rem;
-    }
-  }
-  .container {
-    /* border: 1px solid black; */
-    padding: 2rem 5rem;
-    margin: auto 8rem;
-  }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-  }
-  .W-link {
-    text-decoration: none;
-    color: black;
-  }
-  .item {
-    border: 1px solid black;
-    height: 400px;
-    overflow: hidden;
-    border-radius: 5%;
-    position: relative;
-  }
-  .remove {
-    border: 1px solid black;
-    position: absolute;
-    right: 0.2rem;
-    top: 0.2rem;
-    border-radius: 50%;
-    height: 2.2rem;
-    width: 2.2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #ffffff;
-    opacity: 80%;
-    cursor: pointer;
-  }
-  .content {
-    /* border: 1px solid black; */
-  }
-  .image {
-    padding: 1rem 1rem;
-    width: 80%;
-    height: 50%;
-    /* border: 1px solid black; */
-  }
-  img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-  }
-  .miniContainer {
-    display: flex;
-    /* border: 1px solid black; */
-    padding-top: 1rem;
-  }
-  .dp {
-    flex: 0.2;
-    padding-left: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    img {
-      height: 25px;
-      width: 25px;
-    }
-  }
-  .subContent {
-    flex: 1;
-    gap: 10px;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 10px;
-  }
-  .title {
-    font-weight: 540;
-    font-size: 14px;
-  }
-  .price {
-    width: 30%;
-    color: green;
-    font-weight: bold;
-    font-size: 17px;
-  }
-  .price > img {
-    padding-right: 5px;
-    height: 12px;
-    width: 10px;
-  }
-  .star {
-    padding-left: 10px;
-  }
-  #author {
-    font-weight: 500;
-    font-size: 14px;
-    text-transform: lowercase;
-    padding-left: 20%;
-  }
-  .rate {
-    padding-top: 10px;
-    padding-left: 3rem;
-  }
-`;

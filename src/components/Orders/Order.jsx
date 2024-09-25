@@ -1,31 +1,23 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import { Button, TextField } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
-import { NavLink } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { Button } from "@mui/material";
+import { useSelector } from "react-redux";
 
 const Order = () => {
-
-  const [selectedValue, setSelectedValue] = useState("processing")
-
+  const [selectedValue, setSelectedValue] = useState("processing");
   const [data, setData] = useState([]);
 
+  const deliverOrders = useSelector(
+    (state) => state.customer.allDeliveredOrders
+  );
+  const undeliverOrders = useSelector(
+    (state) => state.customer.allNotDeliveredOrders
+  );
 
-  //deliver
-  const deliverOrders = useSelector((state) => state.customer.allDeliveredOrders);
-  console.log("deliver value:", deliverOrders);
-
-  //undeliver
-  const undeliverOrders = useSelector((state) => state.customer.allNotDeliveredOrders);
-
-  // console.log("Undeliver value:", UndeliverOrders);
   useEffect(() => {
     if (selectedValue === "processing") {
       setData(deliverOrders);
@@ -35,248 +27,114 @@ const Order = () => {
   }, [selectedValue, deliverOrders, undeliverOrders]);
 
   const handleChange = (event) => {
-    setSelectedValue(event.target.value)
+    setSelectedValue(event.target.value);
     if (selectedValue === "processing") {
-      setData(deliverOrders)
+      setData(deliverOrders);
     } else {
-      setData(UndeliverOrders)
+      setData(undeliverOrders);
     }
   };
-  return (
-    <Wrapper>
-      <Container>
-        <Left>
 
+  return (
+    <div className="min-h-screen p-8">
+      <div className="flex gap-8">
+        <div className="bg-gray-100 rounded-lg p-4 w-1/4">
           <FormControl>
-            <FormLabel id="demo-radio-buttons-group-label">
+            <FormLabel id="order-status-label" className="text-xl mb-4">
               Order Status
             </FormLabel>
             <RadioGroup
-              aria-labelledby="demo-radio-buttons-group-label"
+              aria-labelledby="order-status-label"
               defaultValue="processing"
-              name="radio-buttons-group"
+              name="order-status"
               onChange={handleChange}
             >
               <FormControlLabel
                 value="processing"
                 control={<Radio />}
-                label="Delivered"
+                label="On the way"
               />
               <FormControlLabel
                 value="delivered"
                 control={<Radio />}
-                label="On the way"
+                label="Delivered"
               />
             </RadioGroup>
           </FormControl>
-        </Left>
-        <Right>
-          {/* <div className="search-bar">
-            <TextField
-              placeholder="Search your orders here"
-              id="serch"
-              style={{
-                width: "70%",
-                marginRight: "1rem",
-              }}
-              InputProps={{
-                style: {
-                  height: "2.5rem",
-                },
-              }}
-            />
-            <Button
-              variant="contained"
-              startIcon={<SearchIcon />}
-              style={{ width: "12rem" }}
-            >
-              search
-            </Button>
-          </div> */}
+        </div>
 
-          {/* order-product */}
-          {
-            data.length > 0 ? (
-              data.map((order) => (
-                <div className="product-container">
-                  <div className="image">
-                    <img
-                      src={order.productBelongsToOrder.products.productImages[0].name}
-                      alt={order.productBelongsToOrder.products}
-                    />
-                  </div>
-                  <div className="title">
-                    <p className="pname">
-                      {order.productBelongsToOrder.products.name.length > 20
-                        ? order.productBelongsToOrder.products.name.slice(0, 30) +
-                        ".."
-                        : order.productBelongsToOrder.products.name}
-                    </p>
-                    <p className="orderId">
-                      OrderId: <span className="OId">{order.orderId}</span>
-                    </p>
-                    <p className="orderId">
-                      Quantity: <span className="OId">{order.productBelongsToOrder.productQuantity}</span>
-                    </p>
-                    {order.productBelongsToOrder.courierName !== "NULL" && (
-                      <p className="courier">
-                        Courier Name: <span className="cId">{order.productBelongsToOrder.courierName}</span>
-                      </p>
-                    )}
-
-                  </div>
-                  <div className="status">
-                    <p>Status</p>
-                    <span
-                      className="statusId"
-                      style={{
-                        backgroundColor:
-                          order.productBelongsToOrder.deliveryStatus === "SHIPPED"
-                            ? "#0edb1c"
-                            : "#0caae3",
-                      }}
-                    >
-                      {order.productBelongsToOrder.deliveryStatus === "SHIPPED"
-                        ? "Delivered"
-                        : "Pending"}
-                    </span>
-
-
-                    <span className="date">
-                      Order Date: {new Date(order.orderDate).toLocaleDateString('en-IN', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      })}
-                    </span>
-
-                  </div>
+        <div className="flex-1 bg-gray-50 rounded-lg p-6">
+          {data.length > 0 ? (
+            data.map((order) => (
+              <div
+                key={order.orderId}
+                className="bg-white rounded-lg shadow-md p-6 mb-4 flex items-start"
+              >
+                <div className="w-1/4">
+                  <img
+                    src={
+                      order.productBelongsToOrder.products.productImages[0].name
+                    }
+                    alt={order.productBelongsToOrder.products.name}
+                    className="w-full h-full object-cover rounded-md"
+                  />
                 </div>
-              ))
-            ) : (
-              <p>No products found</p>
-            )
-          }
-
-        </Right>
-      </Container>
-    </Wrapper>
+                <div className="flex-1 ml-6">
+                  <p className="font-semibold text-lg">
+                    {order.productBelongsToOrder.products.name.length > 20
+                      ? order.productBelongsToOrder.products.name.slice(0, 30) +
+                        "..."
+                      : order.productBelongsToOrder.products.name}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    OrderId:{" "}
+                    <span className="font-medium">{order.orderId}</span>
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    Quantity:{" "}
+                    <span className="font-medium">
+                      {order.productBelongsToOrder.productQuantity}
+                    </span>
+                  </p>
+                  {order.productBelongsToOrder.courierName !== "NULL" && (
+                    <p className="text-sm text-gray-500">
+                      Courier Name:{" "}
+                      <span className="font-medium">
+                        {order.productBelongsToOrder.courierName}
+                      </span>
+                    </p>
+                  )}
+                </div>
+                <div className="w-1/4 flex flex-col items-end">
+                  <span
+                    className={`px-4 py-1 rounded-full text-white text-sm ${
+                      order.productBelongsToOrder.deliveryStatus === "SHIPPED"
+                        ? "bg-green-500"
+                        : "bg-blue-500"
+                    }`}
+                  >
+                    {order.productBelongsToOrder.deliveryStatus === "SHIPPED"
+                      ? "Delivered"
+                      : "Pending"}
+                  </span>
+                  <p className="text-sm text-gray-500 mt-4">
+                    Order Date:{" "}
+                    {new Date(order.orderDate).toLocaleDateString("en-IN", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </p>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="text-center text-gray-500">No products found</p>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 
 export default Order;
-
-const Wrapper = styled.div`
-  /* border: 1px solid black; */
-  min-height: 60vh;
-  padding: 2rem 10rem;
-`;
-const Container = styled.section`
-  padding-top: 1rem;
-  /* border: 1px solid black; */
-  display: flex;
-  gap: 4rem;
-  min-height: 50vh;
-`;
-const Left = styled.div`
- border: 1px solid #03112099;
-  border-radius: 20px;
-  flex: 0.2;
-  padding-left: 2rem;
-  display: flex;
-  justify-content: flex-start;
-  #demo-radio-buttons-group-label {
-    font-size: 1.2rem;
-    margin: 2rem auto;
-    color: black;
-  }
-  
-`;
-const Right = styled.div`
-  border: 1px solid #2003034b;
-  border-radius: 10px;
-  flex: .8;
-  padding: 1rem;
-
-  .search-bar {
-  }
-
-  .product-container {
-    border: 1px solid #03112099;
-  border-radius: 10px;
-    display: flex;
-    margin-top: 1.5rem;
-    padding: 10px;
-   
-  }
-  .image {
-    height: 120px;
-    flex: 0.4;
-    /* border: 1px solid black; */
-    img {
-      height: 100%;
-      width: 100%;
-      object-fit: cover;
-    }
-  }
-  .title {
-    flex: 0.8;
-    /* border: 1px solid black; */
-    padding: .5rem 1rem;
-  }
-  .price {
-    flex: 0.3;
-    /* border: 1px solid black; */
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding-top: 16px;
-  }
-  .status {
-    flex: 0.7;
-    border-left: 1px solid #079724;
-    /* border: 1px solid black; */
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    flex-direction: column;
-    padding-left: 15px;
-
-    p {
-      font-weight: 550;
-    }
-  }
-  .pname{
-    font-weight: 550;
-  }
-  .courier{
-    font-size: .8rem;
-    padding-top: 1.8rem;
-  }
-  .cId{
-    font-weight: 600;
-  }
-  .orderId{
-    font-size: .8rem;
-    padding-top: 10px;
-  }
-  .OId{
-    font-weight: 550;
-  }
-  .statusId{
-    background-color: #09c63c;
-    margin-top: .5rem;
-    color: white;
-    /* border: 1px solid black; */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 120px;
-    height: 25px;
-    border-radius: 10px;
-  }
-  .date{
-    margin-top: 1rem;
-    font-size: .9rem;
-  }
-`;

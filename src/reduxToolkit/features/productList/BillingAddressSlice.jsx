@@ -2,16 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   // billingAddresses: [],
-
-  addressId: 0,
-  name: "",
-  contact: "",
-  alternateContact: "",
+  addressId: null,
+  name: null,
+  phoneNumber: null,
+  phoneNumber: null,
   orderProducts: [],
   paymentReq: {
     id: 0,
-    amount: "",
-    mode: "",
+    amount: null,
+    mode: null,
   },
   // orderIdCounter: 1,
   // addressIdCounter: 1,
@@ -24,14 +23,11 @@ const BillingAddressSlice = createSlice({
     updateAddressId(state, action) {
       state.addressId = action.payload;
     },
-    updateCustomerDetails(state, action) {
-      const { name, contact, alternateContact } = action.payload;
-      return {
-        ...state,
-        name,
-        contact,
-        alternateContact,
-      };
+    updateCustomerInfo(state, action) {
+      const { name, phoneNumber, alternatePhoneNumber } = action.payload;
+      state.name = name;
+      state.phoneNumber = phoneNumber;
+      state.alternatePhoneNumber = alternatePhoneNumber;
     },
     updateProductInCart(state, action) {
       const { productId, quantity } = action.payload;
@@ -102,7 +98,7 @@ const BillingAddressSlice = createSlice({
 export const {
   addBillingAddress,
   updateBillingAddress,
-  updateCustomerDetails,
+  updateCustomerInfo,
   updateAddressId,
   updateProductInCart,
   updatePaymentDetails,
