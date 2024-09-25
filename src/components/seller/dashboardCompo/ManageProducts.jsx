@@ -5,8 +5,6 @@ import Button from "@mui/material/Button";
 import DataTable from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../../common/Spinner";
-import { uploadImageToCloudinaryForUpdate } from "../../../apiCalls/uploadImageToCloudinaryForUpdate";
-import { useNavigate } from "react-router-dom";
 import { updateProduct } from "../../../reduxToolkit/features/sellerSlice";
 import toast, { Toaster } from "react-hot-toast";
 import { logOut } from "../../../reduxToolkit/features/auth/authSlice";

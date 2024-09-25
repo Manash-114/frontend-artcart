@@ -10,7 +10,10 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import { signout } from "../../reduxToolkit/features/authSlice";
-import { selectCurrentUser } from "../../reduxToolkit/features/auth/authSlice";
+import {
+  logOut,
+  selectCurrentUser,
+} from "../../reduxToolkit/features/auth/authSlice";
 
 const Header = () => {
   let totalQuantity = useSelector((state) => state.cart.cartTotalQuantity);
@@ -29,8 +32,7 @@ const Header = () => {
 
   const handleLogout = () => {
     console.log("logout");
-    dispatch(signout());
-    navigate("/");
+    dispatch(logOut());
   };
 
   const scrollToHero = () => {
@@ -58,107 +60,104 @@ const Header = () => {
             </div>
           </NavLink>
         </div>
-        {/* <div className="center">
-          <div className="search-bar">
-            <input placeholder='Search' />
-          </div>
-        </div> */}
         <div className="right">
           <ul>
-            <li>
-              <StyledLink to="/" onClick={scrollToHero}>
-                About
-              </StyledLink>
-            </li>
             <li>
               <StyledLink to="/products">Products</StyledLink>
             </li>
             {user === null && (
-              <li>
-                <StyledLink to="/seller/signup">Become a Seller</StyledLink>
-              </li>
+              <>
+                <li>
+                  <StyledLink to="/seller/signup">Become a Seller</StyledLink>
+                </li>
+                <li>
+                  <StyledLink to="/admin">Admin</StyledLink>
+                </li>
+              </>
             )}
 
             {user !== null ? (
-              <div className="avatar">
-                <div
-                  className="action"
-                  id="basic-button"
-                  aria-controls={open ? "basic-menu" : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? "true" : undefined}
-                  onClick={handleClick}
-                >
-                  <Avatar
-                    style={{
-                      height: "2.2rem",
-                      width: "2.2rem",
+              <>
+                <div className="avatar">
+                  <div
+                    className="action"
+                    id="basic-button"
+                    aria-controls={open ? "basic-menu" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+                    onClick={handleClick}
+                  >
+                    <Avatar
+                      style={{
+                        height: "2.2rem",
+                        width: "2.2rem",
+                      }}
+                    >
+                      <AccountCircleIcon fontSize="large" />
+                    </Avatar>
+                    <span className="account">Account</span>
+                  </div>
+                  <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{
+                      "aria-labelledby": "basic-button",
                     }}
                   >
-                    <AccountCircleIcon fontSize="large" />
-                  </Avatar>
-                  <span className="account">Account</span>
+                    <MenuItem onClick={handleClose}>Profile</MenuItem>
+                    <NavLink
+                      to="/wishlist"
+                      style={{
+                        textDecoration: "none",
+                        color: "black",
+                      }}
+                    >
+                      <MenuItem onClick={handleClose}>
+                        <FavoriteBorderOutlinedIcon />
+                        WishList
+                      </MenuItem>
+                    </NavLink>
+                    <NavLink
+                      to="/orders"
+                      style={{
+                        textDecoration: "none",
+                        color: "black",
+                      }}
+                    >
+                      <MenuItem onClick={handleClose}>
+                        <ListAltIcon />
+                        Orders
+                      </MenuItem>
+                    </NavLink>
+                    <MenuItem onClick={handleClose}>
+                      <div onClick={handleLogout}>
+                        <LogoutIcon />
+                        Logout
+                      </div>
+                    </MenuItem>
+                  </Menu>
                 </div>
-                <Menu
-                  id="basic-menu"
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={handleClose}
-                  MenuListProps={{
-                    "aria-labelledby": "basic-button",
-                  }}
-                >
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
-                  <NavLink
-                    to="/wishlist"
-                    style={{
-                      textDecoration: "none",
-                      color: "black",
-                    }}
-                  >
-                    <MenuItem onClick={handleClose}>
-                      <FavoriteBorderOutlinedIcon />
-                      WishList
-                    </MenuItem>
-                  </NavLink>
-                  <NavLink
-                    to="/orders"
-                    style={{
-                      textDecoration: "none",
-                      color: "black",
-                    }}
-                  >
-                    <MenuItem onClick={handleClose}>
-                      <ListAltIcon />
-                      Orders
-                    </MenuItem>
-                  </NavLink>
-                  <MenuItem onClick={handleClose}>
-                    <div onClick={handleLogout}>
-                      <LogoutIcon />
-                      Logout
-                    </div>
-                  </MenuItem>
-                </Menu>
-              </div>
+                <li>
+                  <StyledLink to="/cartPage">
+                    <Badge badgeContent={totalQuantity} color="warning">
+                      <ShoppingCartIcon
+                        style={{
+                          height: "1.7rem",
+                          width: "1.7rem",
+                        }}
+                      />
+                    </Badge>{" "}
+                    <span className="cart">Cart</span>
+                  </StyledLink>
+                </li>
+              </>
             ) : (
               <li>
                 <StyledLink to="/login">Login</StyledLink>
               </li>
             )}
-            <li>
-              <StyledLink to="/cartPage">
-                <Badge badgeContent={totalQuantity} color="warning">
-                  <ShoppingCartIcon
-                    style={{
-                      height: "1.7rem",
-                      width: "1.7rem",
-                    }}
-                  />
-                </Badge>{" "}
-                <span className="cart">Cart</span>
-              </StyledLink>
-            </li>
           </ul>
         </div>
       </div>

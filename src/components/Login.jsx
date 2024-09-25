@@ -6,14 +6,11 @@ import TextError from "./TextError";
 import axios from "axios";
 import { BASE_URL_LOCAL } from "../apiCalls/common-db";
 import { useDispatch } from "react-redux";
-// import { currentUser, signIn } from "../reduxToolkit/features/authSlice";
-// import getCurrentUser from "../apiCalls/getCurrentUser";
 import CircularProgress from "@mui/material/CircularProgress";
 import toast, { Toaster } from "react-hot-toast";
 import Header from "./common/Header";
 
 import { Link, useNavigate, useLocation, NavLink } from "react-router-dom";
-import login from "../apiCalls/test/login";
 import { useLoginMutation } from "../reduxToolkit/features/auth/authApiSlice";
 import { setCredentials } from "../reduxToolkit/features/auth/authSlice";
 const initialValues = {

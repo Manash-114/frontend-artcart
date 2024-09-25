@@ -4,7 +4,6 @@ import App from "./App.jsx";
 import "./index.css";
 import { Provider } from "react-redux";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Test from "./components/Test.jsx";
 import { store } from "./app/store.js";
 import {
   fetchCategories,
