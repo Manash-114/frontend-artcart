@@ -137,10 +137,32 @@ export const addProduct = createAsyncThunk(
 );
 export const updateProduct = createAsyncThunk(
   "seller/updateProduct",
-  async (productData) => {
-    const { id, updates } = productData;
-    const response = await axios.put(`/api/seller/product/${id}`, updates);
-    return response.data;
+  async ({ data, productId }, { getState, dispatch, rejectWithValue }) => {
+    const store = getState();
+    const authState = store.auth; // Get current auth state
+    const updateCredentials = (newAuthData) => {
+      const updatAuth = {
+        user: newAuthData.user,
+        accessToken: newAuthData.token,
+        roles: newAuthData.roles,
+      };
+      dispatch(setCredentials(updatAuth));
+    };
+    // Pass authState and refreshToken to getAxiosPrivate
+    const axiosPrivate = getAxiosPrivate(authState, () =>
+      getRefreshToken(authState, updateCredentials)
+    );
+
+    try {
+      // Get the Axios instance with interceptors
+      const response = await axiosPrivate.put(
+        `/api/seller/update-product/${productId}`,
+        data
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Error saving seller");
+    }
   }
 );
 
@@ -261,11 +283,13 @@ const sellerSlice = createSlice({
         state.error = null;
       })
       .addCase(updateProduct.fulfilled, (state, action) => {
+        console.log(`from thunck`);
+        console.log(action.payload);
         const index = state.allProducts.findIndex(
-          (product) => product.id === action.payload.id
+          (product) => product.id === action.payload.data.id
         );
         if (index !== -1) {
-          state.allProducts[index] = action.payload;
+          state.allProducts[index] = action.payload.data;
         }
         state.loading = false;
       })

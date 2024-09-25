@@ -3,13 +3,67 @@ import Popover from "@mui/material/Popover";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import DataTable from "react-data-table-component";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../../common/Spinner";
 import { uploadImageToCloudinaryForUpdate } from "../../../apiCalls/uploadImageToCloudinaryForUpdate";
 import { useNavigate } from "react-router-dom";
-
+import { updateProduct } from "../../../reduxToolkit/features/sellerSlice";
+import toast, { Toaster } from "react-hot-toast";
+import { logOut } from "../../../reduxToolkit/features/auth/authSlice";
 const ManageProducts = () => {
   const data = useSelector((store) => store.seller.allProducts);
+  const dispatch = useDispatch();
+  const productImagesUrlFromClodinary = [];
+  const isLoading = useSelector((store) => store.seller.loading);
+
+  const [isLoadingForCloud, setIsLoadingForCloud] = useState(false);
+  const [anchorEl1, setAnchorEl1] = useState(null);
+  const [showImageTag, SetShowImageTag] = useState(false);
+  const uploadImageToCloudinary = async (files) => {
+    setIsLoadingForCloud(true);
+    try {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "artcart");
+        formData.append("cloud_name", "dqhrisflx");
+        const res = await fetch(
+          "https://api.cloudinary.com/v1_1/dqhrisflx/image/upload",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const resData = await res.json();
+        productImagesUrlFromClodinary.push(resData.url);
+        setIsLoadingForCloud(false);
+      }
+    } catch (e) {
+      toast.error("Error in uploading images try again after some time.");
+      setIsLoadingForCloud(false);
+    }
+  };
+  const handleClose1 = () => {
+    setAnchorEl1(null);
+    SetShowImageTag(false);
+  };
+
+  const handleUpdateProduct = async ({ dataToUpdate }) => {
+    try {
+      const res = await dispatch(
+        updateProduct({ data: dataToUpdate, productId: dataToUpdate.productId })
+      ).unwrap();
+      toast.success(res.message);
+      handleClose1();
+    } catch (error) {
+      toast.error(error);
+      if (error === "Invalid refresh token") {
+        dispatch(logOut());
+      }
+      handleClose1();
+    }
+  };
 
   const columns = [
     {
@@ -35,11 +89,9 @@ const ManageProducts = () => {
     {
       name: "Action",
       cell: (row) => {
-        const [anchorEl1, setAnchorEl1] = useState(null);
-        const [showImageTag, SetShowImageTag] = useState(false);
         const [productImages, setProductImages] = useState([]);
-        const [isLoading, setIsLoading] = useState(false);
         const [productData, setProductData] = useState({
+          productId: row.id,
           name: row.name,
           price: row.price,
           description: row.description,
@@ -50,36 +102,24 @@ const ManageProducts = () => {
           setAnchorEl1(event.currentTarget);
         };
 
-        const handleClose1 = () => {
-          setAnchorEl1(null);
-          SetShowImageTag(false);
-          setIsLoading(false);
-        };
-
         const open1 = Boolean(anchorEl1);
         const id1 = open1 ? "simple-popover" : undefined;
 
-        const handleFormSubmit = (e) => {
+        const handleFormSubmit = async (e) => {
           e.preventDefault();
-          setIsLoading(true);
-
           if (showImageTag) {
-            uploadImageToCloudinaryForUpdate(
-              productImages,
-              productData,
-              token,
-              setIsLoading,
-              pID
-            );
+            //upload image again to
+            const res = await uploadImageToCloudinary(productImages);
+            if (productImagesUrlFromClodinary.length != 0) {
+              productData["productImages"] = productImagesUrlFromClodinary;
+              handleUpdateProduct({ dataToUpdate: productData });
+            } else {
+              toast.error("Error in uploading file.try again after some time");
+            }
           } else {
             const productImagesUrl = row.productImages.map((img) => img.name);
             productData["productImages"] = productImagesUrl;
-            updateProduct(
-              JSON.stringify(productData),
-              token,
-              setIsLoading,
-              row.id
-            );
+            handleUpdateProduct({ dataToUpdate: productData });
           }
         };
 
@@ -264,7 +304,7 @@ const ManageProducts = () => {
                       Update Product
                     </button>
 
-                    {isLoading && <Spinner />}
+                    {(isLoading || isLoadingForCloud) && <Spinner />}
                   </form>
                 </div>
               </Typography>
@@ -276,28 +316,33 @@ const ManageProducts = () => {
   ];
 
   return (
-    <div className="container mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <h1 className="text-2xl font-bold text-gray-900 mb-4">Manage Products</h1>
-      <DataTable
-        columns={columns}
-        data={data}
-        pagination
-        customStyles={{
-          rows: {
-            style: {
-              minHeight: "64px",
-              fontSize: "16px",
+    <>
+      <Toaster position="top-center" reverseOrder={false} />
+      <div className="container mx-auto p-6 bg-white rounded-lg shadow-lg">
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">
+          Manage Products
+        </h1>
+        <DataTable
+          columns={columns}
+          data={data}
+          pagination
+          customStyles={{
+            rows: {
+              style: {
+                minHeight: "64px",
+                fontSize: "16px",
+              },
             },
-          },
-          headCells: {
-            style: {
-              fontWeight: "bold",
-              fontSize: "18px",
+            headCells: {
+              style: {
+                fontWeight: "bold",
+                fontSize: "18px",
+              },
             },
-          },
-        }}
-      />
-    </div>
+          }}
+        />
+      </div>
+    </>
   );
 };
 

@@ -44,7 +44,7 @@ const SellerDashboard = () => {
   };
 
   useEffect(() => {
-    fetchAllProductsAndSellerDetails;
+    fetchAllProductsAndSellerDetails();
   }, [dispatch]);
 
   const handleClick = (id) => {
