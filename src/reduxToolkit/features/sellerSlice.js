@@ -66,9 +66,32 @@ export const saveSellerDetails = createAsyncThunk(
 
 export const fetchNewOrders = createAsyncThunk(
   "seller/fetchNewOrders",
-  async () => {
-    const response = await axios.get("/api/seller/orders/new");
-    return response.data;
+  async (_, { getState, dispatch, rejectWithValue }) => {
+    const store = getState();
+    const authState = store.auth; // Get current auth state
+    const updateCredentials = (newAuthData) => {
+      const updatAuth = {
+        user: newAuthData.user,
+        accessToken: newAuthData.token,
+        roles: newAuthData.roles,
+      };
+      dispatch(setCredentials(updatAuth));
+    };
+
+    // Pass authState and refreshToken to getAxiosPrivate
+    const axiosPrivate = getAxiosPrivate(authState, () =>
+      getRefreshToken(authState, updateCredentials)
+    );
+
+    try {
+      // Get the Axios instance with interceptors
+      const response = await axiosPrivate.get("/api/seller/new-order");
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || "Error fetching all new orders"
+      );
+    }
   }
 );
 
@@ -185,9 +208,32 @@ export const editProduct = createAsyncThunk(
 
 export const approveOrder = createAsyncThunk(
   "seller/approveOrder",
-  async (orderId) => {
-    const response = await axios.post(`/api/seller/order/approve/${orderId}`);
-    return response.data;
+  async ({ data }, { getState, dispatch, rejectWithValue }) => {
+    const store = getState();
+    const authState = store.auth; // Get current auth state
+    const updateCredentials = (newAuthData) => {
+      const updatAuth = {
+        user: newAuthData.user,
+        accessToken: newAuthData.token,
+        roles: newAuthData.roles,
+      };
+      dispatch(setCredentials(updatAuth));
+    };
+    // Pass authState and refreshToken to getAxiosPrivate
+    const axiosPrivate = getAxiosPrivate(authState, () =>
+      getRefreshToken(authState, updateCredentials)
+    );
+
+    try {
+      // Get the Axios instance with interceptors
+      const response = await axiosPrivate.post(
+        "/api/seller/accept-order",
+        data
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Error accepting order");
+    }
   }
 );
 
@@ -241,6 +287,8 @@ const sellerSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchNewOrders.fulfilled, (state, action) => {
+        console.log("all new order from thunk");
+        console.log(action.payload);
         state.newOrders = action.payload;
         state.loading = false;
       })
@@ -340,11 +388,11 @@ const sellerSlice = createSlice({
       })
       .addCase(approveOrder.fulfilled, (state, action) => {
         const index = state.newOrders.findIndex(
-          (order) => order.id === action.payload.id
+          (order) => order.orderId === action.payload.data.id
         );
         if (index !== -1) {
           state.newOrders.splice(index, 1); // Remove the approved order from newOrders
-          state.allOrders.push(action.payload); // Add to allOrders
+          // state.allOrders.push(action.payload); // Add to allOrders
         }
         state.loading = false;
       })

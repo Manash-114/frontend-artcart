@@ -25,7 +25,7 @@ const OrderPage = () => {
   };
   useEffect(() => {
     getAllOrders();
-  }, [dispatch]);
+  }, []);
   return (
     <div>
       <Header />

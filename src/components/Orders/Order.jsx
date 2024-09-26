@@ -52,12 +52,12 @@ const Order = () => {
               <FormControlLabel
                 value="processing"
                 control={<Radio />}
-                label="On the way"
+                label="Delivered"
               />
               <FormControlLabel
                 value="delivered"
                 control={<Radio />}
-                label="Delivered"
+                label="On the way"
               />
             </RadioGroup>
           </FormControl>

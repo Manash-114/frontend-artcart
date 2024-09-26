@@ -15,7 +15,11 @@ import toast, { Toaster } from "react-hot-toast";
 import { generatePaymentWithRazopay } from "../../apiCalls/users/generatePaymentWithRazopay";
 import { useNavigate } from "react-router-dom";
 import { logOut } from "../../reduxToolkit/features/auth/authSlice";
-import { createOrder } from "../../reduxToolkit/features/customerSlice";
+import {
+  createOrder,
+  onlinePaymentRequest,
+} from "../../reduxToolkit/features/customerSlice";
+import { resetBillingAddress } from "../../reduxToolkit/features/productList/BillingAddressSlice";
 const PaymentDetails = () => {
   const [open, setOpen] = useState(false);
   const [orderDetails, setOrderDetails] = useState(null);
@@ -36,6 +40,7 @@ const PaymentDetails = () => {
   const handleOrderConfirmation = (orderData) => {
     setOrderDetails(orderData);
     setOpen(true);
+    dispatch(resetBillingAddress());
   };
   const handleCodPayment = async () => {
     const orderReqData = {
@@ -63,9 +68,58 @@ const PaymentDetails = () => {
     // createOrder(orderReqData, token, dispatch, navigate);
   };
 
-  const handleOnlinePayment = () => {
-    const paymentReqData = { amount: cartTotalAmount };
+  const handleRazorpayPaymentFailed = () => {
+    toast.error("Payment failed.try another way or try again later");
+  };
+  const openRazorpayLayout = (resData, orderReqData) => {
+    var options = {
+      key: "rzp_test_b7cdwAk8TAVDye",
+      amount: resData.amount,
+      currency: "INR",
+      name: "Artcart",
+      image: "https://example.com/your_logo",
+      order_id: resData.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+      handler: async (response) => {
+        console.log("payment done");
+        orderReqData.paymentReq.id = response.razorpay_payment_id;
+        try {
+          const res = await dispatch(
+            createOrder({ data: orderReqData })
+          ).unwrap();
+          handleOrderConfirmation();
+          setOrderDetails(res.data);
+        } catch (error) {
+          if (error === "Invalid refresh token") dispatch(logOut());
+        }
+      },
+      prefill: {
+        name: "Gaurav Kumar", //your customer's name
+        email: "gaurav.kumar@example.com",
+        contact: "9000090000", //Provide the customer's phone number for better conversion rates
+      },
+      notes: {
+        address: "Razorpay Corporate Office",
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.on("payment.failed", function (response) {
+      // alert(response.error.code);
+      // alert(response.error.description);
+      // alert(response.error.source);
+      // alert(response.error.step);
+      // alert(response.error.reason);
+      // alert(response.error.metadata.order_id);
+      // alert(response.error.metadata.payment_id);
+      handleRazorpayPaymentFailed();
+    });
+    rzp1.open();
+  };
 
+  const handleOnlinePayment = async () => {
+    const paymentReqData = { amount: cartTotalAmount };
     const orderReqData = {
       billingAddress: {
         customerName: billingAddress.name,
@@ -80,13 +134,18 @@ const PaymentDetails = () => {
         mode: "ONLINE",
       },
     };
-    // generatePaymentWithRazopay(
-    //   paymentReqData,
-    //   token,
-    //   dispatch,
-    //   orderReqData,
-    //   navigate
-    // );
+
+    try {
+      const res = await dispatch(
+        onlinePaymentRequest({ data: paymentReqData })
+      ).unwrap();
+      if (res.status === "created") {
+        openRazorpayLayout(res, orderReqData);
+      }
+    } catch (error) {
+      console.log(error);
+      if (error === "Invalid refresh token") dispatch(logOut());
+    }
   };
 
   return (

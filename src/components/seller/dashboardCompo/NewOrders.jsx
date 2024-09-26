@@ -1,32 +1,61 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios"; // Import Axios
-import styled from "styled-components";
 import Popover from "@mui/material/Popover";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { TiTick } from "react-icons/ti";
-import { RxCross1 } from "react-icons/rx";
 import DataTable from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllnewOrders } from "../../../apiCalls/seller/getAllnewOrders";
-import { acceptOrder } from "../../../apiCalls/seller/acceptOrder";
+import {
+  approveOrder,
+  fetchNewOrders,
+} from "../../../reduxToolkit/features/sellerSlice";
+import { logOut } from "../../../reduxToolkit/features/auth/authSlice";
+import toast, { Toaster } from "react-hot-toast";
+import { CircularProgress } from "@mui/material";
 
 const NewOrders = () => {
-  // const [orders, setOrders] = useState([]); // State to hold fetched order data
-  // const [isLoading, setIsLoading] = useState(false); // State for loading indicator
-  // const [error, setError] = useState(null); // State for error handling
-  const [selectedValue, setSelectedValue] = useState("");
+  const [selectedCouriers, setSelectedCouriers] = useState({}); // State to track selected couriers per row
+  const [loadingRows, setLoadingRows] = useState({}); // Track loading state per row
   const dispatch = useDispatch();
   const { token } = useSelector((store) => store.auth);
+
+  const handleAllNewOrders = async () => {
+    try {
+      await dispatch(fetchNewOrders()).unwrap();
+    } catch (error) {
+      console.log("error:", error);
+      if (error === "Invalid refresh token") dispatch(logOut());
+    }
+  };
+
+  const handleOrderAccept = async (acceptOrder, orderId) => {
+    try {
+      setLoadingRows((prev) => ({ ...prev, [orderId]: true })); // Set loading state for the specific row
+      const res = await dispatch(approveOrder({ data: acceptOrder })).unwrap();
+      toast.success("Done.");
+    } catch (error) {
+      if (error === "Invalid refresh token") dispatch(logOut());
+      else toast.error(error);
+    } finally {
+      setLoadingRows((prev) => ({ ...prev, [orderId]: false })); // Reset loading state after completion
+    }
+  };
+
   useEffect(() => {
-    getAllnewOrders(token, dispatch);
+    handleAllNewOrders();
   }, []);
 
   const data = useSelector((store) => store.seller.newOrders);
-  const address = data.map((row) => row.address);
+
+  const handleCourierChange = (orderId, value) => {
+    setSelectedCouriers((prev) => ({
+      ...prev,
+      [orderId]: value, // Track courier selection per orderId
+    }));
+  };
+
   const columns = [
     {
-      name: "Order id",
+      name: "Order ID",
       cell: (row) => row.orderId,
       sortable: true,
     },
@@ -38,49 +67,41 @@ const NewOrders = () => {
     {
       name: "Address",
       cell: (row) => {
-        const [anchorEl1, setAnchorEl1] = useState(null);
-        //   const [anchorEl2, setAnchorEl2] = useState(null)
-        const handleClick1 = (event) => {
-          setAnchorEl1(event.currentTarget);
-        };
-        const handleClick2 = (event) => {
-          // setAnchorEl2(event.currentTarget);
+        const [anchorEl, setAnchorEl] = useState(null);
+
+        const handleClick = (event) => {
+          setAnchorEl(event.currentTarget);
         };
 
-        const handleClose1 = () => {
-          setAnchorEl1(null);
+        const handleClose = () => {
+          setAnchorEl(null);
         };
-        //   const handleClose2 = () => {
-        //     // setAnchorEl2(null);
-        //   };
 
-        const open1 = Boolean(anchorEl1);
-        //   const open2 = Boolean(anchorEl2);
-
-        const id1 = open1 ? "simple-popover" : undefined;
-        //   const id2 = open2 ? 'normal-popover' : undefined;
+        const open = Boolean(anchorEl);
+        const id = open ? "address-popover" : undefined;
 
         return (
-          <div className="mt-4">
+          <div>
             <Button
-              aria-describedby={id1}
+              aria-describedby={id}
               variant="contained"
-              onClick={handleClick1}
+              onClick={handleClick}
+              className="bg-blue-500 text-white hover:bg-blue-600"
             >
               Show Address
             </Button>
             <Popover
-              id={id1}
-              open={open1}
-              anchorEl={anchorEl1}
-              onClose={handleClose1}
+              id={id}
+              open={open}
+              anchorEl={anchorEl}
+              onClose={handleClose}
               anchorOrigin={{
                 vertical: "bottom",
                 horizontal: "left",
               }}
             >
               <Typography sx={{ p: 2 }}>
-                <div>
+                <div className="text-gray-700">
                   <div>City: {row.address.city}</div>
                   <div>State: {row.address.state}</div>
                   <div>Zip Code: {row.address.pincode}</div>
@@ -95,66 +116,57 @@ const NewOrders = () => {
     {
       name: "Product",
       cell: (row) => {
-        // const [anchorEl1, setAnchorEl1] = useState(null)
-        const [anchorEl2, setAnchorEl2] = useState(null);
-        // const handleClick1 = (event) => {
-        //     setAnchorEl1(event.currentTarget);
+        const [anchorEl, setAnchorEl] = useState(null);
 
-        //   };
-        const handleClick2 = (event) => {
-          setAnchorEl2(event.currentTarget);
+        const handleClick = (event) => {
+          setAnchorEl(event.currentTarget);
         };
 
-        //   const handleClose1 = () => {
-        //     setAnchorEl1(null);
-        //   };
-        const handleClose2 = () => {
-          setAnchorEl2(null);
+        const handleClose = () => {
+          setAnchorEl(null);
         };
 
-        //   const open1 = Boolean(anchorEl1);
-        const open2 = Boolean(anchorEl2);
-
-        //   const id1 = open1 ? 'simple-popover' : undefined;
-        const id2 = open2 ? "normal-popover" : undefined;
+        const open = Boolean(anchorEl);
+        const id = open ? "product-popover" : undefined;
 
         return (
-          <div className="mt-4">
+          <div>
             <Button
-              aria-describedby={id2}
+              aria-describedby={id}
               variant="contained"
-              onClick={handleClick2}
+              onClick={handleClick}
+              className="bg-green-500 text-white hover:bg-green-600"
             >
               Show Product
             </Button>
             <Popover
-              id={id2}
-              open={open2}
-              anchorEl={anchorEl2}
-              onClose={handleClose2}
+              id={id}
+              open={open}
+              anchorEl={anchorEl}
+              onClose={handleClose}
               anchorOrigin={{
                 vertical: "bottom",
                 horizontal: "left",
               }}
             >
               <Typography sx={{ p: 2 }}>
-                <div>
-                  <div>
-                    {row.productsBelongsToOrder.map((prdct) => (
-                      <div className="border border-3 p-3 m-4">
-                        <h1 className="font-bold">
-                          Product Id: {prdct.products.id}
-                        </h1>
-                        <h1 className="font-bold">
-                          Product Name: {prdct.products.name}
-                        </h1>
-
-                        <h1 className="font-bold">
-                          Product Quantity: {prdct.productQuantity}
-                        </h1>
-                      </div>
-                    ))}
-                  </div>
+                <div className="text-gray-700">
+                  {row.productsBelongsToOrder.map((prdct) => (
+                    <div
+                      key={prdct.products.id}
+                      className="border border-gray-300 rounded p-3 my-4"
+                    >
+                      <h1 className="font-semibold">
+                        Product ID: {prdct.products.id}
+                      </h1>
+                      <h1 className="font-semibold">
+                        Product Name: {prdct.products.name}
+                      </h1>
+                      <h1 className="font-semibold">
+                        Quantity: {prdct.productQuantity}
+                      </h1>
+                    </div>
+                  ))}
                 </div>
               </Typography>
             </Popover>
@@ -166,23 +178,25 @@ const NewOrders = () => {
       name: "Select Courier",
       cell: (row) => {
         const handleChange = (event) => {
-          setSelectedValue(event.target.value);
+          handleCourierChange(row.orderId, event.target.value); // Pass the orderId and selected value
         };
         return (
-          <div className="mt-5 p-3">
+          <div>
             <select
               id="courier"
               name="courier"
-              value={selectedValue}
+              value={selectedCouriers[row.orderId] || ""} // Select value per orderId
               onChange={handleChange}
-              className="w-full px-4 py-1 border rounded focus:outline-none focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
             >
               <option value="">Select Courier</option>
               <option value="e-kart">E-Kart</option>
               <option value="ecom-express">Ecom-Express</option>
               <option value="delhivery">Delhivery</option>
             </select>
-            <p className="mt-2">You selected: {selectedValue}</p>
+            <p className="mt-2 text-sm text-gray-600">
+              Selected: {selectedCouriers[row.orderId] || "None"}
+            </p>
           </div>
         );
       },
@@ -190,195 +204,60 @@ const NewOrders = () => {
     {
       name: "Action",
       cell: (row) => {
-        const [dis, SetDis] = useState("");
-
-        const handleClick = () => {
-          SetDis("disabled");
-          //send data to backend
-          const orderAccept = {
-            orderId: row.orderId,
-            courierName: selectedValue,
-          };
-
-          console.log("order accept data", orderAccept);
-          acceptOrder(orderAccept, token, dispatch);
+        const handleShip = async () => {
+          const courierName = selectedCouriers[row.orderId];
+          if (courierName) {
+            const orderAccept = {
+              orderId: row.orderId,
+              courierName: selectedCouriers[row.orderId],
+            };
+            await handleOrderAccept(orderAccept, row.orderId); // Pass orderId to track loading state
+          } else {
+            toast.error("Select a courier.");
+          }
         };
 
-        //
         return (
           <button
             type="button"
-            className={`border border-2 rounded-md p-2 hover:bg-gray-100 font-bold ${
-              dis ? "cursor-not-allowed" : ""
-            }`}
-            onClick={handleClick}
-            disabled={dis} // Disabling the button
+            onClick={handleShip}
+            className="border border-gray-400 rounded px-4 py-2 text-sm font-semibold bg-white hover:bg-gray-100 transition-all"
+            disabled={loadingRows[row.orderId]} // Disable only the button for the specific row
           >
-            Proceed To Ship
+            {loadingRows[row.orderId] ? (
+              <CircularProgress size={20} />
+            ) : (
+              "Proceed To Ship"
+            )}
           </button>
         );
       },
     },
   ];
 
-  // Function to fetch order data from the API using Axios
-  // const fetchOrders = async () => {
-  //   setIsLoading(true);
-  //   setError(null);
-
-  //   try {
-  //     const response = await axios.get('https://fakestoreapi.com/carts'); // Replace with your API URL
-  //     setOrders(response.data);
-  //   } catch (err) {
-  //     setError(err.message);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  // Fetch orders on component mount
-  // useEffect(() => {
-  //   fetchOrders();
-  //   console.log(address);
-  // }, []);
-
-  return <DataTable columns={columns} data={data} pagination />;
+  return (
+    <>
+      <Toaster position="top-center" reverseOrder={false} />
+      <div className="p-6 bg-white rounded shadow-lg">
+        <h2 className="text-2xl font-bold mb-4">New Orders</h2>
+        <DataTable
+          columns={columns}
+          data={data}
+          pagination
+          className="text-sm"
+          customStyles={{
+            headCells: {
+              style: {
+                fontWeight: "600",
+                fontSize: "14px",
+                backgroundColor: "#f8fafc",
+              },
+            },
+          }}
+        />
+      </div>
+    </>
+  );
 };
 
 export default NewOrders;
-
-// <div>
-//           {orders.map((order) => (
-//             <OrderRow key={order.id}>
-//               <OrderInfo>
-//                 <OrderTime>{order.date}</OrderTime>
-//                 {/* <CustomerName>{order.customerName}</CustomerName> */}
-//                 {/* <Address>{order.address}</Address> */}
-//                 {order.products.map((product) => (
-//                   <ProductDetails key={product.productId}>
-//                     <p>{product.productId} (Qty: {product.quantity})</p>
-//                   </ProductDetails>
-//                 ))}
-//                 <button style={{ width: "70px", backgroundColor: "blue" }}><TiTick /></button>
-//                 <button style={{ width: "70px", backgroundColor: "red" }}><RxCross1 /></button>
-//                 {/* Add more fields as needed */}
-//               </OrderInfo>
-//               {/* Add buttons or actions related to the order */}
-//             </OrderRow>
-//           ))}
-//         </div>
-
-// import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
-// import { TiTick } from "react-icons/ti";
-// import { RxCross1 } from "react-icons/rx";
-
-// // ManageOrders component
-// const ManageOrders = () => {
-//   const [orders, setOrders] = useState([]);
-//   const [isLoading, setIsLoading] = useState(false);
-//   const [error, setError] = useState(null);
-
-//   const fetchOrders = async () => {
-//     setIsLoading(true);
-//     setError(null);
-
-//     try {
-//       const response = await axios.get('https://fakestoreapi.com/carts'); // Replace with your API URL
-//       setOrders(response.data);
-//     } catch (err) {
-//       setError(err.message);
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchOrders();
-//   }, []);
-
-//   return (
-//     <div  className=" h-600 bg-gray-100">
-//       {isLoading ? (
-//         <p className="text-center py-4">Loading orders...</p>
-//       ) : error ? (
-//         <p className="text-center py-4 text-red-500">Error fetching orders: {error}</p>
-//       ) : (
-//         <div style={{ overflowY: 'scroll' }} className="flex flex-col">
-//           {orders.map((order) => (
-//             <div key={order.id} className="flex items-center border-b border-gray-300 p-4 rounded-md shadow-sm">
-//               <div className="flex-grow">
-//                 <p className="text-lg font-medium mb-2">{order.date}</p>
-//                 {/* Add product details here */}
-//                 <div className="flex flex-wrap">
-//                   {order.products.map((product) => (
-//                     <div key={product.productId} className="mr-4 mb-2">
-//                       <p className="text-gray-600">{product.productId} (Qty: {product.quantity})</p>
-//                     </div>
-//                   ))}
-//                 </div>
-//               </div>
-//               <div className="flex space-x-2">
-//                 <button className="w-8 h-8 bg-blue-500 text-white rounded-full">
-//                   <TiTick />
-//                 </button>
-//                 <button className="w-8 h-8 bg-red-500 text-white rounded-full">
-//                   <RxCross1 />
-//                 </button>
-//               </div>
-//             </div>
-//           ))}
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default ManageOrders;
-
-// const orderedProduct = data.productsBelongsToOrder;
-
-const OrdersContainer = styled.div`
-  overflow-y: scroll;
-  max-height: 600px; /* Adjust max-height as needed */
-`;
-
-const OrderRow = styled.div`
-  display: flex;
-  flex-wrap: wrap; /* Allow items to wrap to the next line if needed */
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
-
-  &:last-child {
-    border-bottom: none; /* Remove border for last row */
-  }
-`;
-
-const OrderInfo = styled.div`
-  flex: 1;
-  width: 100%; /* Take up the remaining space in the row */
-  display: flex;
-  flex-wrap: wrap; /* Allow product details to wrap if needed */
-`;
-
-const OrderTime = styled.div`
-  font-weight: bold;
-  width: 30%;
-`;
-
-const CustomerName = styled.div`
-  font-style: italic;
-  width: 20%;
-`;
-
-const Address = styled.div`
-  color: #888;
-  width: 30%;
-`;
-
-const ProductDetails = styled.div`
-  margin-right: 10px; /* Add spacing between product details */
-  width: 100px;
-`;

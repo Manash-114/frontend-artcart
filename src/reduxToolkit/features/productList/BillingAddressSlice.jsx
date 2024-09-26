@@ -5,7 +5,6 @@ const initialState = {
   addressId: null,
   name: null,
   phoneNumber: null,
-  phoneNumber: null,
   orderProducts: [],
   paymentReq: {
     id: 0,
@@ -82,14 +81,14 @@ const BillingAddressSlice = createSlice({
 
     resetBillingAddress: (state) => {
       (state.addressId = 0),
-        (state.name = ""),
-        (state.contact = ""),
-        (state.alternateContact = ""),
+        (state.name = null),
+        (state.alternatePhoneNumber = null),
+        (state.phoneNumber = null),
         (state.orderProducts = []),
         (state.paymentReq = {
           id: 0,
-          amount: "",
-          mode: "",
+          amount: null,
+          mode: null,
         });
     },
   },

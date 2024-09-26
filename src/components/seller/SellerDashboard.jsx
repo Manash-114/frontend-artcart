@@ -16,6 +16,8 @@ import Modal from "react-modal";
 
 // Sample icons (you can use your own SVG or icon imports)
 import { FaBoxOpen, FaShoppingCart, FaBoxes } from "react-icons/fa";
+import OrdersList from "./OrdersList";
+import { logOut } from "../../reduxToolkit/features/auth/authSlice";
 
 const buttons = [
   { name: "Add Product", id: "add-product", icon: <FaBoxOpen /> },
@@ -63,7 +65,6 @@ const SellerDashboard = () => {
 
   return (
     <>
-      <SellerNav />
       {seller?.name === null ? (
         <SellerRegistration />
       ) : (
@@ -124,15 +125,14 @@ const SellerDashboard = () => {
             {/* Show the content-section only if a button is clicked */}
             {btID && (
               <div className="content-section">
-                {btID === "add-product" && <AddProduct />}
-                {btID === "new-orders" && <NewOrders />}
-                {btID === "manage-products" && <ManageProducts />}
+                {btID === "add-product" && navigate("addproduct")}
+                {btID === "new-orders" && navigate("orders")}
+                {btID === "manage-products" && navigate("manageproduct")}
               </div>
             )}
           </div>
         </Wrapper>
       )}
-      <Footer2 />
     </>
   );
 };

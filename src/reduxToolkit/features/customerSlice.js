@@ -112,7 +112,7 @@ export const fetchAllDeliveredOrders = createAsyncThunk(
       const response = await axiosPrivate.get("/api/customer/orders");
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || "Error fetching customer");
+      return rejectWithValue(error.response?.data || "Error fetching orders");
     }
   }
 );
@@ -216,6 +216,39 @@ export const deleteOrder = createAsyncThunk(
   }
 );
 
+// online payment request
+export const onlinePaymentRequest = createAsyncThunk(
+  "customerSlice/onlinePaymentRequest",
+  async ({ data }, { getState, dispatch, rejectWithValue }) => {
+    const store = getState();
+    const authState = store.auth; // Get current auth state
+    const updateCredentials = (newAuthData) => {
+      const updatAuth = {
+        user: newAuthData.user,
+        accessToken: newAuthData.token,
+        roles: newAuthData.roles,
+      };
+      dispatch(setCredentials(updatAuth));
+    };
+
+    // Pass authState and refreshToken to getAxiosPrivate
+    const axiosPrivate = getAxiosPrivate(authState, () =>
+      getRefreshToken(authState, updateCredentials)
+    );
+
+    try {
+      // Get the Axios instance with interceptors
+      const response = await axiosPrivate.post(
+        "/api/customer/order/razor-payment",
+        data
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Error fetching orders");
+    }
+  }
+);
+
 const customerSlice = createSlice({
   name: "customerSlice",
   initialState: {
@@ -246,7 +279,7 @@ const customerSlice = createSlice({
       })
       .addCase(fetchAllUnDeliveredOrders.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.allDeliveredOrders = action.payload;
+        state.allNotDeliveredOrders = action.payload;
       })
       .addCase(fetchAllUnDeliveredOrders.rejected, (state, action) => {
         state.status = "failed";
@@ -345,6 +378,19 @@ const customerSlice = createSlice({
         state.address = [...state.address, action.payload];
       })
       .addCase(addCustomerAddress.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(onlinePaymentRequest.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(onlinePaymentRequest.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        console.log(`data from thunk online`);
+        console.log(action.payload);
+        // state.address = [...state.address, action.payload];
+      })
+      .addCase(onlinePaymentRequest.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       });
