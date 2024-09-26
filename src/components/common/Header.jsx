@@ -1,14 +1,14 @@
 import { Avatar, Badge, Menu, MenuItem } from "@mui/material";
 import React, { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import styled from "styled-components";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useDispatch, useSelector } from "react-redux";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import ListAltIcon from "@mui/icons-material/ListAlt";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 import { signout } from "../../reduxToolkit/features/authSlice";
 import {
   logOut,
@@ -20,6 +20,8 @@ const Header = () => {
   const user = useSelector(selectCurrentUser);
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -31,256 +33,210 @@ const Header = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    console.log("logout");
     dispatch(logOut());
   };
 
-  const scrollToHero = () => {
-    const heroSection = document.getElementById("refer");
-    if (heroSection) {
-      heroSection.scrollIntoView({ behavior: "smooth" });
-    }
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
   };
+
   return (
-    <Wrapper>
-      <div className="container">
-        <div className="left">
+    <header className="bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 p-4 fixed top-0 w-full z-50 shadow-lg">
+      <div className="container mx-auto flex justify-between items-center">
+        {/* Logo and Brand Name */}
+        <NavLink to="/" className="flex items-center space-x-3 text-white">
+          <img
+            src="/images/Logo.jpg"
+            alt="logo"
+            className="rounded-full h-12 w-12"
+          />
+          <h2 className="text-xl font-semibold">ArtCart</h2>
+        </NavLink>
+
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center space-x-6">
           <NavLink
-            to="/"
-            style={{
-              textDecoration: "none",
-              color: "white",
-            }}
+            to="/products"
+            className="text-white hover:text-yellow-300 transition-colors"
           >
-            <div className="icon-container">
-              <div className="image">
-                <img src="/images/Logo.jpg" alt="logo-image"></img>
-              </div>
-              <h2>ArtCart</h2>
-            </div>
+            Products
           </NavLink>
+
+          {user === null && (
+            <>
+              <NavLink
+                to="/seller/signup"
+                className="text-white hover:text-yellow-300 transition-colors"
+              >
+                Become a Seller
+              </NavLink>
+              <NavLink
+                to="/admin"
+                className="text-white hover:text-yellow-300 transition-colors"
+              >
+                Admin
+              </NavLink>
+            </>
+          )}
+
+          {user !== null ? (
+            <>
+              <div
+                className="flex items-center cursor-pointer space-x-2 text-white hover:text-yellow-300 transition-colors"
+                onClick={handleClick}
+              >
+                <Avatar className="h-9 w-9">
+                  <AccountCircleIcon fontSize="large" />
+                </Avatar>
+                <span className="capitalize">Account</span>
+              </div>
+
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
+                }}
+              >
+                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <NavLink to="/wishlist" className="text-black no-underline">
+                  <MenuItem onClick={handleClose}>
+                    <FavoriteBorderOutlinedIcon />
+                    WishList
+                  </MenuItem>
+                </NavLink>
+                <NavLink to="/orders" className="text-black no-underline">
+                  <MenuItem onClick={handleClose}>
+                    <ListAltIcon />
+                    Orders
+                  </MenuItem>
+                </NavLink>
+                <MenuItem onClick={handleClose}>
+                  <div onClick={handleLogout} className="flex items-center">
+                    <LogoutIcon />
+                    <span className="ml-2">Logout</span>
+                  </div>
+                </MenuItem>
+              </Menu>
+
+              <NavLink
+                to="/cartPage"
+                className="flex items-center space-x-2 text-white hover:text-yellow-300 transition-colors"
+              >
+                <Badge badgeContent={totalQuantity} color="warning">
+                  <ShoppingCartIcon className="h-6 w-6" />
+                </Badge>
+                <span>Cart</span>
+              </NavLink>
+            </>
+          ) : (
+            <NavLink
+              to="/login"
+              className="text-white hover:text-yellow-300 transition-colors"
+            >
+              Login
+            </NavLink>
+          )}
+        </nav>
+
+        {/* Mobile Menu Button */}
+        <div className="md:hidden flex items-center">
+          <button
+            onClick={toggleMobileMenu}
+            className="text-white focus:outline-none"
+          >
+            {mobileMenuOpen ? (
+              <CloseIcon className="h-8 w-8" />
+            ) : (
+              <MenuIcon className="h-8 w-8" />
+            )}
+          </button>
         </div>
-        <div className="right">
-          <ul>
-            <li>
-              <StyledLink to="/products">Products</StyledLink>
-            </li>
+      </div>
+
+      {/* Mobile Navigation Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 p-4 fixed top-16 left-0 w-full z-40">
+          <nav className="flex flex-col space-y-4">
+            <NavLink
+              to="/products"
+              onClick={toggleMobileMenu}
+              className="text-white hover:text-yellow-300 transition-colors"
+            >
+              Products
+            </NavLink>
+
             {user === null && (
               <>
-                <li>
-                  <StyledLink to="/seller/signup">Become a Seller</StyledLink>
-                </li>
-                <li>
-                  <StyledLink to="/admin">Admin</StyledLink>
-                </li>
+                <NavLink
+                  to="/seller/signup"
+                  onClick={toggleMobileMenu}
+                  className="text-white hover:text-yellow-300 transition-colors"
+                >
+                  Become a Seller
+                </NavLink>
+                <NavLink
+                  to="/admin"
+                  onClick={toggleMobileMenu}
+                  className="text-white hover:text-yellow-300 transition-colors"
+                >
+                  Admin
+                </NavLink>
               </>
             )}
 
             {user !== null ? (
               <>
-                <div className="avatar">
-                  <div
-                    className="action"
-                    id="basic-button"
-                    aria-controls={open ? "basic-menu" : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={open ? "true" : undefined}
-                    onClick={handleClick}
-                  >
-                    <Avatar
-                      style={{
-                        height: "2.2rem",
-                        width: "2.2rem",
-                      }}
-                    >
-                      <AccountCircleIcon fontSize="large" />
-                    </Avatar>
-                    <span className="account">Account</span>
-                  </div>
-                  <Menu
-                    id="basic-menu"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    MenuListProps={{
-                      "aria-labelledby": "basic-button",
-                    }}
-                  >
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
-                    <NavLink
-                      to="/wishlist"
-                      style={{
-                        textDecoration: "none",
-                        color: "black",
-                      }}
-                    >
-                      <MenuItem onClick={handleClose}>
-                        <FavoriteBorderOutlinedIcon />
-                        WishList
-                      </MenuItem>
-                    </NavLink>
-                    <NavLink
-                      to="/orders"
-                      style={{
-                        textDecoration: "none",
-                        color: "black",
-                      }}
-                    >
-                      <MenuItem onClick={handleClose}>
-                        <ListAltIcon />
-                        Orders
-                      </MenuItem>
-                    </NavLink>
-                    <MenuItem onClick={handleClose}>
-                      <div onClick={handleLogout}>
-                        <LogoutIcon />
-                        Logout
-                      </div>
-                    </MenuItem>
-                  </Menu>
-                </div>
-                <li>
-                  <StyledLink to="/cartPage">
-                    <Badge badgeContent={totalQuantity} color="warning">
-                      <ShoppingCartIcon
-                        style={{
-                          height: "1.7rem",
-                          width: "1.7rem",
-                        }}
-                      />
-                    </Badge>{" "}
-                    <span className="cart">Cart</span>
-                  </StyledLink>
-                </li>
+                <NavLink
+                  to="/wishlist"
+                  onClick={toggleMobileMenu}
+                  className="text-white hover:text-yellow-300 transition-colors"
+                >
+                  Wishlist
+                </NavLink>
+                <NavLink
+                  to="/orders"
+                  onClick={toggleMobileMenu}
+                  className="text-white hover:text-yellow-300 transition-colors"
+                >
+                  Orders
+                </NavLink>
+                <NavLink
+                  to="/cartPage"
+                  onClick={toggleMobileMenu}
+                  className="flex items-center space-x-2 text-white hover:text-yellow-300 transition-colors"
+                >
+                  <Badge badgeContent={totalQuantity} color="warning">
+                    <ShoppingCartIcon className="h-6 w-6" />
+                  </Badge>
+                  <span>Cart</span>
+                </NavLink>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    toggleMobileMenu();
+                  }}
+                  className="text-white hover:text-yellow-300 transition-colors"
+                >
+                  Logout
+                </button>
               </>
             ) : (
-              <li>
-                <StyledLink to="/login">Login</StyledLink>
-              </li>
+              <NavLink
+                to="/login"
+                onClick={toggleMobileMenu}
+                className="text-white hover:text-yellow-300 transition-colors"
+              >
+                Login
+              </NavLink>
             )}
-          </ul>
+          </nav>
         </div>
-      </div>
-    </Wrapper>
+      )}
+    </header>
   );
 };
 
 export default Header;
-
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: white;
-  &:hover {
-    color: #fae25c;
-  }
-`;
-const Wrapper = styled.section`
-  height: 4.2rem;
-  background: linear-gradient(30deg, #a093d6a9, #5852a9a9, #113267bb);
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 500;
-  position: sticky;
-
-  .container {
-    padding: 2.2rem;
-    height: 10%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .left {
-    flex: 0.3;
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-
-    h2 {
-      padding-left: 2px;
-    }
-    .icon-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-decoration: none;
-      &:hover {
-        color: #ffff58;
-      }
-    }
-    .image {
-      padding-bottom: 8px;
-      cursor: pointer;
-    }
-    img {
-      border-radius: 50%;
-      height: 60px;
-      width: 60px;
-    }
-    h2 {
-      font-weight: 500;
-      font-size: 1.2rem;
-    }
-  }
-  /* .center{
-    flex: 1;
-    padding-bottom: 5px;
-  } */
-  /* 
-  input{
-      padding: 8px;
-      padding-left: 40px;
-      border-radius: 40px;
-      height: 25px;
-      width: 15rem;
-      border: none;
-      font-size: 16px;
-    } */
-
-  .right {
-    display: flex;
-    flex: 1;
-    justify-content: flex-end;
-    align-items: flex-end;
-    padding-right: 2rem;
-    ul {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    li {
-      color: white;
-      cursor: pointer;
-      list-style: none;
-      text-transform: uppercase;
-      font-weight: 500;
-      padding: 0.6rem;
-      margin-left: 10px;
-    }
-  }
-  .avatar {
-    cursor: pointer;
-    margin: 0 0.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .action {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .account {
-    text-transform: capitalize;
-    color: white;
-    margin-left: 0.5rem;
-    &:hover {
-      color: #ffff74;
-    }
-  }
-  .cart {
-    text-transform: capitalize;
-  }
-`;

@@ -2,36 +2,34 @@ import React, { useEffect } from "react";
 import Header from "../../components/common/Header";
 import Footer2 from "../../components/common/Footer2";
 import Products from "../../components/users/Products";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
 
-const ProductPage = ({ data }) => {
+const ProductPage = () => {
   const dispatch = useDispatch();
-  const token = localStorage.getItem("jwttoken");
   const navigate = useNavigate();
-  // const { currentUser } = useSelector((store) => store.auth);
+
   useEffect(() => {
-    // Scroll to the top when the component mounts
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
-
-    // getCurrentUser(token, navigate, dispatch);
-    // getAllCategoriesFromBackend(dispatch);
   }, []);
+
   return (
-    <Wrapper>
+    <div className="flex flex-col min-h-screen">
+      {/* Header */}
       <Header />
-      <Products />
-      <Footer2 />
-    </Wrapper>
+
+      {/* Main content with flex-grow to push the footer down */}
+      <main className="flex-grow">
+        <Products />
+      </main>
+
+      {/* Footer */}
+      <Footer2 className="flex-shrink-0" />
+    </div>
   );
 };
 
 export default ProductPage;
-const Wrapper = styled.div`
-  background-size: cover;
-  background-position: center;
-`;

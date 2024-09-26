@@ -1,23 +1,18 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import SearchIcon from "@mui/icons-material/Search";
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Button,
   Checkbox,
-  FormControl,
   FormControlLabel,
   FormGroup,
-  FormLabel,
-  Pagination,
   Radio,
   RadioGroup,
   Typography,
+  Pagination,
 } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-// import { categories, price } from "../landingPage/data";
 import ProductList from "./ProductList";
 import { useDispatch, useSelector } from "react-redux";
 import { searchAndFilter } from "../../reduxToolkit/features/productList/ProductSlice";
@@ -34,7 +29,7 @@ const Products = () => {
   const { products, filterProducts } = product;
   const totalProducts =
     filterProducts.length > 0 ? filterProducts.length : products.length;
-  //For pagination
+
   useEffect(() => {
     const totalFilteredProducts =
       filterProducts.length > 0 ? filterProducts.length : products.length;
@@ -69,36 +64,29 @@ const Products = () => {
   const dispatch = useDispatch();
 
   const handleSearchChange = (e) => {
-    const searchTerm = e.target.value;
-    console.log("Search term:", searchTerm);
-    setTerm(searchTerm);
+    setTerm(e.target.value);
   };
 
   const handleSelectChange = (e) => {
-    const selected = e.target.value;
-    setSelectedValue(selected);
+    setSelectedValue(e.target.value);
   };
 
   const handlePriceFilter = (e) => {
-    const priceFilter = e.target.value;
-    setFilter(priceFilter);
+    setFilter(e.target.value);
   };
 
   const handleCategoryChange = (category) => {
-    const newselectedCategory = [...selectedCategory]; // Create copy to avoid mutation
+    const newSelectedCategory = [...selectedCategory];
 
-    const index = newselectedCategory.indexOf(category);
+    const index = newSelectedCategory.indexOf(category);
     if (index > -1) {
-      // Category already selected, remove it
-      newselectedCategory.splice(index, 1);
+      newSelectedCategory.splice(index, 1);
     } else {
-      // Category not selected, add it
-      newselectedCategory.push(category);
+      newSelectedCategory.push(category);
     }
-    setSelectedCategory(newselectedCategory);
+    setSelectedCategory(newSelectedCategory);
   };
 
-  // All Filters working simultaneously
   const applyFilters = (searchTerm, priceFilter, sortOption) => {
     dispatch(
       searchAndFilter({
@@ -111,13 +99,12 @@ const Products = () => {
   };
 
   useEffect(() => {
-    applyFilters(term, filter, selectedValue); // Call initial filter without category
+    applyFilters(term, filter, selectedValue);
   }, [term, filter, selectedValue]);
 
   useEffect(() => {
-    // Re-apply filters when selectedCategory change
     applyFilters(term, filter, selectedValue);
-  }, [term, filter, selectedValue, selectedCategory]);
+  }, [selectedCategory]);
 
   useEffect(() => {
     if (auth.orderCreate) {
@@ -125,291 +112,133 @@ const Products = () => {
     }
     dispatch(orderSuccess(false));
   }, []);
-  return (
-    <Container>
-      <ImageSection>
-        <h1>Shop for art from creators you love</h1>
-      </ImageSection>
-      <FilterTop>
-        <div className="filter-content" id="ref">
-          <div className="title">Product List ({totalProducts})</div>
-          <div className="search">
-            <SearchIcon />
-            <input
-              type="text"
-              placeholder="Search Arts"
-              value={term}
-              onChange={handleSearchChange}
-            />
-          </div>
-          <div className="sort">
-            <label htmlFor="dropdown">Sort By</label>
 
-            <select
-              id="dropdown"
-              value={selectedValue}
-              onChange={handleSelectChange}
-            >
-              <option value="default" disabled={selectedValue !== "default"}>
-                Select Option
-              </option>
-              <option value="ascending">Low to High</option>
-              <option value="descending">High to Low</option>
-            </select>
+  return (
+    <div className="flex flex-col min-h-screen bg-slate-400">
+      {/* Header Section */}
+      <div className="relative h-64 bg-cover bg-center flex justify-center items-center text-white text-center bg-[url('/images/theme1.jpg')]">
+        <h1 className="text-3xl font-bold uppercase">
+          Shop for art from creators you love
+        </h1>
+      </div>
+
+      {/* Main Content Section */}
+      <div className="py-6 flex flex-col items-center flex-grow">
+        <div
+          className="flex flex-col md:flex-row md:justify-between w-full max-w-screen-xl px-4 md:px-8 space-y-4 md:space-y-0"
+          id="ref"
+        >
+          <div className="text-lg font-semibold">
+            Product List ({totalProducts})
+          </div>
+
+          {/* Search and Sort Section */}
+          <div className="flex flex-col md:flex-row items-center justify-between md:space-x-4 w-full md:w-auto">
+            <div className="relative w-full md:w-64 mt-5">
+              <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+              <input
+                type="text"
+                className="pl-12 pr-4 py-2 border rounded-full w-full"
+                placeholder="Search Arts"
+                value={term}
+                onChange={handleSearchChange}
+              />
+            </div>
+            <div className="relative w-full md:w-64">
+              <label htmlFor="dropdown" className="mr-2">
+                Sort By:
+              </label>
+              <select
+                id="dropdown"
+                value={selectedValue}
+                onChange={handleSelectChange}
+                className="border rounded-lg py-2 px-3 w-full"
+              >
+                <option value="default" disabled>
+                  Select Option
+                </option>
+                <option value="ascending">Low to High</option>
+                <option value="descending">High to Low</option>
+              </select>
+            </div>
           </div>
         </div>
-      </FilterTop>
-      <SubContainer>
-        <LeftFilter>
-          <h2>Filter</h2>
+      </div>
+
+      {/* Filter and Product List Section */}
+      <div className="flex flex-col md:flex-row max-w-screen-xl mx-auto px-4 md:px-8 gap-8 flex-grow">
+        {/* Filter Section */}
+        <div className="w-full md:w-1/4">
+          <h2 className="text-xl font-semibold mb-4">Filter</h2>
           <Accordion>
             <AccordionSummary>
-              <Typography variant="h5" id="category">
+              <Typography variant="h6">
                 Categories <ArrowDropDownIcon />
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>
-                {categories.map((item, index) => (
-                  <FormGroup key={item.id}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={selectedCategory.includes(item.name)} // Check based on selectedCategory array
-                          onChange={() => handleCategoryChange(item.name)}
-                        />
-                      }
-                      label={item.name}
-                    />
-                  </FormGroup>
+              <FormGroup>
+                {categories.map((item) => (
+                  <FormControlLabel
+                    key={item.id}
+                    control={
+                      <Checkbox
+                        checked={selectedCategory.includes(item.name)}
+                        onChange={() => handleCategoryChange(item.name)}
+                      />
+                    }
+                    label={item.name}
+                  />
                 ))}
-              </Typography>
+              </FormGroup>
             </AccordionDetails>
           </Accordion>
+
           <Accordion>
             <AccordionSummary>
-              <Typography variant="h5" id="price">
+              <Typography variant="h6">
                 Price <ArrowDropDownIcon />
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>
-                <FormControl>
-                  {/* <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel> */}
-                  <RadioGroup
-                    aria-labelledby="demo-radio-buttons-group-label"
-                    defaultValue="all"
-                    name="radio-buttons-group"
-                    onChange={handlePriceFilter}
-                  >
-                    <FormControlLabel
-                      id="form-left"
-                      value="all"
-                      control={<Radio />}
-                      label="All"
-                    />
-                    <FormControlLabel
-                      id="form-left"
-                      value="below"
-                      control={<Radio />}
-                      label="Below 300"
-                    />
-                    <FormControlLabel
-                      id="form-left"
-                      value="between"
-                      control={<Radio />}
-                      label="300 - 1000"
-                    />
-                    <FormControlLabel
-                      id="form-left"
-                      value="above"
-                      control={<Radio />}
-                      label="1000 and above"
-                    />
-                  </RadioGroup>
-                </FormControl>
-
-                {/* {
-                  price.map((item, index) => (
-                    <List key={item.id}>
-                      <Button key={index} variant='outlined' color='success'>{item.range}</Button>
-                    </List>
-                  ))
-                } */}
-              </Typography>
+              <RadioGroup onChange={handlePriceFilter} defaultValue="all">
+                <FormControlLabel value="all" control={<Radio />} label="All" />
+                <FormControlLabel
+                  value="below"
+                  control={<Radio />}
+                  label="Below 300"
+                />
+                <FormControlLabel
+                  value="between"
+                  control={<Radio />}
+                  label="300 - 1000"
+                />
+                <FormControlLabel
+                  value="above"
+                  control={<Radio />}
+                  label="1000 and above"
+                />
+              </RadioGroup>
             </AccordionDetails>
           </Accordion>
-        </LeftFilter>
+        </div>
 
-        {/* product-container */}
-        <ProductContainer>
+        {/* Product List Section */}
+        <div className="flex-1">
+          {/* Responsive Product Grid */}
           <ProductList currentProducts={currentProducts} />
-          <StyledPagination>
+          <div className="flex justify-center mt-8">
             <Pagination
               count={totalPages}
               color="primary"
-              onChange={handlePageChange}
               page={currentPage}
+              onChange={handlePageChange}
             />
-          </StyledPagination>
-        </ProductContainer>
-      </SubContainer>
-    </Container>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
 export default Products;
-
-const StyledPagination = styled.div`
-  border-top: 0.4px solid #baa95f;
-  padding: 12px;
-  margin-top: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 500;
-`;
-const List = styled.div`
-  width: auto;
-  height: auto;
-`;
-const Container = styled.div`
-  height: 220vh;
-`;
-const ImageSection = styled.div`
-  background-image: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.023),
-      rgba(0, 0, 0, 0.393)
-    ),
-    url("/images/theme1.jpg");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  height: 200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-
-  h1 {
-    text-transform: uppercase;
-    font-size: 40px;
-    width: 50%;
-    text-align: center;
-    font-weight: 600;
-  }
-`;
-const FilterTop = styled.div`
-  height: 120px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  .title {
-    font-weight: 500;
-    color: #020d17;
-  }
-  .filter-content {
-    height: 60px;
-    width: 100%;
-    background-image: linear-gradient(
-      90deg,
-      rgb(255, 254, 254),
-      rgba(224, 194, 149, 0.84),
-      rgba(125, 158, 209, 0.756)
-    );
-    display: flex;
-    justify-content: space-between;
-    padding: 0 15%;
-    align-items: center;
-  }
-  .search {
-    padding: 0 10px;
-    width: 20%;
-    height: 40px;
-    background-color: white;
-    border: 1px solid black;
-    border-radius: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    input {
-      height: 32px;
-      width: 100%;
-      border: none;
-      outline: none;
-      font-size: 15px;
-      font-weight: 400;
-    }
-  }
-  .sort {
-    width: 40%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  #dropdown {
-    margin-left: 10px;
-    height: 35px;
-    border-radius: 10px;
-    width: 40%;
-    padding-left: 10px;
-    color: #070000;
-  }
-`;
-const SubContainer = styled.div`
-  padding: 10px 7%;
-  display: flex;
-  gap: 50px;
-`;
-const LeftFilter = styled.div`
-  background-image: linear-gradient(
-    180deg,
-    rgba(228, 219, 219, 0.046),
-    rgba(207, 198, 113, 0.575),
-    rgba(141, 171, 215, 0.553)
-  );
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  flex: 0.3;
-  border: 1px solid #a19581;
-
-  #form-left {
-    padding-left: 15px;
-  }
-  h2 {
-    text-transform: uppercase;
-    text-align: center;
-    margin-bottom: 40px;
-    font-weight: 550;
-    font-size: 1.2rem;
-  }
-  #category {
-    width: 100%;
-    display: flex;
-    font-size: 16px;
-    font-weight: 540;
-    text-transform: uppercase;
-    justify-content: space-between;
-  }
-  #price {
-    width: 100%;
-    display: flex;
-    font-size: 16px;
-    font-weight: 540;
-    text-transform: uppercase;
-    justify-content: space-between;
-  }
-  Button {
-    font-size: 14px;
-    font-weight: 530;
-    width: 90%;
-    margin-left: 20px;
-  }
-`;
-const ProductContainer = styled.div`
-  flex: 1.1;
-`;

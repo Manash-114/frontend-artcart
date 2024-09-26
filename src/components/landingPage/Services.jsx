@@ -1,126 +1,53 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from "react";
 
 const Services = () => {
   return (
-    <Wrapper>
-      <Title>Services</Title>
-      <Container>
-        <div className="delivery-container">
-        <div className="image-section delivery" />
-           <h1>Free Delivery</h1>
-           <p className='shipping'>Free Shipping on Order above 500</p>
+    <section className="h-auto bg-inherit py-10">
+      <h1 className="text-3xl font-semibold text-center text-green-100 mb-6">
+        Services
+      </h1>
+
+      <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 px-6 lg:px-24">
+        <div className="delivery-container bg-gradient-to-r from-pink-100 to-yellow-100 rounded-lg p-6 shadow-md text-center">
+          <div
+            className="image-section bg-cover bg-center h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 mx-auto mb-4"
+            style={{ backgroundImage: "url('./images/de.png')" }}
+          />
+          <h1 className="text-xl font-semibold">Free Delivery</h1>
+          <p className="mt-2 text-sm font-medium">
+            Free Shipping on Orders above 500
+          </p>
         </div>
 
-        <div className="delivery-container">
-        <div className="image-section payment" />
-           <h1>Safe Payment</h1>
-           <p className='secure'>secure payment gateway</p>
+        <div className="delivery-container bg-gradient-to-r from-pink-100 to-yellow-100 rounded-lg p-6 shadow-md text-center">
+          <div
+            className="image-section bg-cover bg-center h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 mx-auto mb-4"
+            style={{ backgroundImage: "url('./images/pay.png')" }}
+          />
+          <h1 className="text-xl font-semibold">Safe Payment</h1>
+          <p className="mt-2 text-sm font-medium">Secure Payment Gateway</p>
         </div>
 
-        <div className="delivery-container">
-        <div className="image-section support" />
-           <h1>Support</h1>
-           <p className='payment2'>24/7 hours support ready</p>
+        <div className="delivery-container bg-gradient-to-r from-pink-100 to-yellow-100 rounded-lg p-6 shadow-md text-center">
+          <div
+            className="image-section bg-cover bg-center h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 mx-auto mb-4"
+            style={{ backgroundImage: "url('./images/s.png')" }}
+          />
+          <h1 className="text-xl font-semibold">Support</h1>
+          <p className="mt-2 text-sm font-medium">24/7 Customer Support</p>
         </div>
 
-        <div className="delivery-container">
-        <div className="image-section return" />
-           <h1>Return Policy</h1>
-           <p className='return2'>30 - days return guarantee </p>
+        <div className="delivery-container bg-gradient-to-r from-pink-100 to-yellow-100 rounded-lg p-6 shadow-md text-center">
+          <div
+            className="image-section bg-cover bg-center h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 mx-auto mb-4"
+            style={{ backgroundImage: "url('./images/re.png')" }}
+          />
+          <h1 className="text-xl font-semibold">Return Policy</h1>
+          <p className="mt-2 text-sm font-medium">30-Days Return Guarantee</p>
         </div>
-        
-      </Container>
-    </Wrapper>
-  )
-}
+      </div>
+    </section>
+  );
+};
 
-export default Services
-
-const Wrapper = styled.section`
-    height: 52vh;
-    background-color: inherit;
-`
-const Container = styled.div`
-    margin: auto 8%;
-    height: 60%;    
-    display: grid;
-    grid-template-columns: repeat(4,1fr);
-    gap: 35px;
-    padding: 10px 120px;
-
-    .shipping{
-        margin-top: 1rem;
-        font-size: 13px;
-        width: 70%;
-        font-weight: 550;
-    }
-    .secure{
-        margin-top: 1rem;
-        font-size: 15px;
-        width: 70%;
-        font-weight: 550;
-    }
-    .payment2{
-        margin-top: 1rem;
-        font-size: 15px;
-        width: 70%;
-        font-weight: 550;
-    }
-    .return2{
-        margin-top: 1rem;
-        font-size: 15px;
-        width: 70%;
-        font-weight: 550;
-    }
-    .delivery-container{
-        border-radius: 10px;
-        border: .3px solid #efed6c;
-        margin-top: 15px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        background-image: linear-gradient(10deg, #fee3f3, #f9edb1);
-    }
-    .image-section{
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-    }
-    .delivery{
-        height: 20%;
-        width: 26%;
-        background-image: url('./images/shipment.png');
-    }
-    .payment{
-        height: 22%;
-        width: 20%;
-        background-image: url('./images/safe.png');
-    }
-    .support{
-        height: 24%;
-        width: 18%;
-        background-image: url('./images/support.png');
-    }
-    .return{
-        height: 24%;
-        width: 20%;
-        background-image: url('./images/return.png');
-        }
-    p{  
-        font-weight: 500;
-        text-align: center;
-        width: 90%;
-        margin: 0 10px;
-    }
-`
-const Title = styled.h1`
-    font-size: 2.2rem;
-    text-transform: capitalize;
-    display: flex;
-    justify-content: center;
-    font-weight: 600;
-    color: #e4fdf3;
-    margin-bottom: 1rem;
-`
+export default Services;
