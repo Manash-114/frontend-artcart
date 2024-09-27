@@ -1,24 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Popover from "@mui/material/Popover";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import DataTable from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../../common/Spinner";
-import { updateProduct } from "../../../reduxToolkit/features/sellerSlice";
+import {
+  fetchSellerProducts,
+  updateProduct,
+} from "../../../reduxToolkit/features/sellerSlice";
 import toast, { Toaster } from "react-hot-toast";
 import { logOut } from "../../../reduxToolkit/features/auth/authSlice";
+import { CircularProgress } from "@mui/material";
+
 const ManageProducts = () => {
   const data = useSelector((store) => store.seller.allProducts);
   const dispatch = useDispatch();
-  const productImagesUrlFromClodinary = [];
-  const isLoading = useSelector((store) => store.seller.loading);
+  const [rowLoading, setRowLoading] = useState({}); // Tracks loading state per row
 
-  const [isLoadingForCloud, setIsLoadingForCloud] = useState(false);
-  const [anchorEl1, setAnchorEl1] = useState(null);
-  const [showImageTag, SetShowImageTag] = useState(false);
-  const uploadImageToCloudinary = async (files) => {
-    setIsLoadingForCloud(true);
+  const uploadImageToCloudinary = async (files, productId) => {
+    const productImagesUrlFromCloudinary = [];
+    setRowLoading((prevState) => ({
+      ...prevState,
+      [productId]: { ...prevState[productId], isLoadingForCloud: true },
+    }));
+
     try {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
@@ -34,32 +40,51 @@ const ManageProducts = () => {
           }
         );
         const resData = await res.json();
-        productImagesUrlFromClodinary.push(resData.url);
-        setIsLoadingForCloud(false);
+        productImagesUrlFromCloudinary.push(resData.url);
       }
+
+      setRowLoading((prevState) => ({
+        ...prevState,
+        [productId]: { ...prevState[productId], isLoadingForCloud: false },
+      }));
+      return productImagesUrlFromCloudinary;
     } catch (e) {
-      toast.error("Error in uploading images try again after some time.");
-      setIsLoadingForCloud(false);
+      toast.error("Error in uploading images. Try again.");
+      setRowLoading((prevState) => ({
+        ...prevState,
+        [productId]: { ...prevState[productId], isLoadingForCloud: false },
+      }));
+      return [];
     }
   };
-  const handleClose1 = () => {
-    setAnchorEl1(null);
-    SetShowImageTag(false);
-  };
 
-  const handleUpdateProduct = async ({ dataToUpdate }) => {
+  const handleUpdateProduct = async (productData) => {
+    setRowLoading((prevState) => ({
+      ...prevState,
+      [productData.productId]: {
+        ...prevState[productData.productId],
+        isLoading: true,
+      },
+    }));
+
     try {
       const res = await dispatch(
-        updateProduct({ data: dataToUpdate, productId: dataToUpdate.productId })
+        updateProduct({ data: productData, productId: productData.productId })
       ).unwrap();
       toast.success(res.message);
-      handleClose1();
     } catch (error) {
       toast.error(error);
       if (error === "Invalid refresh token") {
         dispatch(logOut());
       }
-      handleClose1();
+    } finally {
+      setRowLoading((prevState) => ({
+        ...prevState,
+        [productData.productId]: {
+          ...prevState[productData.productId],
+          isLoading: false,
+        },
+      }));
     }
   };
 
@@ -87,6 +112,7 @@ const ManageProducts = () => {
     {
       name: "Action",
       cell: (row) => {
+        const [anchorEl, setAnchorEl] = useState(null);
         const [productImages, setProductImages] = useState([]);
         const [productData, setProductData] = useState({
           productId: row.id,
@@ -95,47 +121,63 @@ const ManageProducts = () => {
           description: row.description,
           stock: row.stock,
         });
+        const [showImageTag, setShowImageTag] = useState(false);
 
-        const handleClick1 = (event) => {
-          setAnchorEl1(event.currentTarget);
+        const handleClick = (event) => {
+          setAnchorEl(event.currentTarget);
         };
 
-        const open1 = Boolean(anchorEl1);
-        const id1 = open1 ? "simple-popover" : undefined;
+        const open = Boolean(anchorEl);
+        const id = open ? "simple-popover" : undefined;
+
+        const handleClose = () => {
+          setAnchorEl(null);
+          setShowImageTag(false);
+        };
 
         const handleFormSubmit = async (e) => {
           e.preventDefault();
           if (showImageTag) {
-            //upload image again to
-            const res = await uploadImageToCloudinary(productImages);
-            if (productImagesUrlFromClodinary.length != 0) {
-              productData["productImages"] = productImagesUrlFromClodinary;
-              handleUpdateProduct({ dataToUpdate: productData });
+            const productImagesUrl = await uploadImageToCloudinary(
+              productImages,
+              productData.productId
+            );
+            if (productImagesUrl.length !== 0) {
+              productData["productImages"] = productImagesUrl;
+              handleUpdateProduct(productData);
+              handleClose();
             } else {
-              toast.error("Error in uploading file.try again after some time");
+              toast.error("Error in uploading file. Try again.");
             }
           } else {
             const productImagesUrl = row.productImages.map((img) => img.name);
             productData["productImages"] = productImagesUrl;
-            handleUpdateProduct({ dataToUpdate: productData });
+            handleUpdateProduct(productData);
+            handleClose();
           }
         };
+
+        const isRowLoading = rowLoading[row.id] || {};
 
         return (
           <div>
             <Button
-              aria-describedby={id1}
+              aria-describedby={id}
               variant="contained"
               className="bg-indigo-600 text-white hover:bg-indigo-500 transition-colors"
-              onClick={handleClick1}
+              onClick={handleClick}
             >
-              Edit Product
+              {isRowLoading.isLoading || isRowLoading.isLoadingForCloud ? (
+                <Spinner />
+              ) : (
+                "Edit Product"
+              )}
             </Button>
             <Popover
-              id={id1}
-              open={open1}
-              anchorEl={anchorEl1}
-              onClose={handleClose1}
+              id={id}
+              open={open}
+              anchorEl={anchorEl}
+              onClose={handleClose}
               anchorOrigin={{
                 vertical: "top",
                 horizontal: "left",
@@ -144,7 +186,6 @@ const ManageProducts = () => {
                 vertical: "center",
                 horizontal: "center",
               }}
-              className="w-full"
             >
               <Typography sx={{ p: 2 }}>
                 <div className="p-4 bg-white rounded-lg shadow-lg max-w-lg w-full">
@@ -267,7 +308,7 @@ const ManageProducts = () => {
                         type="checkbox"
                         id="showImage"
                         checked={showImageTag}
-                        onChange={() => SetShowImageTag(!showImageTag)}
+                        onChange={() => setShowImageTag(!showImageTag)}
                         className="form-checkbox"
                       />
                       <label htmlFor="showImage" className="ml-2 text-sm">
@@ -301,8 +342,7 @@ const ManageProducts = () => {
                     >
                       Update Product
                     </button>
-
-                    {(isLoading || isLoadingForCloud) && <Spinner />}
+                    {isRowLoading.isLoadingForCloud && <Spinner />}
                   </form>
                 </div>
               </Typography>
@@ -313,6 +353,20 @@ const ManageProducts = () => {
     },
   ];
 
+  const fetchProducts = async () => {
+    try {
+      await dispatch(fetchSellerProducts()).unwrap();
+    } catch (error) {
+      if (error === "Invalid refresh token") {
+        dispatch(logOut());
+      } else {
+        console.log("Server error ", error);
+      }
+    }
+  };
+  useEffect(() => {
+    fetchProducts();
+  }, []);
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />

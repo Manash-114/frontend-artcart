@@ -5,7 +5,6 @@ import {
   approveSeller,
   fetchNewSeller,
 } from "../../reduxToolkit/features/adminSlice";
-
 import toast, { Toaster } from "react-hot-toast";
 import { logOut } from "../../reduxToolkit/features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
@@ -55,7 +54,6 @@ const ManageSeller = () => {
     } catch (error) {
       if (error === "Invalid refresh token") {
         dispatch(logOut());
-        navigate("/");
       }
     }
   };
@@ -63,13 +61,14 @@ const ManageSeller = () => {
   useEffect(() => {
     getAllUnapprovedSeller();
   }, [dispatch]);
+
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
-      <div className="p-6 flex flex-col md:flex-row">
+      <div className="p-6 flex flex-col md:flex-row gap-6">
         {/* Sidebar */}
-        <div className="md:w-1/4 bg-white shadow-md rounded-lg p-4 mb-6 md:mb-0">
-          <h2 className="text-lg font-semibold mb-4 text-center">
+        <div className="md:w-1/4 bg-white shadow-lg rounded-lg p-4">
+          <h2 className="text-lg font-semibold mb-6 text-center text-gray-800">
             Admin Actions
           </h2>
           <ul className="space-y-4">
@@ -77,8 +76,8 @@ const ManageSeller = () => {
               className={`${
                 activeTab === "view-requests"
                   ? "bg-blue-500 text-white"
-                  : "bg-gray-200"
-              } rounded-lg p-3 text-center cursor-pointer hover:bg-gray-300`}
+                  : "bg-gray-100 hover:bg-gray-200"
+              } rounded-lg p-3 text-center cursor-pointer transition-colors`}
               onClick={() => setActiveTab("view-requests")}
             >
               View All Requests
@@ -87,8 +86,8 @@ const ManageSeller = () => {
               className={`${
                 activeTab === "list-sellers"
                   ? "bg-blue-500 text-white"
-                  : "bg-gray-200"
-              } rounded-lg p-3 text-center cursor-pointer hover:bg-gray-300`}
+                  : "bg-gray-100 hover:bg-gray-200"
+              } rounded-lg p-3 text-center cursor-pointer transition-colors`}
               onClick={() => setActiveTab("list-sellers")}
             >
               List of All Sellers
@@ -97,8 +96,8 @@ const ManageSeller = () => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 ml-0 md:ml-6 bg-white shadow-lg rounded-lg p-6">
-          <h2 className="text-xl font-bold mb-6">
+        <div className="flex-1 bg-white shadow-lg rounded-lg p-6">
+          <h2 className="text-xl font-bold mb-6 text-gray-800">
             {activeTab === "view-requests"
               ? "Manage Seller Requests"
               : "List of All Sellers"}
@@ -119,7 +118,9 @@ const ManageSeller = () => {
             </>
           )}
           {activeTab === "list-sellers" && (
-            <p>List of all sellers goes here...</p>
+            <p className="text-center text-gray-500">
+              List of all sellers goes here...
+            </p>
           )}
         </div>
       </div>

@@ -1,46 +1,66 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import * as Yup from "yup";
 import TextError from "./TextError";
 import axios from "axios";
-import { BASE_URL } from "./common/config";
 import { BASE_URL_LOCAL } from "../apiCalls/common-db";
 import CircularProgress from "@mui/material/CircularProgress";
 import toast, { Toaster } from "react-hot-toast";
 
+// Initial form values
 const initialValues = {
   email: "",
   password: "",
 };
 
+// Reusable FormField component
+const FormField = ({ label, name, type }) => (
+  <div className="mb-6">
+    <label
+      htmlFor={name}
+      className="block text-lg font-medium text-gray-700 mb-2"
+    >
+      {label}
+    </label>
+    <Field
+      type={type}
+      id={name}
+      name={name}
+      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+    />
+    <ErrorMessage name={name} component={TextError} />
+  </div>
+);
+
 const Registration = () => {
   const [loading, setLoading] = useState(false);
+  const location = useLocation();
+  const role = location.pathname.includes("seller") ? "seller" : "customer";
+  const loginLink = role === "seller" ? "/seller/login" : "/login";
+
+  const registerUser = async (values) => {
+    try {
+      const res = await axios.post(`${BASE_URL_LOCAL}/auth/signup`, values);
+      if (res.data.status === false) {
+        toast.error(res.data.message);
+      } else {
+        toast.success("Registration successful!");
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "Registration failed!";
+      toast.error(errorMessage);
+      console.error("Registration Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const onSubmit = (values) => {
-    setLoading(true); // Set loading to true during form submission
-
-    values["role"] =
-      window.location.href.split("/")[3] === "seller" ? "seller" : "customer";
-
-    axios
-      .post(`${BASE_URL_LOCAL}/auth/signup`, values)
-      .then((res) => {
-        console.log("res", res.data);
-        if (res.data.status === false) {
-          toast.success(res.data.message); // Show success toast
-        } else {
-          toast.success("Registration successful!"); // Show success toast
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error("Registration failed!"); // Show error toast
-      })
-      .finally(() => {
-        setLoading(false); // Set loading to false after registration
-      });
+    setLoading(true);
+    values["role"] = role;
+    registerUser(values);
   };
 
   const validationSchema = Yup.object({
@@ -53,52 +73,53 @@ const Registration = () => {
   });
 
   return (
-    <Wrapper>
+    <div className="h-screen mt-6 bg-cover bg-center flex justify-center items-center bg-gradient-to-r from-black/50 via-black/40 to-black/30 bg-[url('./images/nature.jpg')]">
       <Toaster position="top-center" reverseOrder={false} />
-      <div className="container">
-        <div className="imageSection">
-          <div className="content">
-            <h1>Join the largest artwork community</h1>
-            <p id="content-p">
-              Get free access to millions pieces of art, showcase, promote, sell
-              & share your work with other members in the ArtWork Community.
+      <div className="w-full max-w-[650px] h-auto md:h-[500px] bg-white flex flex-col md:flex-row shadow-lg">
+        <div className="flex-1 bg-cover bg-center flex items-center bg-[url('./images/ship.jpg')] bg-gradient-to-r from-black/50 to-black/40">
+          <div className="m-8 text-white">
+            <h1 className="text-2xl md:text-4xl font-bold uppercase mb-4 md:mb-8">
+              Join the largest artwork community
+            </h1>
+            <p className="text-sm md:text-lg">
+              Get free access to millions of pieces of art, showcase, promote,
+              sell & share your work with other members in the ArtWork
+              Community.
             </p>
           </div>
         </div>
 
-        <div className="registrationSection">
+        <div className="flex-1 bg-white flex flex-col items-center py-8 px-4 md:py-16 md:px-6">
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
           >
-            <Form>
-              <h2 className="title">Join ArtWork</h2>
-              <div className="form-control">
-                <label htmlFor="email">Email</label>
-                <Field type="email" id="email" name="email" />
-                <ErrorMessage name="email" component={TextError} />
-              </div>
+            <Form className="w-full max-w-xs">
+              <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">
+                Join ArtWork
+              </h2>
 
-              <div className="form-control">
-                <label htmlFor="password">Password</label>
-                <Field type="password" id="password" name="password" />
-                <ErrorMessage name="password" component={TextError} />
-              </div>
+              <FormField label="Email" name="email" type="email" />
+              <FormField label="Password" name="password" type="password" />
 
-              <button type="submit" disabled={loading}>
+              <button
+                type="submit"
+                disabled={loading}
+                className={`w-full bg-green-600 text-white text-sm md:text-lg font-bold py-2 rounded-md ${
+                  loading
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-green-700"
+                }`}
+              >
                 {loading ? <CircularProgress size={20} /> : "Submit"}
               </button>
 
-              <p>
+              <p className="mt-4 text-gray-600">
                 Already a member?{" "}
                 <NavLink
-                  className="log-in"
-                  to={
-                    window.location.href.split("/")[3] === "seller"
-                      ? "/seller/login"
-                      : "/login"
-                  }
+                  className="text-green-600 font-bold hover:underline"
+                  to={loginLink}
                 >
                   Log in
                 </NavLink>
@@ -107,109 +128,8 @@ const Registration = () => {
           </Formik>
         </div>
       </div>
-    </Wrapper>
+    </div>
   );
 };
 
 export default Registration;
-
-const Wrapper = styled.div`
-  height: 97vh;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.365), rgba(0, 0, 0, 0.5)),
-    url("./images/nature.jpg");
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  .container {
-    width: 900px;
-    height: 680px;
-    background-color: white;
-    display: flex;
-  }
-  .imageSection {
-    flex: 1;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.486), rgba(0, 0, 0, 0.42)),
-      url("./images/flower.jpg");
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    align-items: center;
-  }
-  .content {
-    margin: 30px;
-    height: 60%;
-  }
-  h1 {
-    width: 80%;
-    font-size: 40px;
-    text-transform: uppercase;
-    font-weight: bold;
-    line-height: 1.2;
-    color: #fff;
-    margin-bottom: 30px;
-  }
-  #content-p {
-    font-size: 20px;
-    color: #fdfdfde5;
-  }
-  .registrationSection {
-    background: #f8f8fef3;
-
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 60px 0px;
-    border-radius: 1px solid black;
-  }
-
-  .title {
-    font-weight: bold;
-    font-size: 35px;
-    margin-bottom: 40px;
-  }
-  label {
-    font-size: 18px;
-    display: block;
-    margin-bottom: 10px;
-    font-weight: 500;
-  }
-  input[type="password"],
-  input[type="email"] {
-    display: block;
-    width: 300px;
-    padding: 6px 12px;
-    font-size: 16px;
-    line-height: 1.4;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  p {
-    font-size: 18px;
-  }
-  .form-control {
-    margin-bottom: 20px;
-  }
-  button {
-    width: 100%;
-    height: 40px;
-    background-color: #2c5c66;
-    border: 1px solid #ccc;
-    color: white;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-  }
-
-  .log-in {
-    font-weight: 3000;
-    color: #24da24;
-    text-decoration: none;
-  }
-  .error {
-    color: red;
-  }
-`;

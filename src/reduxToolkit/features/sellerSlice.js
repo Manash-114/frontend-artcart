@@ -197,15 +197,6 @@ export const deleteProduct = createAsyncThunk(
   }
 );
 
-export const editProduct = createAsyncThunk(
-  "seller/editProduct",
-  async (productData) => {
-    const { id, updates } = productData;
-    const response = await axios.patch(`/api/seller/product/${id}`, updates);
-    return response.data;
-  }
-);
-
 export const approveOrder = createAsyncThunk(
   "seller/approveOrder",
   async ({ data }, { getState, dispatch, rejectWithValue }) => {
@@ -331,8 +322,6 @@ const sellerSlice = createSlice({
         state.error = null;
       })
       .addCase(updateProduct.fulfilled, (state, action) => {
-        console.log(`from thunck`);
-        console.log(action.payload);
         const index = state.allProducts.findIndex(
           (product) => product.id === action.payload.data.id
         );
@@ -358,25 +347,6 @@ const sellerSlice = createSlice({
         state.loading = false;
       })
       .addCase(deleteProduct.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
-
-      // Edit product
-      .addCase(editProduct.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(editProduct.fulfilled, (state, action) => {
-        const index = state.allProducts.findIndex(
-          (product) => product.id === action.payload.id
-        );
-        if (index !== -1) {
-          state.allProducts[index] = action.payload;
-        }
-        state.loading = false;
-      })
-      .addCase(editProduct.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })

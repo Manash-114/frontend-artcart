@@ -1,115 +1,38 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
 import { logOut } from "../../reduxToolkit/features/auth/authSlice";
 
 const AdminNav = () => {
   const dispatch = useDispatch();
   return (
-    <Wrapper>
-      <div className="container">
-        <div className="left">
-          <div className="image">
-            <img src="/images/Logo.jpg" alt="logo-image"></img>
-          </div>
-          <h2>ArtCart</h2>
-        </div>
-
-        <div className="right">
-          <ul>
-            <li>
-              <StyledLink to="/admin">Home</StyledLink>
-            </li>
-            <li>
-              <StyledLink
-                onClick={() => {
-                  dispatch(logOut());
-                }}
-                to={"/login"}
-              >
-                Logout
-              </StyledLink>
-            </li>
-          </ul>
-        </div>
+    <nav className="bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-700 shadow-lg p-4 flex justify-between items-center">
+      <div className="flex items-center gap-3">
+        <img
+          src="/images/Logo.jpg"
+          alt="logo"
+          className="h-12 w-12 rounded-full"
+        />
+        <h2 className="text-white text-lg font-semibold">ArtCart</h2>
       </div>
-    </Wrapper>
+      <ul className="flex space-x-6">
+        <li>
+          <Link to="/admin" className="text-white hover:text-yellow-400">
+            Home
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/login"
+            onClick={() => dispatch(logOut())}
+            className="text-white hover:text-yellow-400"
+          >
+            Logout
+          </Link>
+        </li>
+      </ul>
+    </nav>
   );
 };
 
 export default AdminNav;
-
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: white;
-  &:hover {
-    color: #fae25c;
-  }
-`;
-const Wrapper = styled.section`
-  height: 4.2rem;
-  background: linear-gradient(30deg, #978ad3a9, #2452a0ee);
-
-  .container {
-    padding: 2.2rem;
-
-    height: 10%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .left {
-    flex: 0.7;
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-
-    .image {
-      padding-bottom: 8px;
-    }
-    img {
-      border-radius: 50%;
-      height: 60px;
-      width: 60px;
-    }
-    h2 {
-      font-weight: 500;
-      font-size: 1.2rem;
-    }
-  }
-  .center {
-    flex: 1;
-    padding-bottom: 5px;
-  }
-
-  input {
-    padding: 8px;
-    padding-left: 40px;
-    border-radius: 40px;
-    height: 25px;
-    width: 15rem;
-    border: none;
-    font-size: 16px;
-  }
-
-  .right {
-    display: flex;
-    flex: 1;
-
-    ul {
-      display: flex;
-      justify-content: space-between;
-    }
-    li {
-      color: white;
-      cursor: pointer;
-      list-style: none;
-      text-transform: uppercase;
-      font-weight: 500;
-      padding: 0.6rem;
-      margin-left: 10px;
-    }
-  }
-`;

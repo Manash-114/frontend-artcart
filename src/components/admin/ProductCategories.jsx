@@ -6,21 +6,21 @@ import { deleteCategory } from "../../reduxToolkit/features/productList/ProductS
 import CircularProgress from "@mui/material/CircularProgress";
 import toast, { Toaster } from "react-hot-toast";
 import { logOut } from "../../reduxToolkit/features/auth/authSlice";
+
 const ProductCategories = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const categories = useSelector((store) => store.product.productCategory);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [categoryIdToDelete, setCategoryIdToDelete] = useState(null);
-  const [selectedCategoryId, setSelectedCategoryId] = useState(null); // State to track selected category
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const dispatch = useDispatch();
-
   const isLoading = useSelector((store) => store.product.loading);
   const status = useSelector((store) => store.product.status);
+  const [isLoading1, setIsLoading1] = useState(false);
+
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
-
-  const [isLoading1, setIsLoading1] = useState(false);
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -58,23 +58,22 @@ const ProductCategories = () => {
   };
 
   const handleAddCategory = (categoryName) => {
-    // Handle adding the category
-    setIsModalOpen(false); // Close the modal after submission
+    setIsModalOpen(false);
   };
 
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
-      <div className="flex flex-col md:flex-row justify-center items-start space-y-4 md:space-y-0 md:space-x-4 border-2 border-green-400 p-4">
+      <div className="flex flex-col md:flex-row justify-center items-start space-y-4 md:space-y-0 md:space-x-4 p-4">
         {/* Left Sidebar for Categories */}
-        <div className="border-2 w-full md:w-1/4 text-center p-4 h-auto bg-slate-100 shadow-lg">
-          <div className="p-4 bg-slate-300 m-2 cursor-pointer font-bold">
+        <div className="w-full md:w-1/4 text-center p-4 h-auto bg-slate-100 shadow-lg rounded-lg">
+          <div className="p-4 bg-slate-300 m-2 cursor-pointer font-bold rounded-lg hover:bg-slate-400 transition duration-200">
             All Categories
           </div>
-          <div className="p-4 bg-slate-300 m-2 ">
+          <div className="p-4 bg-slate-300 m-2 rounded-lg">
             <button
               onClick={handleOpenModal}
-              className="w-full font-bold py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-200"
+              className="w-full font-bold py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition duration-200"
             >
               Add New Category
             </button>
@@ -89,7 +88,7 @@ const ProductCategories = () => {
         </div>
 
         {/* Category Table or Empty Message */}
-        <div className="w-full md:w-3/4 h-80 overflow-y-auto border-2 border-gray-200 p-4 bg-white shadow-lg">
+        <div className="w-full md:w-3/4 h-80 overflow-y-auto border border-gray-200 p-4 bg-white shadow-lg rounded-lg">
           {categories.length === 0 ? (
             <div className="text-center p-4">
               <p className="text-gray-500 text-lg">No categories available.</p>
@@ -114,11 +113,9 @@ const ProductCategories = () => {
                   <tr
                     key={category.id}
                     className={`border-b border-gray-200 ${
-                      selectedCategoryId === category.id
-                        ? "bg-blue-100" // Apply blue background if the category is selected
-                        : ""
+                      selectedCategoryId === category.id ? "bg-blue-100" : ""
                     }`}
-                    onClick={() => handleCategorySelect(category.id)} // Set selected category on click
+                    onClick={() => handleCategorySelect(category.id)}
                   >
                     <td className="px-6 py-4 whitespace-no-wrap cursor-pointer">
                       {category.name}
@@ -128,7 +125,7 @@ const ProductCategories = () => {
                         <button
                           className="text-red-600 hover:text-red-900"
                           onClick={(e) => {
-                            e.stopPropagation(); // Prevent click from selecting the row
+                            e.stopPropagation();
                             handleCategoryDelete(category.id);
                           }}
                         >
