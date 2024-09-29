@@ -134,14 +134,14 @@ export const categories1 = [
     img: "https://c4.wallpaperflare.com/wallpaper/240/654/397/nature-landscape-painting-artwork-wallpaper-preview.jpg",
     title: "LIGHT JACKETS",
     category: "skincare",
-    cat: "Nature2",
+    cat: "Sketching",
   },
   {
     id: 6,
     img: "https://c4.wallpaperflare.com/wallpaper/240/654/397/nature-landscape-painting-artwork-wallpaper-preview.jpg",
     title: "LIGHT JACKETS",
     category: "skincare",
-    cat: "Nature3",
+    cat: "Love",
   },
 ];
 

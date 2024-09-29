@@ -4,10 +4,11 @@ import {
   logOut,
 } from "../../reduxToolkit/features/auth/authSlice";
 import { createApi } from "@reduxjs/toolkit/query/react";
+import { BASE_URL_LOCAL } from "../../apiCalls/common-db";
 
 // Base query setup for fetching with access token and credentials (cookies)
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:7002",
+  baseUrl: BASE_URL_LOCAL,
   credentials: "include", // Include credentials (cookies) with every request
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token; // Get token from Redux state
@@ -19,7 +20,7 @@ const baseQuery = fetchBaseQuery({
 });
 
 const baseQuery1 = fetchBaseQuery({
-  baseUrl: "http://localhost:7002",
+  baseUrl: BASE_URL_LOCAL,
   credentials: "include", // Include credentials (cookies) with every request
 });
 
