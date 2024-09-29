@@ -11,22 +11,22 @@ const OrderDetail = () => {
 
   return (
     <div className="p-4">
-      <div className="flex gap-6 justify-center items-start">
+      <div className="flex flex-col md:flex-row gap-6 justify-center items-start">
         {/* Product Details Section */}
         <div className="flex-1 space-y-4">
           {cartItems.map((item) => (
             <div
-              className="flex border border-gray-300 rounded-lg shadow-md p-4 w-full max-w-lg"
+              className="flex flex-col md:flex-row border border-gray-300 rounded-lg shadow-md p-4 w-full max-w-lg"
               key={item.id}
             >
-              <div className="w-32 h-32 p-2">
+              <div className="w-full md:w-32 h-32 p-2">
                 <img
                   src={item.productImages[0].name}
                   alt={item.id}
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="ml-4 flex-1">
+              <div className="ml-0 md:ml-4 flex-1 mt-4 md:mt-0">
                 <p className="font-semibold text-md">{item.name}</p>
                 <p className="mt-4 text-green-600 flex items-center">
                   <CurrencyRupee className="h-5 w-5" />
@@ -38,7 +38,7 @@ const OrderDetail = () => {
         </div>
 
         {/* Order Summary Section */}
-        <div className="w-full max-w-sm border border-gray-300 rounded-lg shadow-md p-6">
+        <div className="w-full md:max-w-sm border border-gray-300 rounded-lg shadow-md p-6 bg-white">
           <h2 className="text-center text-lg font-semibold uppercase text-gray-700 border-b border-gray-200 pb-4">
             Order Summary
           </h2>

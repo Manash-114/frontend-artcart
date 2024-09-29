@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
-import { generatePaymentWithRazopay } from "../../apiCalls/users/generatePaymentWithRazopay";
 import { useNavigate } from "react-router-dom";
 import { logOut } from "../../reduxToolkit/features/auth/authSlice";
 import {
@@ -20,6 +19,7 @@ import {
   onlinePaymentRequest,
 } from "../../reduxToolkit/features/customerSlice";
 import { resetBillingAddress } from "../../reduxToolkit/features/productList/BillingAddressSlice";
+
 const PaymentDetails = () => {
   const [open, setOpen] = useState(false);
   const [orderDetails, setOrderDetails] = useState(null);
@@ -28,7 +28,6 @@ const PaymentDetails = () => {
   const { billingAddress } = useSelector((store) => store);
   const { cartTotalAmount } = useSelector((store) => store.cart);
   const { token } = useSelector((store) => store.auth);
-
   const navigate = useNavigate();
   const { status } = useSelector((store) => store.customer);
 
@@ -42,6 +41,7 @@ const PaymentDetails = () => {
     setOpen(true);
     dispatch(resetBillingAddress());
   };
+
   const handleCodPayment = async () => {
     const orderReqData = {
       billingAddress: {
@@ -60,17 +60,16 @@ const PaymentDetails = () => {
 
     try {
       const res = await dispatch(createOrder({ data: orderReqData })).unwrap();
-      handleOrderConfirmation();
-      setOrderDetails(res.data);
+      handleOrderConfirmation(res.data);
     } catch (error) {
       if (error === "Invalid refresh token") dispatch(logOut());
     }
-    // createOrder(orderReqData, token, dispatch, navigate);
   };
 
   const handleRazorpayPaymentFailed = () => {
-    toast.error("Payment failed.try another way or try again later");
+    toast.error("Payment failed. Try another way or try again later.");
   };
+
   const openRazorpayLayout = (resData, orderReqData) => {
     var options = {
       key: "rzp_test_b7cdwAk8TAVDye",
@@ -78,43 +77,29 @@ const PaymentDetails = () => {
       currency: "INR",
       name: "Artcart",
       image: "https://example.com/your_logo",
-      order_id: resData.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+      order_id: resData.id,
       handler: async (response) => {
-        console.log("payment done");
         orderReqData.paymentReq.id = response.razorpay_payment_id;
         try {
           const res = await dispatch(
             createOrder({ data: orderReqData })
           ).unwrap();
-          handleOrderConfirmation();
-          setOrderDetails(res.data);
+          handleOrderConfirmation(res.data);
         } catch (error) {
           if (error === "Invalid refresh token") dispatch(logOut());
         }
       },
       prefill: {
-        name: "Gaurav Kumar", //your customer's name
+        name: "Gaurav Kumar",
         email: "gaurav.kumar@example.com",
-        contact: "9000090000", //Provide the customer's phone number for better conversion rates
-      },
-      notes: {
-        address: "Razorpay Corporate Office",
+        contact: "9000090000",
       },
       theme: {
         color: "#3399cc",
       },
     };
     var rzp1 = new Razorpay(options);
-    rzp1.on("payment.failed", function (response) {
-      // alert(response.error.code);
-      // alert(response.error.description);
-      // alert(response.error.source);
-      // alert(response.error.step);
-      // alert(response.error.reason);
-      // alert(response.error.metadata.order_id);
-      // alert(response.error.metadata.payment_id);
-      handleRazorpayPaymentFailed();
-    });
+    rzp1.on("payment.failed", handleRazorpayPaymentFailed);
     rzp1.open();
   };
 
@@ -149,16 +134,16 @@ const PaymentDetails = () => {
   };
 
   return (
-    <div className="border border-gray-300 rounded-lg p-6 mx-auto max-w-xl">
+    <div className="border border-gray-300 rounded-lg p-6 mx-auto max-w-xl bg-white shadow-lg">
       <Toaster position="top-center" reverseOrder={false} />
-      <h3 className="text-center text-xl font-semibold mb-6">
+      <h3 className="text-center text-2xl font-semibold mb-6">
         Choose Payment Options
       </h3>
-      <div className="flex justify-around items-center space-x-4">
+      <div className="flex flex-col md:flex-row justify-around items-center space-y-4 md:space-x-4 sm:space-y-2">
         <Button
           variant="contained"
           startIcon={<PaymentsIcon />}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded"
+          className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded mb-4 md:mb-0"
           onClick={handleCodPayment}
         >
           Cash On Delivery
@@ -167,10 +152,10 @@ const PaymentDetails = () => {
         <Button
           variant="contained"
           startIcon={<CreditCardIcon />}
-          className="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded"
+          className="bg-green-500  hover:bg-green-600 text-white font-medium py-2 px-4 rounded"
           onClick={handleOnlinePayment}
         >
-          Online
+          Online Payment
         </Button>
       </div>
 
@@ -183,7 +168,7 @@ const PaymentDetails = () => {
             details:
           </DialogContentText>
           {orderDetails && (
-            <div>
+            <div className="mt-4">
               <p>
                 <strong>Customer Name:</strong>{" "}
                 {orderDetails.billingAddress?.customerName}

@@ -189,39 +189,57 @@ const Header = () => {
 
             {user !== null ? (
               <>
-                <NavLink
-                  to="/wishlist"
-                  onClick={toggleMobileMenu}
-                  className="text-white hover:text-yellow-300 transition-colors"
-                >
-                  Wishlist
-                </NavLink>
-                <NavLink
-                  to="/orders"
-                  onClick={toggleMobileMenu}
-                  className="text-white hover:text-yellow-300 transition-colors"
-                >
-                  Orders
-                </NavLink>
-                <NavLink
-                  to="/cartPage"
-                  onClick={toggleMobileMenu}
-                  className="flex items-center space-x-2 text-white hover:text-yellow-300 transition-colors"
-                >
-                  <Badge badgeContent={totalQuantity} color="warning">
-                    <ShoppingCartIcon className="h-6 w-6" />
-                  </Badge>
-                  <span>Cart</span>
-                </NavLink>
-                <button
-                  onClick={() => {
-                    handleLogout();
-                    toggleMobileMenu();
-                  }}
-                  className="text-white hover:text-yellow-300 transition-colors"
-                >
-                  Logout
-                </button>
+                <>
+                  <div
+                    className="flex items-center cursor-pointer space-x-2 text-white hover:text-yellow-300 transition-colors"
+                    onClick={handleClick}
+                  >
+                    <Avatar className="h-9 w-9">
+                      <AccountCircleIcon fontSize="large" />
+                    </Avatar>
+                    <span className="capitalize">Account</span>
+                  </div>
+
+                  <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{
+                      "aria-labelledby": "basic-button",
+                    }}
+                  >
+                    <MenuItem onClick={handleClose}>Profile</MenuItem>
+                    <NavLink to="/wishlist" className="text-black no-underline">
+                      <MenuItem onClick={handleClose}>
+                        <FavoriteBorderOutlinedIcon />
+                        WishList
+                      </MenuItem>
+                    </NavLink>
+                    <NavLink to="/orders" className="text-black no-underline">
+                      <MenuItem onClick={handleClose}>
+                        <ListAltIcon />
+                        Orders
+                      </MenuItem>
+                    </NavLink>
+                    <MenuItem onClick={handleClose}>
+                      <div onClick={handleLogout} className="flex items-center">
+                        <LogoutIcon />
+                        <span className="ml-2">Logout</span>
+                      </div>
+                    </MenuItem>
+                  </Menu>
+
+                  <NavLink
+                    to="/cartPage"
+                    className="flex items-center space-x-2 text-white hover:text-yellow-300 transition-colors"
+                  >
+                    <Badge badgeContent={totalQuantity} color="warning">
+                      <ShoppingCartIcon className="h-6 w-6" />
+                    </Badge>
+                    <span>Cart</span>
+                  </NavLink>
+                </>
               </>
             ) : (
               <NavLink

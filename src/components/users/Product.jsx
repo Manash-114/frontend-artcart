@@ -40,39 +40,42 @@ const Product = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <nav className="bg-gradient-to-r from-yellow-200 via-blue-200 to-gray-100 py-4 px-8 uppercase text-sm">
+      {/* Breadcrumb Navigation */}
+      <nav className="bg-gradient-to-r from-yellow-200 via-blue-200 to-gray-100 py-4 px-4 md:px-8 text-sm">
         <span className="text-blue-800 font-semibold">Home</span> / product /{" "}
-        {name}
+        <span className="text-gray-700 font-medium">{name}</span>
       </nav>
+
       {items ? (
-        <div className="container mx-auto py-10 flex flex-col lg:flex-row space-y-8 lg:space-y-0 lg:space-x-12">
+        <div className="container mx-auto py-10 px-4 md:px-8 flex flex-col lg:flex-row space-y-8 lg:space-y-0 lg:space-x-12">
+          {/* Image Section */}
           <div className="w-full lg:w-1/2">
-            {/* Image Section */}
             <ImageProduct data={items} />
           </div>
 
           {/* Content Section */}
           <div className="w-full lg:w-1/2 flex flex-col space-y-6">
-            <div className="flex items-center space-x-4">
-              <div>
-                <h1 className="text-2xl font-semibold">{items.name}</h1>
-                <div className="text-teal-600 text-sm mt-2">
-                  {items.category.name}
-                </div>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-800">{items.name}</h1>
+              <div className="text-teal-600 text-sm mt-2">
+                {items.category.name}
               </div>
             </div>
-            <div className="text-green-700 text-lg flex items-center space-x-1">
+
+            {/* Price Section */}
+            <div className="flex items-center space-x-1 text-green-700 text-xl font-semibold">
               <CurrencyRupeeIcon className="text-green-600" />
-              <span className="font-semibold">{items.price}</span>
+              <span>{items.price}</span>
             </div>
 
-            <div className="flex space-x-4">
+            {/* Action Buttons */}
+            <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
               <Button
                 variant="outlined"
                 color="warning"
                 startIcon={<ShoppingCartIcon />}
                 onClick={handleAddToCart}
-                className="text-yellow-600 border-yellow-600"
+                className="text-yellow-600 border-yellow-600 w-full md:w-auto"
               >
                 Add to cart
                 <Toaster position="top-center" reverseOrder={true} />
@@ -83,17 +86,18 @@ const Product = () => {
                 color="success"
                 startIcon={<BoltIcon />}
                 onClick={handleBuyNow}
-                className="text-green-600 border-green-600"
+                className="text-green-600 border-green-600 w-full md:w-auto"
               >
                 Buy Now
               </Button>
             </div>
 
+            {/* Product Description */}
             <div className="border-t pt-6 mt-6">
               <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                Product Descriptions
+                Product Description
               </h2>
-              <p className="text-gray-700 leading-relaxed text-justify lg:text-left">
+              <p className="text-gray-700 leading-relaxed text-justify">
                 {items.description}
               </p>
             </div>

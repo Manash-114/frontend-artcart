@@ -27,10 +27,8 @@ const OrderPage = () => {
     getAllOrders();
   }, []);
   return (
-    <div>
-      <Header />
+    <div className="mt-8">
       <Order />
-      <Footer2 />
     </div>
   );
 };

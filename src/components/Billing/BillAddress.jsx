@@ -22,16 +22,15 @@ import toast, { Toaster } from "react-hot-toast";
 
 const BillAddress = ({ handleDeliverClick }) => {
   const dispatch = useDispatch();
-  // const [selectedAddressId, setSelectedAddressId] = useState(null);
   const [showAddressForm, setShowAddressForm] = useState(false);
 
   const selectedAddressId = useSelector(
     (store) => store.billingAddress.addressId
   );
-
   const { name, phoneNumber, alternatePhoneNumber } = useSelector(
     (store) => store.billingAddress
   );
+
   const initialAddressValues = {
     pincode: "",
     locality: "",
@@ -49,6 +48,7 @@ const BillAddress = ({ handleDeliverClick }) => {
 
   const addressData = useSelector((store) => store.customer.address);
   const { status } = useSelector((store) => store.customer);
+
   const addressValidationSchema = yup.object({
     address: yup.string().required("Address is required"),
     city: yup.string().required("City/District/Town is required"),
@@ -75,7 +75,7 @@ const BillAddress = ({ handleDeliverClick }) => {
   const onSubmitAddress = async (values) => {
     setShowAddressForm(false);
     try {
-      const res = await dispatch(addCustomerAddress({ data: values })).unwrap();
+      await dispatch(addCustomerAddress({ data: values })).unwrap();
       toast.success("Address added successfully");
     } catch (error) {
       if (error === "Invalid refresh token") {
@@ -85,7 +85,6 @@ const BillAddress = ({ handleDeliverClick }) => {
   };
 
   const onSubmitCustomerDetails = (values) => {
-    console.log(JSON.stringify(values));
     if (selectedAddressId) {
       dispatch(
         updateCustomerInfo({
@@ -138,27 +137,27 @@ const BillAddress = ({ handleDeliverClick }) => {
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
-      <div className="flex flex-col items-center py-10 bg-gray-50 min-h-screen">
-        <div className="flex flex-col md:flex-row space-x-6 w-full max-w-4xl px-4">
+      <div className="flex flex-col items-center py-6 px-4 bg-gray-50 min-h-screen">
+        <div className="flex flex-col md:flex-row space-x-6 w-full max-w-4xl">
           {/* Left Section - Your Addresses */}
-          <div className="md:w-1/2 w-full bg-white shadow-md p-6 rounded-md">
+          <div className="md:w-1/2 w-full bg-white shadow-md p-6 rounded-lg">
             {addressData?.length > 0 ? (
               <>
-                <Typography variant="h6" className="text-gray-700 mb-4">
+                <Typography variant="h6" className="text-gray-800 mb-4">
                   Select Address
                 </Typography>
                 <RadioGroup
-                  value={selectedAddressId || ""} // Ensure no radio is selected if selectedAddressId is null
-                  onChange={(event) => handleAddressSelect(event.target.value)} // Handle address change
+                  value={selectedAddressId || ""}
+                  onChange={(event) => handleAddressSelect(event.target.value)}
                 >
                   {addressData.map((ad) => (
                     <div
                       key={ad.id}
-                      className="flex justify-between items-center bg-gray-50 p-3 rounded-lg mb-2"
+                      className="flex justify-between items-center bg-gray-50 p-3 rounded-lg mb-2 border"
                     >
                       <FormControlLabel
                         value={ad.id}
-                        control={<Radio />} // Let RadioGroup manage selection based on the value
+                        control={<Radio />}
                         label={`${ad.locality}, ${ad.city}, ${ad.state}, ${ad.pincode}`}
                         className="text-sm"
                       />
@@ -244,23 +243,22 @@ const BillAddress = ({ handleDeliverClick }) => {
                         error={touched.locality && !!errors.locality}
                         helperText={touched.locality && errors.locality}
                       />
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        className="bg-blue-500 hover:bg-blue-600 w-full mt-4 text-white"
-                      >
-                        Save
-                      </Button>
-
-                      <Button
-                        onClick={() => {
-                          setShowAddressForm(false);
-                        }}
-                        variant="contained"
-                        className="bg-blue-500 hover:bg-blue-600 w-full mt-4 text-white"
-                      >
-                        Cancel
-                      </Button>
+                      <div className="space-y-2">
+                        <Button
+                          type="submit"
+                          variant="contained"
+                          className="bg-blue-500 hover:bg-blue-600 w-full mt-4 text-white"
+                        >
+                          Save
+                        </Button>
+                        <Button
+                          onClick={() => setShowAddressForm(false)}
+                          variant="outlined"
+                          className="w-full text-blue-500 mt-2"
+                        >
+                          Cancel
+                        </Button>
+                      </div>
                     </Form>
                   )}
                 </Formik>
@@ -269,12 +267,12 @@ const BillAddress = ({ handleDeliverClick }) => {
           </div>
 
           {/* Right Section - Customer Information */}
-          <div className="md:w-1/2 w-full bg-white shadow-md p-6 rounded-md">
+          <div className="md:w-1/2 w-full bg-white shadow-md p-6 rounded-lg mt-6 md:mt-0">
             {selectedAddressId && (
               <>
                 <Typography
                   variant="h6"
-                  className="text-gray-700 mb-4 text-center"
+                  className="text-gray-800 mb-4 text-center"
                 >
                   Contact Information
                 </Typography>
@@ -288,7 +286,7 @@ const BillAddress = ({ handleDeliverClick }) => {
                       <Field
                         name="customerName"
                         as={TextField}
-                        label="Name"
+                        label="Customer Name"
                         fullWidth
                         error={touched.customerName && !!errors.customerName}
                         helperText={touched.customerName && errors.customerName}
@@ -318,7 +316,7 @@ const BillAddress = ({ handleDeliverClick }) => {
                       <Button
                         type="submit"
                         variant="contained"
-                        className="bg-blue-500 hover:bg-blue-600 w-full mt-4 text-white"
+                        className="bg-green-500 hover:bg-green-600 w-full mt-4 text-white"
                       >
                         Deliver Here
                       </Button>

@@ -26,6 +26,7 @@ import OrdersList from "./components/seller/OrdersList.jsx";
 import SellerLayout from "./components/seller/SellerLayout.jsx";
 import AddProduct from "./components/seller/dashboardCompo/AddProduct.jsx";
 import ManageProducts from "./components/seller/dashboardCompo/ManageProducts.jsx";
+import UserLayout from "./pages/users/UserLayout.jsx";
 
 const ROLES = {
   Customer: "ROLE_CUSTOMER",
@@ -53,12 +54,14 @@ const App = () => {
         <Route path="seller/login" element={<LoginPage />} />
         <Route path="unauthorized" element={<Unauthorized />} />
 
-        <Route element={<RequireAuth allowedRoles={ROLES.Customer} />}>
-          <Route path="wishlist" element={<WishListPage />} />
-          <Route path="cartPage" element={<CartPage />} />
-          <Route path="billing" element={<BillingPage />} />
-          <Route path="orders" element={<OrderPage />} />
-          <Route path="orders/details" element={<OrderDetails />} />
+        <Route element={<UserLayout />}>
+          <Route element={<RequireAuth allowedRoles={ROLES.Customer} />}>
+            <Route path="wishlist" element={<WishListPage />} />
+            <Route path="cartPage" element={<CartPage />} />
+            <Route path="billing" element={<BillingPage />} />
+            <Route path="orders" element={<OrderPage />} />
+            <Route path="orders/details" element={<OrderDetails />} />
+          </Route>
         </Route>
 
         <Route
